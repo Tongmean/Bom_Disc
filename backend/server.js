@@ -9,9 +9,16 @@ const bodyParser = require('body-parser');
 //Use middleware
 app.use(cors());
 app.use(bodyParser.json());
+//call database connection
 
 
 
+const requireAuth = require('./middleware/requireAuth');
+const UserRouter = require('./routes/userRoutes')
+const Bomsrouter = require('./routes/BomRoutes');
+
+app.use('/api/user', UserRouter);
+app.use('/api/bom',requireAuth, Bomsrouter);
 
 
 require('dotenv').config();

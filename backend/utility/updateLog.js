@@ -1,19 +1,19 @@
 // logging.js
-const dbconnect = require('../DbConnect'); 
-
-async function logUpdate(table, column, record_id, oldValue, newValue, user) {
+const dbconnect = require('../middleware/Dbconnect'); 
+async function logUpdate(table, column, record_id, oldValue, newValue, action, action_by) {
     const query = `
-        INSERT INTO update_log (table_name, column_name, record_id , old_value, new_value, updatedby)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO update_log (table_name, column_name, record_id, old_value, new_value, action, action_by)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
-    const values = [table, column, record_id , oldValue, newValue, user];
+    const values = [table, column, record_id, oldValue, newValue, action, action_by];
     
     try {
         // Ensure the query is properly awaited
-        const result = await dbconnect.query(query, values);
-        // console.log("History Log successfully inserted", result.command);
+        await dbconnect.query(query, values);
+        // Optionally log success
+        // console.log("History Log successfully inserted");
     } catch (err) {
-        console.log('Error logging update:', err); // Log the error if something goes wrong
+        console.error('Error logging update:', err); // Log the error if something goes wrong
     }
 }
 

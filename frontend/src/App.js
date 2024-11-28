@@ -16,7 +16,7 @@ const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuthContext();
   const isAuthenticated = Boolean(user && user.token);
-  console.log('user', user)
+  console.log('user', user, isAuthenticated)
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
@@ -39,8 +39,8 @@ const App = () => {
           >
             <Routes>
               <Route path="/login" element={<Loginpage />} />
-              <Route path="/home" element={<Homepage />} />
-              <Route path="/package" element={<Package />} />
+              <Route path="/Home" element={<Homepage />} />
+              <Route path="/Package" element={<Package />} />
               {/* Add more routes as needed */}
             </Routes>
           </Content>

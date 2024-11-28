@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
 import Tablecomponent from '../../Components/Tablecomponent';
 import {fetchPackages} from '../../Ultility/Packageapi';
-
+import ExcelExportButton from '../../Components/ExcelExportButton';
+import ClipboardButton from '../../Components/ClipboardButton';
 const Package = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
@@ -18,7 +18,31 @@ const Package = () =>{
         { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
         { headerName: 'กรอกโดย', field: 'CreateBy' },
         { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
+        {
+            headerName: 'Actions',
+            field: 'actions',
+            cellRenderer: (params) => (
+                <div>
+                    <button
+                        className="btn btn-primary btn-sm"
+                        // onClick={() => handleShowDetails(params.data)}
+                        style={{ marginRight: '5px' }}
+                    >
+                        Detail
+                    </button>
+                    <button
+                        className="btn btn-secondary btn-sm"
+                        // onClick={() => handleShowEdit(params.data)}
+                        style={{ marginRight: '5px' }}
+                    >
+                        Edit
+                    </button>
+                </div>
+            ),
+        }
     ]
+
+
     useEffect(() => {
         const loadpackages = async () => {
           try {
@@ -54,18 +78,20 @@ const Package = () =>{
     const onSelectionChanged = () => {
         const selectedRows = gridApi.getSelectedRows();
         console.log('Selected rows:', selectedRows);
-    
-        // Call the function to copy the selected rows to the clipboard
-        // copySelectedRowsToClipboard(selectedRows);
     };
+
+
     return (
         <>
             <div>
-                <button style={{ marginBottom: '10px' }}>Export</button>
-                <button style={{ marginLeft: '10px', marginBottom: '10px' }}>Copy</button>
+                <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }}>เพิ่มรายการ</button>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Package"/>
+                <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
                 <div>Loading...</div>
+            ) : error ? (
+                <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}

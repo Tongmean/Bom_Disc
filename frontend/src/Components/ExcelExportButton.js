@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import Notification from './Notification';
+
+const ExcelExportButton = ({ gridApi, columnDefs }) => {
+    const [notification, setNotification] = useState(null);
+
+    const exportToExcel = () => {
+        try {
+            if (!gridApi) {
+                throw new Error('Grid API is not available.');
+            }
+
+            const selectedRows = gridApi.getSelectedRows();
+            if (selectedRows.length === 0) {
+                showNotification('แจ้งเดือน: ยังไม่มีการเลือกแถว เพื่อนำออก ครับ.', 'warning');
+                return;
+            }
+
+            const headers = columnDefs.reduce((acc, col) => {
+                acc[col.field] = col.headerName;
+                return acc;
+            }, {});
+
+            const mappedData = selectedRows.map(row => {
+                const mappedRow = {};
+                for (const key in headers) {
+                    mappedRow[headers[key]] = row[key] || '';
+                }
+                return mappedRow;
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(mappedData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Selected Data');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+
+            const currentDate = new Date().toISOString().split('T')[0];
+            saveAs(blob, `${currentDate}_Selected_Packages.xlsx`);
+            showNotification('Export successful!', 'success');
+        } catch (error) {
+            showNotification('Error exporting data to Excel.', 'fail');
+        }
+    };
+
+    const showNotification = (message, type) => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 3000); // Hide after 3 seconds
+    };
+
+    return (
+        <>
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
+            )}
+            <button
+                onClick={exportToExcel}
+                className="btn btn-primary btn-sm"
+                style={{ marginLeft: '10px', marginBottom: '10px' }}
+            >
+                Export
+            </button>
+        </>
+    );
+};
+
+export default ExcelExportButton;

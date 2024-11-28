@@ -3,13 +3,14 @@ import { Layout, Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useAuthContext } from '../Hook/useAuthContext';
 import { useLogout } from '../Hook/useLogout';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 
 const { Header } = Layout;
 
 const HeaderComponent = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current path
   const isAuthenticated = user && user.token;
   const { logout } = useLogout();
   const onLogout = () => {
@@ -24,7 +25,7 @@ const HeaderComponent = () => {
 
   // If user is not loaded yet, don't render the sidebar
   if (!user) return null;
-
+  const decodedPath = decodeURIComponent(location.pathname);
   return (
     <Header
       style={{
@@ -39,6 +40,7 @@ const HeaderComponent = () => {
       <span>
         {/* User: {user ? `${user.data.email}` : ''}
         ({user ? `${user.data.role}` : ''})  */}
+        <h7>{decodedPath}</h7>
       </span>
       {user && (
         <Button type="primary" icon={<LogoutOutlined />} onClick={onLogout}>

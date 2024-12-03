@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchPackages, fetchHistoryLog} from '../../Ultility/Packageapi';
+import {fetchusers} from '../../Ultility/Usersapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Package/DetailModal'
 import { useNavigate } from 'react-router-dom';
-const Package = () =>{
+const Usermanagement = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
     const [gridApi, setGridApi] = useState(null)
-    const [selectedData, setSelectedData] = useState(null);
-    const [historyLog, setHistoryLog] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-        { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-        { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
-        { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
+        { headerName: 'Email', field: 'email' },
+        { headerName: 'Password', field: 'password' },
+        { headerName: 'Role', field: 'role' },
+
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -29,13 +25,6 @@ const Package = () =>{
             field: 'actions',
             cellRenderer: (params) => (
                 <div>
-                    <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleShowDetails(params.data)}
-                        style={{ marginRight: '5px' }}
-                    >
-                        Detail
-                    </button>
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => handleShowEdit(params.data)}
@@ -47,40 +36,19 @@ const Package = () =>{
             ),
         }
     ];
-    const handleShowDetails = async (data) => {
-        setSelectedData(data);
-        try {
-            const history = await fetchHistoryLog(data.No); // API call to fetch the history log
-            setHistoryLog(history);
-        } catch (err) {
-            console.error('Failed to fetch history log:', err.message);
-            setError(err.message);
-        }
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setSelectedData(null);
-        setHistoryLog([]);
-    };
 
 
 
     useEffect(() => {
-        const loadpackages = async () => {
+        const load = async () => {
           try {
-            const packageData = (await fetchPackages()).data;
+            const packageData = (await fetchusers()).data;
             
             const mappedData = packageData.map(i => ({
                 No: i.id,
-                Display_Box_id: i.Display_Box_id,
-                Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-                Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-                Num_Display_Box: i.Num_Display_Box,
-                Display_Box_Group: i.Display_Box_Group,
-                CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
+                email: i.email,
+                password: i.password,
+                role: i.role,
 
             }));
             // console.log('Mapped Data', mappedData)
@@ -92,7 +60,7 @@ const Package = () =>{
           }
         };
     
-        loadpackages();
+        load();
     }, []);
 
     const onGridReady = params => {
@@ -105,16 +73,16 @@ const Package = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createPackage');
+        navigate('/createuser');
     };
     const handleShowEdit = (data) => {
-        navigate(`/package/${data.No}`);
+        navigate(`/user/${data.No}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Package"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Users"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -129,15 +97,9 @@ const Package = () =>{
                     onSelectionChanged={onSelectionChanged}
                 />
             )}
-            <DetailModal
-                show={showModal}
-                onHide={handleCloseModal}
-                data={selectedData}
-                historyLog={historyLog}
-                Tablename = 'กล่อง'
-            />
+            
         </>
     )
 }
 
-export default Package;
+export default Usermanagement;

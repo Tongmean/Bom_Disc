@@ -4,7 +4,7 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { useAuthContext } from '../Hook/useAuthContext';
 import { useLogout } from '../Hook/useLogout';
 import { useNavigate, useLocation  } from 'react-router-dom';
-
+import TokenTimer from './TokenTimer';
 const { Header } = Layout;
 
 const HeaderComponent = () => {
@@ -40,7 +40,8 @@ const HeaderComponent = () => {
       <span>
         {/* User: {user ? `${user.data.email}` : ''}
         ({user ? `${user.data.role}` : ''})  */}
-        <h7>{decodedPath}</h7>
+        {/* <h6>{decodedPath}</h6> */}
+        <h6><TokenTimer token={user.token} /></h6>
       </span>
       {user && (
         <Button type="primary" icon={<LogoutOutlined />} onClick={onLogout}>

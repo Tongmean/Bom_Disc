@@ -61,7 +61,7 @@ const getDatasheet = async (req,res) =>{
 //post Data_Sheet
 const postDatasheet = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Uderlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy} = req.body;
+    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy} = req.body;
     try {
         // Check for duplicate 
         const sqlCheck = `SELECT * FROM "Data_Sheet" WHERE "Data_Sheet_No" = $1`;
@@ -71,13 +71,13 @@ const postDatasheet = async (req, res) =>{
             return res.status(400).json({
                 success: false,
                 data: checkResult.rows,
-                msg: `รหัส Data Sheet: ${Data_Sheet_No} มีในฐานข้อมูลอยู่แล้ว กรุณาลองรหัสใหม่!`
+                msg: `รหัส Data Sheet no: ${Data_Sheet_No} มีในฐานข้อมูลอยู่แล้ว กรุณาลองรหัสใหม่!`
             });
         }
         //Insert New         
-        const sqlCommand = `INSERT INTO "Data_Sheet" ("Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Uderlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy")
+        const sqlCommand = `INSERT INTO "Data_Sheet" ("Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Underlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING*`;
-        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Uderlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, userEmail];
+        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, userEmail];
         //Insert Query
 
         const insertResult = await dbconnect.query(sqlCommand, values);
@@ -89,7 +89,7 @@ const postDatasheet = async (req, res) =>{
         });
 
     } catch (error) {
-        // console.log('error', error)
+        console.log('error', error)
         return res.status(500).json({
             success: false,
             data: error,

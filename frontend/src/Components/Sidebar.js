@@ -30,19 +30,19 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       { key: '30', label: <Link to="/Outer">Report</Link> },
     ]},
     { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: 'Data Sheet', children: [
-      { key: '40', label: <Link to="/Data-Sheet">Report</Link> },
+      { key: '40', label: <Link to="/datasheet">Report</Link> },
     ]},
     { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
-      { key: '50', label: <Link to="/Product-Spec">Report</Link> },
+      { key: '50', label: <Link to="/productspec">Report</Link> },
     ]},
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: 'โฟมสำเร็จรูปอุปกรณ์เสริม', children: [
-      { key: '60', label: <Link to="/โฟมสำเร็จรูปอุปกรณ์เสริม">Report</Link> },
+      { key: '60', label: <Link to="/additionalpackage">Report</Link> },
     ]},
     { key: 'Shim', icon: <FileExcelOutlined />, label: 'Shim', children: [
-      { key: '70', label: <Link to="/Shim">Report</Link> },
+      { key: '70', label: <Link to="/shim">Report</Link> },
     ]},
     { key: 'Drawing', icon: <FileExcelOutlined />, label: 'Drawing', children: [
-      { key: '80', label: <Link to="/Drawing">Report</Link> },
+      { key: '80', label: <Link to="/drawing">Report</Link> },
     ]},
     { key: 'Drawing-File', icon: <FileExcelOutlined />, label: 'Drawing-File', children: [
       { key: '90', label: <Link to="/Drawing-File">Report</Link> },
@@ -54,7 +54,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       { key: '110', label: <Link to="/Product-Data">Report</Link> },
     ]},
     { key: 'user', icon: <UserOutlined />, label: 'User Management', children: [
-      { key: '120', label: <Link to="/user">Report</Link> },
+      { key: '120', label: <Link to="/usermanagement">Report</Link> },
     ]},
    
   ].filter(item => !item.hidden); // Filter out hidden items
@@ -73,7 +73,10 @@ const Sidebar = ({ collapsed, onCollapse }) => {
         <div>
           {collapsed ? 'Compact' : 'Compact Brake'}
         </div>
-        {collapsed ? `${user.data.role}` : `${user.data.email}(${user.data.role})`}
+        {collapsed ? `(${user.data.role})` : `${user.data.email}`}
+        <div>
+          {collapsed ? `` : `(${(user.data.role)})`}
+        </div>
       </div>
       <Menu
         theme="dark"

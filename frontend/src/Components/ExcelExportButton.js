@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Notification from './Notification';
 
-const ExcelExportButton = ({ gridApi, columnDefs }) => {
+const ExcelExportButton = ({ gridApi, columnDefs, Tablename }) => {
     const [notification, setNotification] = useState(null);
 
     const exportToExcel = () => {
@@ -14,19 +14,26 @@ const ExcelExportButton = ({ gridApi, columnDefs }) => {
 
             const selectedRows = gridApi.getSelectedRows();
             if (selectedRows.length === 0) {
-                showNotification('แจ้งเดือน: ยังไม่มีการเลือกแถว เพื่อนำออก ครับ.', 'warning');
+                showNotification('แจ้งเตือน: ยังไม่มีการเลือกแถว เพื่อนำออก ครับ.', 'warning');
                 return;
             }
 
+            const excludeFields = ['Actions']; // Fields to exclude
             const headers = columnDefs.reduce((acc, col) => {
-                acc[col.field] = col.headerName;
+                // Only add fields that are not in the exclude list
+                if (!excludeFields.includes(col.field)) {
+                    acc[col.field] = col.headerName;
+                }
                 return acc;
             }, {});
 
+            // Filter out the excluded fields from data rows
             const mappedData = selectedRows.map(row => {
                 const mappedRow = {};
-                for (const key in headers) {
-                    mappedRow[headers[key]] = row[key] || '';
+                for (const key in row) {
+                    if (headers[key]) {  // Only include keys that are in the headers
+                        mappedRow[headers[key]] = row[key] || ''; // Map data only to included columns
+                    }
                 }
                 return mappedRow;
             });
@@ -40,7 +47,7 @@ const ExcelExportButton = ({ gridApi, columnDefs }) => {
             });
 
             const currentDate = new Date().toISOString().split('T')[0];
-            saveAs(blob, `${currentDate}_Selected_Packages.xlsx`);
+            saveAs(blob, `${currentDate}_Selected_${Tablename}.xlsx`);
             showNotification('Export successful!', 'success');
         } catch (error) {
             showNotification('Error exporting data to Excel.', 'fail');

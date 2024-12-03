@@ -22,7 +22,7 @@ const Loginpage = () => {
             setShowErrorModal(true);
         } else {
             navigate('/home');
-            alert('Success')
+            // alert('Success')
         }
     };
 

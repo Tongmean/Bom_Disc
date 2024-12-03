@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchPackages, fetchHistoryLog} from '../../Ultility/Packageapi';
+import {fetchOuters, fetchHistoryLog} from '../../Ultility/Outerapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Package/DetailModal'
+import DetailModal from '../Outer/DetailModal'
 import { useNavigate } from 'react-router-dom';
-const Package = () =>{
+const Outer = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -17,13 +17,18 @@ const Package = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-        { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-        { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
+        { headerName: 'รหัส Outer', field: 'Outer_Id' },
         { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
-        // { headerName: 'กรอกโดย', field: 'CreateBy' },
-        // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
+        { headerName: 'ลักษณะ Die Cut', field: 'Type_Diecut' },
+        { headerName: 'เบอร์ Outer', field: 'Num_Outer' },
+        { headerName: 'รหัส ERP', field: 'Outer_Erp_Id' },
+        { headerName: 'ชื่อ Outer', field: 'Name_Outer_Erp' },
+        { headerName: 'จำนวน Set/ Outer', field: 'Set_Per_Outer' },
+        { headerName: 'จำนวน Set/ Outer_1', field: 'Set_Per_Outer_1' },
+        { headerName: 'รหัส ERP Sticker', field: 'Outer_Erp_Sticker' },
+        { headerName: 'ชื่อ ERP Sticker', field: 'Name_Outer_Erp_Sticker' },
+        { headerName: 'จำนวน Sticker', field: 'Num_Sticker' },
+        { headerName: 'จำนวน Outer/ พาเลท', field: 'Outer_Per_pallet' },
         {
             headerName: 'Actions',
             field: 'actions',
@@ -68,21 +73,28 @@ const Package = () =>{
 
 
     useEffect(() => {
-        const loadpackages = async () => {
+        const loadouter = async () => {
           try {
-            const packageData = (await fetchPackages()).data;
-            
-            const mappedData = packageData.map(i => ({
-                No: i.id,
-                Display_Box_id: i.Display_Box_id,
-                Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-                Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-                Num_Display_Box: i.Num_Display_Box,
-                Display_Box_Group: i.Display_Box_Group,
-                CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
-
+            const packageData = (await fetchOuters()).data;
+        
+            const mappedData = packageData.map((i) => ({
+                No: i.id, // Assuming you want to assign a sequential number starting at 1
+                Outer_Id: i.Outer_Id || "-",
+                Num_Display_Box: i.Num_Display_Box || "-",
+                Type_Diecut: i.Type_Diecut || "-",
+                Num_Outer: i.Num_Outer || "-",
+                Outer_Erp_Id: i.Outer_Erp_Id || "-",
+                Name_Outer_Erp: i.Name_Outer_Erp || "-",
+                Set_Per_Outer: i.Set_Per_Outer || "-",
+                Set_Per_Outer_1: i.Set_Per_Outer_1 || "-",
+                Outer_Erp_Sticker: i.Outer_Erp_Sticker || "-",
+                Name_Outer_Erp_Sticker: i.Name_Outer_Erp_Sticker || "-",
+                Num_Sticker: i.Num_Sticker || "-",
+                Outer_Per_pallet: i.Outer_Per_pallet || "-",
+                CreateBy: i.CreateBy || "-",
+                CreateAt: i.CreateAt || "-",
             }));
+            
             // console.log('Mapped Data', mappedData)
             setRowData(mappedData); // Set the users from the API response
           } catch (err) {
@@ -92,7 +104,7 @@ const Package = () =>{
           }
         };
     
-        loadpackages();
+        loadouter();
     }, []);
 
     const onGridReady = params => {
@@ -105,16 +117,16 @@ const Package = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createPackage');
+        navigate('/createouter');
     };
     const handleShowEdit = (data) => {
-        navigate(`/package/${data.No}`);
+        navigate(`/outer/${data.No}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Package"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Outer"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -134,10 +146,10 @@ const Package = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'กล่อง'
+                Tablename = 'Outer'
             />
         </>
     )
 }
 
-export default Package;
+export default Outer;

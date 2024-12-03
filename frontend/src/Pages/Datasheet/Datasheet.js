@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchPackages, fetchHistoryLog} from '../../Ultility/Packageapi';
+import {fetchdDatasheets, fetchHistoryLog} from '../../Ultility/Datasheet';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Package/DetailModal'
+import DetailModal from '../Datasheet/DetailModal'
 import { useNavigate } from 'react-router-dom';
-const Package = () =>{
+const DataSheet = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -17,11 +17,15 @@ const Package = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-        { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-        { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
-        { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
+        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' },
+        { headerName: 'Compact No.', field: 'Compact_No' },
+        { headerName: 'เกรดเคมี.', field: 'Grade_Chem' },
+        { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
+        { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
+        { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
+        { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
+        { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
+        { headerName: 'สูตร', field: 'Formular' },
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -68,22 +72,26 @@ const Package = () =>{
 
 
     useEffect(() => {
-        const loadpackages = async () => {
+        const loadDatasheet = async () => {
           try {
-            const packageData = (await fetchPackages()).data;
+            const packageData = (await fetchdDatasheets()).data;
             
             const mappedData = packageData.map(i => ({
                 No: i.id,
-                Display_Box_id: i.Display_Box_id,
-                Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-                Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-                Num_Display_Box: i.Num_Display_Box,
-                Display_Box_Group: i.Display_Box_Group,
+                Data_Sheet_No: i.Data_Sheet_No,
+                Compact_No: i.Compact_No,
+                Grade_Chem: i.Grade_Chem,
+                Weight_F1: i.Weight_F1,
+                Weight_F2: i.Weight_F2,
+                Underlayer_Grade_Chem: i.Underlayer_Grade_Chem,
+                Weight_U1: i.Weight_U1,
+                Weight_U2: i.Weight_U2,
+                Formular: i.Formular,
                 CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
+                CreateAt: i.CreateAt,
 
             }));
-            // console.log('Mapped Data', mappedData)
+            console.log('Mapped Data', mappedData)
             setRowData(mappedData); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
@@ -92,7 +100,7 @@ const Package = () =>{
           }
         };
     
-        loadpackages();
+        loadDatasheet();
     }, []);
 
     const onGridReady = params => {
@@ -105,16 +113,16 @@ const Package = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createPackage');
+        navigate('/createdatasheet');
     };
     const handleShowEdit = (data) => {
-        navigate(`/package/${data.No}`);
+        navigate(`/datasheet/${data.No}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Package"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Data-Sheet"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -134,10 +142,10 @@ const Package = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'กล่อง'
+                Tablename = 'Data-Sheet'
             />
         </>
     )
 }
 
-export default Package;
+export default DataSheet;

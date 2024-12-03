@@ -113,12 +113,12 @@ const updatePackage = async (req, res) => {
         }
         //Update Record
         const updateSql = `UPDATE "Package" SET "Display_Box_id" = $1, "Display_Box_Erp_Id" = $2, "Name_Display_Box_Erp" = $3, "Num_Display_Box" = $4, "Display_Box_Group" = $5, "CreateBy" = $6 WHERE id = $7 RETURNING *;`;
-        const values = [Display_Box_id, Display_Box_Erp_Id, Name_Display_Box_Erp, Num_Display_Box, Display_Box_Group, CreateBy, id];
+        const values = [Display_Box_id, Display_Box_Erp_Id, Name_Display_Box_Erp, Num_Display_Box, Display_Box_Group, userEmail, id];
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
 
         const columns = [
-            "Display_Box_id", "Display_Box_Erp_Id", "Name_Display_Box_Erp", "Num_Display_Box", "Display_Box_Group", "CreateBy"
+            "Display_Box_id", "Display_Box_Erp_Id", "Name_Display_Box_Erp", "Num_Display_Box", "Display_Box_Group"
         ];
 
         for (const column of columns) {
@@ -141,7 +141,7 @@ const updatePackage = async (req, res) => {
         console.error("Error updating BOM:", error);
         res.status(500).json({
             success: false,
-            msg: `เกิดข้อผิดพลาดขณะอัปเดตข้อมูล:  กรุณาลองอีกครั้ง.`,
+            msg: `เกิดข้อผิดพลาดขณะอัปเดตข้อมูล: กรุณาลองอีกครั้ง.`,
             data: error.message,
         });
     }

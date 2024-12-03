@@ -1,8 +1,8 @@
 import apiClient from './ApiSetup/api';
 
-export const fetchPackages = async () => {
+export const fetchProductspecs = async () => {
   try {
-    const response = await apiClient.get('/package'); // Send the GET request to the server
+    const response = await apiClient.get('/productspec'); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -17,9 +17,9 @@ export const fetchPackages = async () => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const fetchPackage = async (id) => {
+export const fetchproductspec = async (id) => {
   try {
-    const response = await apiClient.get(`/package/${id}`); // Send the GET request to the server
+    const response = await apiClient.get(`/productspec/${id}`); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -34,9 +34,9 @@ export const fetchPackage = async (id) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const createPackage = async (packageData) => {
+export const createProductspec = async (productspecData) => {
   try {
-    const response = await apiClient.post(`/package/create`, packageData); // Send the GET request to the server
+    const response = await apiClient.post(`/productspec/create`, productspecData); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -51,9 +51,9 @@ export const createPackage = async (packageData) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const updatePackage = async (id, updatedBox) => {
+export const updateProductspec = async (id, updatedProductspec) => {
   try {
-    const response = await apiClient.put(`/package/update/${id}`, updatedBox); // Send the GET request to the server
+    const response = await apiClient.put(`/productspec/update/${id}`, updatedProductspec); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -71,7 +71,7 @@ export const updatePackage = async (id, updatedBox) => {
 
 export const fetchHistoryLog = async (id) => {
   try {
-    const response = await apiClient.get(`/historylog/package/${id}`); // Send the GET request to the server
+    const response = await apiClient.get(`/historylog/productspec/${id}`); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {

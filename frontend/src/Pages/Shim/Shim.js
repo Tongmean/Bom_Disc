@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchPackages, fetchHistoryLog} from '../../Ultility/Packageapi';
+import {fetchShims, fetchHistoryLog} from '../../Ultility/Shimapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Package/DetailModal'
+import DetailModal from '../Shim/DetailModal'
 import { useNavigate } from 'react-router-dom';
-const Package = () =>{
+const Shim = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -17,11 +17,24 @@ const Package = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-        { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-        { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
-        { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
+        { headerName: 'Compact No (ปรับ)', field: 'Compact_No_Modify' },
+        { headerName: 'Part No', field: 'Part_No' },
+
+        { headerName: 'ชื่อ SP1', field: 'Name_SP1' },
+        { headerName: 'รหัส SP1', field: 'Erp_Id_SP1' },
+        { headerName: 'ID SP1', field: 'Id_SP1' },
+        { headerName: 'จำนวน SP1', field: 'Quantity_SP1' },
+
+        { headerName: 'ชื่อ SP2', field: 'Name_SP2' },
+        { headerName: 'รหัส SP2', field: 'Erp_Id_SP2' },
+        { headerName: 'ID SP2', field: 'Id_SP2' },
+        { headerName: 'จำนวน SP2', field: 'Quantity_SP2' },
+
+        { headerName: 'ชื่อ SP3', field: 'Name_SP3' },
+        { headerName: 'รหัส SP3', field: 'Erp_Id_SP3' },
+        { headerName: 'ID SP3', field: 'Id_SP3' },
+        { headerName: 'จำนวน SP3', field: 'Quantity_SP3' },
+
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -68,17 +81,28 @@ const Package = () =>{
 
 
     useEffect(() => {
-        const loadpackages = async () => {
+        const load = async () => {
           try {
-            const packageData = (await fetchPackages()).data;
+            const packageData = (await fetchShims()).data;
             
             const mappedData = packageData.map(i => ({
                 No: i.id,
-                Display_Box_id: i.Display_Box_id,
-                Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-                Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-                Num_Display_Box: i.Num_Display_Box,
-                Display_Box_Group: i.Display_Box_Group,
+                Compact_No_Modify: i.Compact_No_Modify,
+                Part_No: i.Part_No,
+                Name_SP1: i.Name_SP1,
+                Erp_Id_SP1: i.Erp_Id_SP1,
+                Id_SP1: i.Id_SP1,
+                Quantity_SP1: i.Quantity_SP1,
+                Name_SP2: i.Name_SP2,
+                Erp_Id_SP2: i.Erp_Id_SP2,
+                Id_SP2: i.Id_SP2,
+                Quantity_SP2: i.Quantity_SP2,
+                Name_SP3: i.Name_SP3,
+                Erp_Id_SP3: i.Erp_Id_SP3,
+                Id_SP3: i.Id_SP3,
+                Quantity_SP3: i.Quantity_SP3,
+
+                
                 CreateBy: i.CreateBy,
                 CreateAt: i.CreateAt
 
@@ -92,7 +116,7 @@ const Package = () =>{
           }
         };
     
-        loadpackages();
+        load();
     }, []);
 
     const onGridReady = params => {
@@ -105,16 +129,16 @@ const Package = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createPackage');
+        navigate('/createshim');
     };
     const handleShowEdit = (data) => {
-        navigate(`/package/${data.No}`);
+        navigate(`/shim/${data.No}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Package"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Shim"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -134,10 +158,10 @@ const Package = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'กล่อง'
+                Tablename = 'Shim'
             />
         </>
     )
 }
 
-export default Package;
+export default Shim;

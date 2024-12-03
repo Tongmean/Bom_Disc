@@ -1,8 +1,8 @@
 import apiClient from './ApiSetup/api';
 
-export const fetchPackages = async () => {
+export const fetchusers = async () => {
   try {
-    const response = await apiClient.get('/package'); // Send the GET request to the server
+    const response = await apiClient.get('/user'); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -17,9 +17,9 @@ export const fetchPackages = async () => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const fetchPackage = async (id) => {
+export const fetchUser = async (id) => {
   try {
-    const response = await apiClient.get(`/package/${id}`); // Send the GET request to the server
+    const response = await apiClient.get(`/user/${id}`); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -34,9 +34,9 @@ export const fetchPackage = async (id) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const createPackage = async (packageData) => {
+export const createUser = async (userData) => {
   try {
-    const response = await apiClient.post(`/package/create`, packageData); // Send the GET request to the server
+    const response = await apiClient.post(`/user/create`, userData); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -51,9 +51,9 @@ export const createPackage = async (packageData) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const updatePackage = async (id, updatedBox) => {
+export const updateUser = async (id, updatedUser) => {
   try {
-    const response = await apiClient.put(`/package/update/${id}`, updatedBox); // Send the GET request to the server
+    const response = await apiClient.put(`/user/update/${id}`, updatedUser); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -69,20 +69,20 @@ export const updatePackage = async (id, updatedBox) => {
   }
 };
 
-export const fetchHistoryLog = async (id) => {
-  try {
-    const response = await apiClient.get(`/historylog/package/${id}`); // Send the GET request to the server
+// export const fetchHistoryLog = async (id) => {
+//   try {
+//     const response = await apiClient.get(`/historylog/user/${id}`); // Send the GET request to the server
 
-    // Check the response's 'success' field to determine if the request was successful
-    if (response.data.success) {
-      // If successful, return the 'data' part of the response
-      return response.data.data; // Assuming 'data' contains the users
-    } else {
-      // If success is false, throw an error with the server message
-      throw new Error(response.data.msg);
-    }
-  } catch (error) {
-    // Catch and rethrow the error with a message from the server or a generic one
-    throw new Error(error.response?.data?.msg);
-  }
-};
+//     // Check the response's 'success' field to determine if the request was successful
+//     if (response.data.success) {
+//       // If successful, return the 'data' part of the response
+//       return response.data.data; // Assuming 'data' contains the users
+//     } else {
+//       // If success is false, throw an error with the server message
+//       throw new Error(response.data.msg);
+//     }
+//   } catch (error) {
+//     // Catch and rethrow the error with a message from the server or a generic one
+//     throw new Error(error.response?.data?.msg);
+//   }
+// };

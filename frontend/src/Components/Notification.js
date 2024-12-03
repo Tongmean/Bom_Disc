@@ -29,7 +29,7 @@ const Notification = ({ message, type, onClose }) => {
                 ...getNotificationStyles(),
                 padding: '10px',
                 borderRadius: '5px',
-                position: 'absolute',
+                position: 'fixed', // Changed from 'absolute' to 'fixed' for better floating behavior
                 top: '10px',
                 right: '10px',
                 zIndex: 9999,
@@ -37,6 +37,7 @@ const Notification = ({ message, type, onClose }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: '300px',
+                boxSizing: 'border-box', // Ensures padding is considered in width
             }}
         >
             <span>{message}</span>

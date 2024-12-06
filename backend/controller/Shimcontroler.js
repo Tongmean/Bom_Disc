@@ -63,7 +63,7 @@ const getShim = async (req,res) =>{
 //post shim
 const postShim = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy} = req.body;
+    const {Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy, Status} = req.body;
     try {
         // Check for duplicate value
         const sqlCheck = `SELECT * FROM "Shim" WHERE "Compact_No_Modify" = $1`;
@@ -78,10 +78,10 @@ const postShim = async (req, res) =>{
         }
         //INsert New Shim
         const sqlCommand = `
-            INSERT INTO "Shim" ("Compact_No_Modify", "Part_No", "Name_SP1", "Erp_Id_SP1", "Id_SP1","Quantity_SP1", "Name_SP2", "Erp_Id_SP2", "Id_SP2","Quantity_SP2", "Name_SP3", "Erp_Id_SP3", "Id_SP3","Quantity_SP3","CreateBy")
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING*
+            INSERT INTO "Shim" ("Compact_No_Modify", "Part_No", "Name_SP1", "Erp_Id_SP1", "Id_SP1","Quantity_SP1", "Name_SP2", "Erp_Id_SP2", "Id_SP2","Quantity_SP2", "Name_SP3", "Erp_Id_SP3", "Id_SP3","Quantity_SP3","CreateBy", "Status")
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING*
         `
-        const values = [Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, userEmail];
+        const values = [Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, userEmail, Status];
         const insertResult = await dbconnect.query(sqlCommand, values);
 
         return res.status(200).json({
@@ -102,7 +102,7 @@ const postShim = async (req, res) =>{
 const updateShim = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // Authenticated user email
-    const {Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy} = req.body;
+    const {Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy, Status} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Shim" WHERE id = $1`;
@@ -117,15 +117,15 @@ const updateShim = async (req, res) =>{
         }
         //Update Record
         const updateSql = `
-            UPDATE "Shim" SET "Compact_No_Modify" = $1, "Part_No" = $2, "Name_SP1" = $3, "Erp_Id_SP1" = $4, "Id_SP1" = $5, "Quantity_SP1" = $6, "Name_SP2" = $7, "Erp_Id_SP2" = $8, "Id_SP2" = $9, "Quantity_SP2" = $10, "Name_SP3" = $11, "Erp_Id_SP3" = $12, "Id_SP3" = $13, "Quantity_SP3" = $14, "CreateBy" = $15 WHERE "id" = $16
+            UPDATE "Shim" SET "Compact_No_Modify" = $1, "Part_No" = $2, "Name_SP1" = $3, "Erp_Id_SP1" = $4, "Id_SP1" = $5, "Quantity_SP1" = $6, "Name_SP2" = $7, "Erp_Id_SP2" = $8, "Id_SP2" = $9, "Quantity_SP2" = $10, "Name_SP3" = $11, "Erp_Id_SP3" = $12, "Id_SP3" = $13, "Quantity_SP3" = $14, "CreateBy" = $15, "Status" = $16 WHERE "id" = $17
 
         `;
-        const values = [Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy, id];
+        const values = [Compact_No_Modify, Part_No, Name_SP1, Erp_Id_SP1, Id_SP1, Quantity_SP1, Name_SP2, Erp_Id_SP2, Id_SP2, Quantity_SP2, Name_SP3, Erp_Id_SP3, Id_SP3, Quantity_SP3, CreateBy,Status, id];
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
         // Log changes
         const columns = [
-            "Compact_No_Modify", "Part_No", "Name_SP1", "Erp_Id_SP1", "Id_SP1","Quantity_SP1", "Name_SP2", "Erp_Id_SP2", "Id_SP2","Quantity_SP2", "Name_SP3", "Erp_Id_SP3", "Id_SP3","Quantity_SP3","CreateBy"
+            "Compact_No_Modify", "Part_No", "Name_SP1", "Erp_Id_SP1", "Id_SP1","Quantity_SP1", "Name_SP2", "Erp_Id_SP2", "Id_SP2","Quantity_SP2", "Name_SP3", "Erp_Id_SP3", "Id_SP3","Quantity_SP3","CreateBy", "Status"
         ];
 
         // const action = updated;

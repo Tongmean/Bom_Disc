@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchdDatasheets, fetchHistoryLog} from '../../Ultility/Datasheet';
+import {fetchBoms, fetchHistoryLog} from '../../Ultility/Bomapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Datasheet/DetailModal'
+import DetailModal from '../Bom/DetailModal'
 import { useNavigate } from 'react-router-dom';
-const DataSheet = () =>{
+const Bom = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -17,16 +17,27 @@ const DataSheet = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' },
-        { headerName: 'Compact No.', field: 'Compact_No' },
-        { headerName: 'เกรดเคมี.', field: 'Grade_Chem' },
-        { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
-        { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
-        { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
-        { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
-        { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
-        { headerName: 'สูตร', field: 'Formular' },
+        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' },
+        { headerName: 'เบอร์', field: 'Num' },
+        { headerName: 'Part No.', field: 'Part_No' },
+        { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
+        { headerName: 'ประเภทลูกค้า', field: 'Type_Customer' },
+        { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
+        { headerName: 'วันเริ่มขาย', field: 'Start_Sale_Date' },
         { headerName: 'Status', field: 'Status' },
+        { headerName: 'Drawing No.', field: 'Drawing_No' },
+        { headerName: 'การติด Shim', field: 'Shim_Attach' },
+        { headerName: 'Shim No', field: 'Shim_No' },
+        { headerName: 'Product Spec No.', field: 'Product_Spec_No' },
+        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' },
+        { headerName: 'เบอร์กล่อง', field: 'Display_Box_Id' },
+        { headerName: 'จำนวนกล่อง', field: 'Quantity_Display_Box' },
+        { headerName: 'ใส่ Outer', field: 'Outer_Package' },
+        { headerName: 'รหัส Outer', field: 'Outer_Id' },
+        { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
+        { headerName: 'รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา', field: 'Additional_Package_Id' },
+
+
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -73,27 +84,39 @@ const DataSheet = () =>{
 
 
     useEffect(() => {
-        const loadDatasheet = async () => {
+        const load = async () => {
           try {
-            const packageData = (await fetchdDatasheets()).data;
+            const packageData = (await fetchBoms()).data;
             
             const mappedData = packageData.map(i => ({
                 No: i.id,
-                Data_Sheet_No: i.Data_Sheet_No,
-                Compact_No: i.Compact_No,
-                Grade_Chem: i.Grade_Chem,
-                Weight_F1: i.Weight_F1,
-                Weight_F2: i.Weight_F2,
-                Underlayer_Grade_Chem: i.Underlayer_Grade_Chem,
-                Weight_U1: i.Weight_U1,
-                Weight_U2: i.Weight_U2,
-                Formular: i.Formular,
+                Code_Fg: i.Code_Fg,
+                Num: i.Num,
+                Part_No: i.Part_No,
+                Sale_Code_Bom: i.Sale_Code_Bom,
+                Type_Customer: i.Type_Customer,
+                Customer_Name: i.Customer_Name,
+                Start_Sale_Date: i.Start_Sale_Date,
                 Status: i.Status,
+                Drawing_No: i.Drawing_No,
+                Shim_Attach: i.Shim_Attach,
+                Product_Spec_No: i.Product_Spec_No,
+                Data_Sheet_No: i.Data_Sheet_No,
+                Display_Box_Id: i.Display_Box_Id,
+                Quantity_Display_Box: i.Quantity_Display_Box,
+                Outer_Package: i.Outer_Package,
+                Outer_Id: i.Outer_Id,
+
+                Pcs_Per_Set: i.Pcs_Per_Set,
+                Additional_Package_Id: i.Additional_Package_Id,
+
+
                 CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt,
+                CreateAt: i.CreateAt
 
             }));
             // console.log('Mapped Data', mappedData)
+            console.log('Bom Data', packageData)
             setRowData(mappedData); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
@@ -102,7 +125,7 @@ const DataSheet = () =>{
           }
         };
     
-        loadDatasheet();
+        load();
     }, []);
 
     const onGridReady = params => {
@@ -115,16 +138,16 @@ const DataSheet = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createdatasheet');
+        navigate('/createbom');
     };
     const handleShowEdit = (data) => {
-        navigate(`/datasheet/${data.No}`);
+        navigate(`/bom/${data.No}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Data-Sheet"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Bom"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -144,10 +167,10 @@ const DataSheet = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'Data-Sheet'
+                Tablename = 'Bom'
             />
         </>
     )
 }
 
-export default DataSheet;
+export default Bom;

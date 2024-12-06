@@ -105,7 +105,7 @@ const postDrawing = async (req, res) =>{
 const updateDrawing = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy} = req.body;
+    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1,Thickness_Pad1 , Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Drawing" WHERE id = $1`;
@@ -118,19 +118,67 @@ const updateDrawing = async (req, res) =>{
                 msg: `ไม่พบข้อมูลที่มีรหัส: ${Compact_No_Modify_Drawing}`,
             });
         }
-        //update record
+        // Update record
         const updateSql = `
-            UPDATE "Drawing" SET "Compact_No_Modify_Drawing" = $1, "Part_No" = $2, "Erp_Id_BP1" = $3, "Name_BP1" = $4, "Id_BP1" = $5, "Quantity_BP1" = $6, "Erp_Id_BP2" = $7, "Name_BP2" = $8, "Id_BP2" = $9, "Quantity_BP2" = $10, "Erp_Id_BP3" = $11, "Name_BP3" = $12, "Id_BP3" = $13, "Quantity_BP3" = $14, "Erp_Id_BP4" = $15, "Name_BP4" = $16, "Id_BP4" = $17, "Quantity_BP4" = $18, "Erp_Id_WD1" = $19, "Name_WD1" = $20, "Id_WD1" = $21, "Quantity_WD1" = $22, "Erp_Id_WD2" = $23, "Name_WD2" = $24, "Id_WD2" = $25, "Quantity_WD2" = $26, "Erp_Id_WD3" = $27, "Name_WD3" = $28, "Id_WD3" = $29, "Quantity_WD3" = $30, "CreateBy" = $31 
-            WHERE "id" = $32 RETURNING *
+            UPDATE "Drawing"
+            SET 
+                "Compact_No_Modify_Drawing" = $1,
+                "Part_No" = $2,
+                "Erp_Id_BP1" = $3,
+                "Name_BP1" = $4,
+                "Id_BP1" = $5,
+                "Quantity_BP1" = $6,
+                "Thickness_Pad1" = $7,
+                "Erp_Id_BP2" = $8,
+                "Name_BP2" = $9,
+                "Id_BP2" = $10,
+                "Quantity_BP2" = $11,
+                "Thickness_Pad2" = $12,
+                "Erp_Id_BP3" = $13,
+                "Name_BP3" = $14,
+                "Id_BP3" = $15,
+                "Quantity_BP3" = $16,
+                "Thickness_Pad3" = $17,
+                "Erp_Id_BP4" = $18,
+                "Name_BP4" = $19,
+                "Id_BP4" = $20,
+                "Quantity_BP4" = $21,
+                "Thickness_Pad4" = $22,
+                "Erp_Id_WD1" = $23,
+                "Name_WD1" = $24,
+                "Id_WD1" = $25,
+                "Quantity_WD1" = $26,
+                "Erp_Id_WD2" = $27,
+                "Name_WD2" = $28,
+                "Id_WD2" = $29,
+                "Quantity_WD2" = $30,
+                "Erp_Id_WD3" = $31,
+                "Name_WD3" = $32,
+                "Id_WD3" = $33,
+                "Quantity_WD3" = $34,
+                "CreateBy" = $35
+            WHERE "id" = $36
+            RETURNING *;
         `;
-        const values = [Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy, id];
-       
+
+        const values = [
+            Compact_No_Modify_Drawing, Part_No,
+            Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Thickness_Pad1,
+            Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2,
+            Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3,
+            Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4,
+            Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1,
+            Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2,
+            Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3,
+            CreateBy, id
+        ];
+
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
 
         // Log changes
         const columns = [
-            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy"
+            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1", "Thickness_Pad2", "Thickness_Pad3", "Thickness_Pad4", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy"
         ];
 
         // const action = updated;

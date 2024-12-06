@@ -9,8 +9,9 @@ const bodyParser = require('body-parser');
 //Use middleware
 app.use(cors());
 app.use(bodyParser.json());
-//call database connection
-
+const path = require('path');
+// Serve static files from the 'Assets' folder
+app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 
 
 const requireAuth = require('./middleware/requireAuth');
@@ -23,8 +24,11 @@ const data_sheetRouter = require('./routes/data_sheetRoutes');
 const shimRouter = require('./routes/shimRoutes');
 const drawingRouter = require('./routes/drawingRoutes');
 const productspecRouter = require('./routes/product_specRoutes');
+const displayRouter = require('./routes/displayRoutes');
+const drawingfileRouter = require('./routes/drawingfileRoutes');
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
+const sellectedbomRouter = require('./routes/sellectedbomRoutes')
 
 app.use('/api/user', UserRouter);
 app.use('/api/bom',requireAuth, Bomsrouter);
@@ -36,6 +40,9 @@ app.use('/api/shim', requireAuth, shimRouter);
 app.use('/api/drawing', requireAuth, drawingRouter);
 app.use('/api/productspec', requireAuth, productspecRouter);
 app.use('/api/historylog', requireAuth, historylogRouter);
+app.use('/api/sellectedbom', requireAuth, sellectedbomRouter);
+app.use('/api/display', requireAuth, displayRouter);
+app.use('/api/file', requireAuth, drawingfileRouter);
 
 require('dotenv').config();
 const port = process.env.PORT || 8001;

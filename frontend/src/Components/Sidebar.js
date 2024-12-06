@@ -22,40 +22,39 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   if (!user) return null;
 
   const items = [
+
+    
     { key: '1', icon: <HomeOutlined />, label: <Link to="/home">Home</Link> },
-    { key: 'Package', icon: <ExceptionOutlined />, label: 'Package', children: [
-      { key: '20', label: <Link to="/package">Report</Link> },
+
+    { key: 'Display', icon: <ExceptionOutlined />, label: 'Display', children: [
+      { key: '11', label: <Link to="/wipdisplay">WIP Code</Link> },
     ]},
-    { key: 'Outer', icon: <FileExclamationOutlined />, label: 'Outer', children: [
-      { key: '30', label: <Link to="/Outer">Report</Link> },
-    ]},
-    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: 'Data Sheet', children: [
-      { key: '40', label: <Link to="/datasheet">Report</Link> },
-    ]},
+
+    { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">กล่อง</Link>},
+
+    { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">Outer</Link>},
+
+    { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
+
+    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: <Link to="/dataSheet">Data Sheet</Link>},
+
     { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
       { key: '50', label: <Link to="/productspec">Report</Link> },
+      { key: '51', label: <Link to="/productspecfile">Product Spec File</Link> },
     ]},
-    { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: 'โฟมสำเร็จรูปอุปกรณ์เสริม', children: [
-      { key: '60', label: <Link to="/additionalpackage">Report</Link> },
-    ]},
-    { key: 'Shim', icon: <FileExcelOutlined />, label: 'Shim', children: [
-      { key: '70', label: <Link to="/shim">Report</Link> },
-    ]},
+
+    { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
+
     { key: 'Drawing', icon: <FileExcelOutlined />, label: 'Drawing', children: [
       { key: '80', label: <Link to="/drawing">Report</Link> },
+      { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
     ]},
-    { key: 'Drawing-File', icon: <FileExcelOutlined />, label: 'Drawing-File', children: [
-      { key: '90', label: <Link to="/Drawing-File">Report</Link> },
-    ]},
-    { key: 'Bom', icon: <FileExcelOutlined />, label: 'Bom', children: [
-      { key: '100', label: <Link to="/bom">Report</Link> },
-    ]},
-    { key: 'Product-Data', icon: <FileExcelOutlined />, label: 'Product Data', children: [
-      { key: '110', label: <Link to="/Product-Data">Report</Link> },
-    ]},
-    { key: 'user', icon: <UserOutlined />, label: 'User Management', children: [
-      { key: '120', label: <Link to="/usermanagement">Report</Link> },
-    ]},
+    { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/bom">Bom</Link>},
+    
+    // { key: 'Product-Data', icon: <FileExcelOutlined />, label: 'Product Data', children: [
+    //   { key: '110', label: <Link to="/Product-Data">Report</Link> },
+    // ]},
+    { key: 'user', icon: <UserOutlined />, key: '120', label: <Link to="/usermanagement">User management</Link>},
    
   ].filter(item => !item.hidden); // Filter out hidden items
 

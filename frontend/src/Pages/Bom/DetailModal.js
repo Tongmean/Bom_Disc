@@ -10,19 +10,27 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
 
     if (!data) return null;
 
-    // Updated column_name to labels
+    // Mapping field names to display labels
     const columnNameLabels = {
-        No: "No",
-        Data_Sheet_No: "Data Sheet No.",
-        Compact_No: "Compact No.",
-        Grade_Chem: "เกรดเคมี.",
-        Weight_F1: "น้ำหนักเคมี F1",
-        Weight_F2: "น้ำหนักเคมี F2",
-        Underlayer_Grade_Chem: "เกรดเคมี Underlayer",
-        Weight_U1: "น้ำหนักเคมี U1",
-        Weight_U2: "น้ำหนักเคมี U2",
-        Formular: "สูตร",
+        Code_Fg: "รหัส ERP (Code_Fg)",
+        Num: "เบอร์",
+        Part_No: "Part No.",
+        Sale_Code_Bom: "Code การขาย",
+        Type_Customer: "ประเภทลูกค้า",
+        Customer_Name: "ชื่อลูกค้า",
+        Start_Sale_Date: "วันเริ่มขาย",
         Status: "Status",
+        Drawing_No: "Drawing No.",
+        Shim_Attach: "การติด Shim",
+        Shim_No: "Shim No",
+        Product_Spec_No: "Product Spec No.",
+        Data_Sheet_No: "Data Sheet No.",
+        Display_Box_Id: "เบอร์กล่อง",
+        Quantity_Display_Box: "จำนวนกล่อง",
+        Outer_Package: "รหัส Outer",
+        Outer_Id: "ใส่ Outer",
+        Pcs_Per_Set: "จำนวนชิ้น/ชุด",
+        Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
     };
 
     return (
@@ -35,21 +43,29 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                 <h5 className="text-primary">Detail Information</h5>
                 <div className="row">
                     {[
-                        { label: "No:", value: data.No },
-                        { label: "Data Sheet No.:", value: data.Data_Sheet_No },
-                        { label: "Compact No.:", value: data.Compact_No },
-                        { label: "เกรดเคมี.:", value: data.Grade_Chem },
-                        { label: "น้ำหนักเคมี F1:", value: data.Weight_F1 },
-                        { label: "น้ำหนักเคมี F2:", value: data.Weight_F2 },
-                        { label: "เกรดเคมี Underlayer:", value: data.Underlayer_Grade_Chem },
-                        { label: "น้ำหนักเคมี U1:", value: data.Weight_U1 },
-                        { label: "น้ำหนักเคมี U2:", value: data.Weight_U2 },
-                        { label: "สูตร:", value: data.Formular },
-                        { label: "Status:", value: data.Status },
-                        { label: "กรอกโดย:", value: data.CreateBy },
-                        { label: "กรอกเมื่อ:", value: convertToUTCPlus7(data.CreateAt) },
+                        { label: columnNameLabels.Code_Fg, value: data.Code_Fg },
+                        { label: columnNameLabels.Num, value: data.Num },
+                        { label: columnNameLabels.Part_No, value: data.Part_No },
+                        { label: columnNameLabels.Sale_Code_Bom, value: data.Sale_Code_Bom },
+                        { label: columnNameLabels.Type_Customer, value: data.Type_Customer },
+                        { label: columnNameLabels.Customer_Name, value: data.Customer_Name },
+                        { label: columnNameLabels.Start_Sale_Date, value: data.Start_Sale_Date },
+                        { label: columnNameLabels.Status, value: data.Status },
+                        { label: columnNameLabels.Drawing_No, value: data.Drawing_No },
+                        { label: columnNameLabels.Shim_Attach, value: data.Shim_Attach },
+                        { label: columnNameLabels.Shim_No, value: data.Shim_No },
+                        { label: columnNameLabels.Product_Spec_No, value: data.Product_Spec_No },
+                        { label: columnNameLabels.Data_Sheet_No, value: data.Data_Sheet_No },
+                        { label: columnNameLabels.Display_Box_Id, value: data.Display_Box_Id },
+                        { label: columnNameLabels.Quantity_Display_Box, value: data.Quantity_Display_Box },
+                        { label: columnNameLabels.Outer_Package, value: data.Outer_Package },
+                        { label: columnNameLabels.Outer_Id, value: data.Outer_Id },
+                        { label: columnNameLabels.Pcs_Per_Set, value: data.Pcs_Per_Set },
+                        { label: columnNameLabels.Additional_Package_Id, value: data.Additional_Package_Id },
+                        { label: "กรอกโดย", value: data.CreateBy },
+                        { label: "กรอกเมื่อ", value: convertToUTCPlus7(data.CreateAt) },
                     ].map((field, index) => (
-                        <div key={index} className="col-md-4 mb-3"> {/* Changed col-md-6 to col-md-4 for 3 boxes in a row */}
+                        <div key={index} className="col-md-4 mb-3">
                             <div className="p-2 border border-primary rounded bg-light">
                                 <h6 className="text-secondary mb-1">{field.label}</h6>
                                 <p className="m-0">{field.value || "-"}</p>
@@ -61,7 +77,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                 {/* History Log Section */}
                 {showHistoryLog && (
                     <div className="mt-3">
-                        <h5 className="text-primary">ประวิติการแก้ไข</h5>
+                        <h5 className="text-primary">ประวัติการแก้ไข</h5>
                         <div className="border p-3 bg-light">
                             {historyLog && historyLog.length > 0 ? (
                                 <Timeline>
@@ -79,7 +95,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                                     ))}
                                 </Timeline>
                             ) : (
-                                <p>ไม่มี ประวิติการแก้ไข.</p>
+                                <p>ไม่มีประวัติการแก้ไข.</p>
                             )}
                         </div>
                     </div>

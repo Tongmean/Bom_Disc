@@ -26,6 +26,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Erp_Id_SP3: "รหัส SP3",
         Id_SP3: "ID SP3",
         Quantity_SP3: "จำนวน SP3",
+        Status: "Status",
     };
 
     return (
@@ -53,6 +54,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "รหัส SP3:", value: data.Erp_Id_SP3 },
                         { label: "ID SP3:", value: data.Id_SP3 },
                         { label: "จำนวน SP3:", value: data.Quantity_SP3 },
+                        { label: "Status:", value: data.Status },
                         { label: "กรอกโดย:", value: data.CreateBy },
                         { label: "กรอกเมื่อ:", value: convertToUTCPlus7(data.CreateAt) },
                     ].map((field, index) => (

@@ -1,8 +1,8 @@
 import apiClient from './ApiSetup/api';
 
-export const fetchDrawings = async () => {
+export const fetchBoms = async () => {
   try {
-    const response = await apiClient.get('/drawing'); // Send the GET request to the server
+    const response = await apiClient.get('/bom'); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -17,9 +17,9 @@ export const fetchDrawings = async () => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const fetchDrawing = async (id) => {
+export const fetchBom = async (id) => {
   try {
-    const response = await apiClient.get(`/drawing/${id}`); // Send the GET request to the server
+    const response = await apiClient.get(`/bom/${id}`); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -34,9 +34,9 @@ export const fetchDrawing = async (id) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const CreateDrawingapi = async (drawingData) => {
+export const createBom = async (bomData) => {
   try {
-    const response = await apiClient.post(`/drawing/create`, drawingData); // Send the GET request to the server
+    const response = await apiClient.post(`/bom/create`, bomData); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -51,9 +51,9 @@ export const CreateDrawingapi = async (drawingData) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const updateDrawingapi = async (id, updatedDrawing) => {
+export const updateBom = async (id, updatedBom) => {
   try {
-    const response = await apiClient.put(`/drawing/update/${id}`, updatedDrawing); // Send the GET request to the server
+    const response = await apiClient.put(`/bom/update/${id}`, updatedBom); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -71,7 +71,7 @@ export const updateDrawingapi = async (id, updatedDrawing) => {
 
 export const fetchHistoryLog = async (id) => {
   try {
-    const response = await apiClient.get(`/historylog/drawing/${id}`); // Send the GET request to the server
+    const response = await apiClient.get(`/historylog/bom/${id}`); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {

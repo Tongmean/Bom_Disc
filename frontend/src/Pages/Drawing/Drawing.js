@@ -88,6 +88,7 @@ const Drawing = () =>{
         try {
             const history = await fetchHistoryLog(data.No); // API call to fetch the history log
             setHistoryLog(history);
+            console.log('history', history)
         } catch (err) {
             console.error('Failed to fetch history log:', err.message);
             setError(err.message);

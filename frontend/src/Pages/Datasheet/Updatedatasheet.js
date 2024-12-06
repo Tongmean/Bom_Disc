@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Spin } from 'antd';
+import { Form, Input, Button, Spin, Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchDatasheet, updateDatasheet } from '../../Ultility/Datasheet';
+const { Option } = Select;
 
 const UpdateDatasheet = () => {
     const [form] = Form.useForm(); // Initialize Form instance
@@ -24,6 +25,7 @@ const UpdateDatasheet = () => {
         Weight_U1: "น้ำหนักเคมี U1",
         Weight_U2: "น้ำหนักเคมี U2",
         Formular: "สูตร",
+        Status: "Status",
     };
 
     // Fetch datasheet data on component mount
@@ -43,6 +45,7 @@ const UpdateDatasheet = () => {
                         Weight_U1: data.Weight_U1,
                         Weight_U2: data.Weight_U2,
                         Formular: data.Formular,
+                        Status: data.Status,
                     };
                     console.log('data', data)
                     console.log('formData', formData)
@@ -185,6 +188,18 @@ const UpdateDatasheet = () => {
                             rules={[{ required: true, message: 'กรุณากรอก สูตร' }]}
                         >
                             <Input />
+                        </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-lg-6 col-md-12">
+                        <Form.Item
+                            label={columnNameLabels.Status}
+                            name="Status"
+                            rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels.Status}` }]}
+                        >
+                            <Select placeholder="กรุณาเลือก Status">
+                                <Select.Option value="Master">Master</Select.Option>
+                                <Select.Option value="Intensive">Intensive</Select.Option>
+                            </Select>
                         </Form.Item>
                     </div>
 

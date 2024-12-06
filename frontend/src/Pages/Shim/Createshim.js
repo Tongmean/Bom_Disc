@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createShim } from '../../Ultility/Shimapi'; // Assuming you have a similar API function
 
+const { Option } = Select; // Destructure Select.Option for use
+
 const CreateShim = () => {
-    const [form] = Form.useForm(); // Initialize Form instance
+    const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
     const navigate = useNavigate();
@@ -31,7 +33,7 @@ const CreateShim = () => {
     const handleSubmit = async (values) => {
         setIsPending(true);
 
-        const shimData = { ...values, CreateBy: '-' }; // Merge form values with CreateBy
+        const shimData = { ...values, CreateBy: '-' };
 
         try {
             const result = await createShim(shimData);
@@ -39,9 +41,7 @@ const CreateShim = () => {
             console.log('Shim Data:', shimData);
             console.log('API Result:', result);
 
-            form.resetFields(); // Clear the form fields upon success
-            // Optionally navigate to another route
-            // setTimeout(() => navigate('/shim'), 2000);
+            form.resetFields();
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {
@@ -58,7 +58,7 @@ const CreateShim = () => {
         <div className="container-fluid">
             <h2>แบบฟอร์มบันทึก Shim</h2>
             <Form
-                form={form} // Associate the form instance with the Form component
+                form={form}
                 layout="vertical"
                 onFinish={handleSubmit}
                 initialValues={{
@@ -76,10 +76,11 @@ const CreateShim = () => {
                     Erp_Id_SP3: '',
                     Id_SP3: '',
                     Quantity_SP3: '',
+                    Status: '',
                 }}
             >
                 <div className="row">
-                    {Object.entries(columnNameLabels).map(([fieldName, label], index) => (
+                    {Object.entries(columnNameLabels).map(([fieldName, label]) => (
                         <div className="col-xl-4 col-lg-4 col-md-6" key={fieldName}>
                             <Form.Item
                                 label={label}
@@ -90,6 +91,21 @@ const CreateShim = () => {
                             </Form.Item>
                         </div>
                     ))}
+
+                    {/* Add the dropdown for Status */}
+                    <div className="col-xl-4 col-lg-4 col-md-6">
+                        <Form.Item
+                            label="Status"
+                            name="Status"
+                            rules={[{ required: true, message: 'กรุณาเลือก Status' }]}
+                        >
+                            <Select placeholder="เลือก Status">
+                                <Option value="Master">Active</Option>
+                                <Option value="Intensive">Intensive</Option>
+                            </Select>
+                        </Form.Item>
+                    </div>
+
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/shim')}>

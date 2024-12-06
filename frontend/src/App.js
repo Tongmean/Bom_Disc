@@ -5,7 +5,9 @@ import HeaderComponent from './Components/Header';
 import FooterComponent from './Components/Footer';
 import { Layout } from 'antd';
 import Loginpage from "./Components/Loginpage";
-import Homepage from './Pages/Home/Home';
+//Display
+import Homepage from './Pages/Display/Home';
+import Wipdisplay from './Pages/Display/Wipdisplay';
 //Protect Route
 import ProtectedRoute from './Components/ProtectedRoute';
 //package
@@ -34,6 +36,14 @@ import CreateShim from './Pages/Shim/Createshim';
 import UpdateShim from './Pages/Shim/UpdateShim';
 //Drawing
 import Drawing from './Pages/Drawing/Drawing';
+import CreateDrawing from './Pages/Drawing/Createdrawing';
+import UpdateDrawing from './Pages/Drawing/Updatedrawing';
+//bom
+import Bom from './Pages/Bom/Bom';
+import CreateBom from './Pages/Bom/Createbom';
+import UpdateBom from './Pages/Bom/Updatebom';
+//Drawing File
+import Drawingfile from './Pages/Drawingfile/Drawingfile';
 //user
 import Usermanagement from './Pages/Users/Users';
 import CreateUser from './Pages/Users/Createuser';
@@ -71,33 +81,40 @@ const App = () => {
             <Routes>
               <Route path='/login' element={isAuthenticated ? <Navigate to='/Home' /> : <Loginpage />} />
               <Route path='/Home' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
+              <Route path='/wipdisplay' element={isAuthenticated ? <Wipdisplay /> : <Navigate to='/login' />} />
 
               <Route path="/Package" element={isAuthenticated ? <Package /> : <Navigate to='/login' />} />
 
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                <Route path="createPackage" element={<CreateDisplayBox />} />
+                <Route path="/createPackage" element={<CreateDisplayBox />} />
                 <Route path="/Package/:id" element={<UpdateDisplayBox />} />
               </Route>
               {/* <Route path="/createPackage" element={isAuthenticated ? <CreateDisplayBox /> : <Navigate to='/login' />} /> */}
               {/* <Route path="/Package/:id" element={isAuthenticated ? <UpdateDisplayBox /> : <Navigate to='/login' />} /> */}
 
               <Route path="/outer" element={isAuthenticated ? <Outer /> : <Navigate to='/login' />} />
-              <Route path="/createouter" element={isAuthenticated ? <CreateOuter /> : <Navigate to='/login' />} />
-              <Route path="/outer/:id" element={isAuthenticated ? <UpdateOuter /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createouter" element={<CreateOuter />} />
+                <Route path="/outer/:id" element={<UpdateOuter />} />
+              </Route>
 
               <Route path="/dataSheet" element={isAuthenticated ? <DataSheet /> : <Navigate to='/login' />} />
-              <Route path="/createdatasheet" element={isAuthenticated ? <CreateDatasheet /> : <Navigate to='/login' />} />
-              <Route path="/datasheet/:id" element={isAuthenticated ? <UpdateDatasheet /> : <Navigate to='/login' />} />
-
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createdatasheet" element={<CreateDatasheet />} />
+                <Route path="/datasheet/:id" element={<UpdateDatasheet />} />
+              </Route>
 
               <Route path="/productspec" element={isAuthenticated ? <Productspec /> : <Navigate to='/login' />} />
-              <Route path="/createproductspec" element={isAuthenticated ? <CreateProductSpec /> : <Navigate to='/login' />} />
-              <Route path="/productspec/:id" element={isAuthenticated ? <UpdateProductSpec /> : <Navigate to='/login' />} />
-
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createproductspec" element={<CreateProductSpec />} />
+                <Route path="/productspec/:id" element={<UpdateProductSpec />} />
+              </Route>
 
               <Route path="/Additionalpackage" element={isAuthenticated ? <Additionalpackage /> : <Navigate to='/login' />} />
-              <Route path="/createadditionalpackage" element={isAuthenticated ? <CreateAdditionalPackage /> : <Navigate to='/login' />} />
-              <Route path="/additionalpackage/:id" element={isAuthenticated ? <UpdateAdditionPackage /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createadditionalpackage" element={<CreateAdditionalPackage />} />
+                <Route path="/additionalpackage" element={<UpdateAdditionPackage />} />
+              </Route>
 
 
               <Route path="/shim" element={isAuthenticated ? <Shim /> : <Navigate to='/login' />} />
@@ -107,14 +124,26 @@ const App = () => {
               </Route>
 
               <Route path="/drawing" element={isAuthenticated ? <Drawing /> : <Navigate to='/login' />} />
-              {/* <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                <Route path="/createshim" element={<CreateShim />} />
-                <Route path="/shim/:id" element={<UpdateShim />} />
-              </Route> */}
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createdrawing" element={<CreateDrawing />} />
+                <Route path="/drawing/:id" element={<UpdateDrawing />} />
+              </Route>
 
+              <Route path="/bom" element={isAuthenticated ? <Bom /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createbom" element={<CreateBom />} />
+                <Route path="/bom/:id" element={<UpdateBom />} />
+              </Route>
 
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/usermanagement" element={<Usermanagement />} />
+                <Route path="/createuser" element={<CreateUser />} />
+                <Route path="/user/:id" element={<UpdateUser />} />
+                {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
+              </Route>
+
+              <Route path="/drawingfile" element={isAuthenticated ? <Drawingfile /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/createuser" element={<CreateUser />} />
                 <Route path="/user/:id" element={<UpdateUser />} />
                 {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}

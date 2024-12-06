@@ -65,7 +65,7 @@ const postBom = async (req, res) => {
     const {
         Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
         Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
-        Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package,
+        Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
         Pcs_Per_Set, Additional_Package_Id
     } = req.body;
 
@@ -88,16 +88,16 @@ const postBom = async (req, res) => {
                 "Code_Fg", "Num", "Part_No", "Sale_Code_Bom", "Type_Customer", "Customer_Name",
                 "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", 
                 "Product_Spec_No", "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box",
-                "Outer_Package", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy"
+                "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy"
             ) 
             VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
             ) RETURNING *`;
 
         const values = [
             Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
             Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
-            Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package,
+            Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
             Pcs_Per_Set, Additional_Package_Id, userEmail
         ];
 

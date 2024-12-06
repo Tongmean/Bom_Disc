@@ -61,7 +61,7 @@ const getDatasheet = async (req,res) =>{
 //post Data_Sheet
 const postDatasheet = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy} = req.body;
+    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy, Status} = req.body;
     try {
         // Check for duplicate 
         const sqlCheck = `SELECT * FROM "Data_Sheet" WHERE "Data_Sheet_No" = $1`;
@@ -75,9 +75,9 @@ const postDatasheet = async (req, res) =>{
             });
         }
         //Insert New         
-        const sqlCommand = `INSERT INTO "Data_Sheet" ("Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Underlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING*`;
-        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, userEmail];
+        const sqlCommand = `INSERT INTO "Data_Sheet" ("Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Underlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy", "Status")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING*`;
+        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, userEmail, Status];
         //Insert Query
 
         const insertResult = await dbconnect.query(sqlCommand, values);
@@ -102,7 +102,7 @@ const postDatasheet = async (req, res) =>{
 const updateDatasheet = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // Authenticated user email
-    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy} = req.body;
+    const {Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy, Status} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Data_Sheet" WHERE id = $1`;
@@ -115,14 +115,14 @@ const updateDatasheet = async (req, res) =>{
                 msg: `ไม่พบข้อมูลที่มีรหัส: ${Data_Sheet_No}`,
             });
         }
-        const updateSql = `UPDATE "Data_Sheet" SET "Data_Sheet_No" = $1, "Compact_No" = $2, "Grade_Chem" = $3, "Weight_F1" = $4, "Weight_F2" = $5, "Underlayer_Grade_Chem" = $6, "Weight_U1" = $7, "Weight_U2" = $8, "Formular" = $9, "CreateBy" = $10 WHERE "id" = $11 RETURNING *`;
-        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy, id];
+        const updateSql = `UPDATE "Data_Sheet" SET "Data_Sheet_No" = $1, "Compact_No" = $2, "Grade_Chem" = $3, "Weight_F1" = $4, "Weight_F2" = $5, "Underlayer_Grade_Chem" = $6, "Weight_U1" = $7, "Weight_U2" = $8, "Formular" = $9, "CreateBy" = $10, "Status" =$11 WHERE "id" = $12 RETURNING *`;
+        const values = [Data_Sheet_No, Compact_No, Grade_Chem, Weight_F1, Weight_F2, Underlayer_Grade_Chem, Weight_U1, Weight_U2, Formular, CreateBy, Status, id];
         //Update Query
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
         // Log changes
         const columns = [
-            "Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Underlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy"
+            "Data_Sheet_No", "Compact_No", "Grade_Chem", "Weight_F1", "Weight_F2","Underlayer_Grade_Chem", "Weight_U1", "Weight_U2", "Formular", "CreateBy", "Status"
         ];
         for (const column of columns) {
             const oldValue = currentValue[column];

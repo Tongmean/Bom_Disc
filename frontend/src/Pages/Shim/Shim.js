@@ -34,6 +34,7 @@ const Shim = () =>{
         { headerName: 'รหัส SP3', field: 'Erp_Id_SP3' },
         { headerName: 'ID SP3', field: 'Id_SP3' },
         { headerName: 'จำนวน SP3', field: 'Quantity_SP3' },
+        { headerName: 'Status', field: 'Status' },
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
@@ -101,6 +102,7 @@ const Shim = () =>{
                 Erp_Id_SP3: i.Erp_Id_SP3,
                 Id_SP3: i.Id_SP3,
                 Quantity_SP3: i.Quantity_SP3,
+                Status: i.Status,
 
                 
                 CreateBy: i.CreateBy,

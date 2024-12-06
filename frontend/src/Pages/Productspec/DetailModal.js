@@ -49,7 +49,8 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Name_Erp_Additional_Tool: 'ชื่อ ERP อุปกรณ์เสริมอื่น ๆ',
         Additional_Tool_Erp_Id: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ',
         Num_Additional_Tool: 'จำนวน อุปกรณ์เสริมอื่น ๆ',
-        Column_36: 'Column_36'
+        Column_36: 'Column_36',
+        Status: 'Status'
     };
 
     return (
@@ -101,6 +102,9 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "รหัส ERP อุปกรณ์เสริมอื่น ๆ:", value: data.Additional_Tool_Erp_Id },
                         { label: "จำนวน อุปกรณ์เสริมอื่น ๆ:", value: data.Num_Additional_Tool },
                         { label: "Column_36:", value: data.Column_36 },
+                        
+                        { label: "Status:", value: data.Status },
+
                         { label: "กรอกโดย:", value: data.CreateBy },
                         { label: "กรอกเมื่อ:", value: convertToUTCPlus7(data.CreateAt) },
                     ].map((field, index) => (

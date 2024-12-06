@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Spin, Select } from 'antd'; // Import necessary components
+import { Form, Input, Button, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
-import { fetchShim, updateShim } from '../../Ultility/Shimapi';
+import { fetchDrawing, updateDrawingapi } from '../../Ultility/Drawingapi';
 
-const { Option } = Select; // Destructure Option for the Select component
-
-const UpdateShim = () => {
+const UpdateDrawing = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
@@ -15,38 +13,51 @@ const UpdateShim = () => {
     const { id } = useParams(); // Extract ID from route params
     const navigate = useNavigate();
 
-    // Mapping the new attributes to their labels
-    const fieldLabels = {
-        Compact_No_Modify: "Compact No (ปรับ)",
-        Part_No: "Part No",
-        Name_SP1: "ชื่อ SP1",
-        Erp_Id_SP1: "รหัส SP1",
-        Id_SP1: "ID SP1",
-        Quantity_SP1: "จำนวน SP1",
-        Name_SP2: "ชื่อ SP2",
-        Erp_Id_SP2: "รหัส SP2",
-        Id_SP2: "ID SP2",
-        Quantity_SP2: "จำนวน SP2",
-        Name_SP3: "ชื่อ SP3",
-        Erp_Id_SP3: "รหัส SP3",
-        Id_SP3: "ID SP3",
-        Quantity_SP3: "จำนวน SP3",
-        Status: "Status" // Add label for the Status field
+    const columnNameLabels = {
+        Compact_No_Modify_Drawing: "Compact No (ปรับ)",
+        Part_No: "Part No.",
+        Erp_Id_BP1: "รหัส ERP BP1",
+        Name_BP1: "ชื่อ ERP BP1",
+        Id_BP1: "ID BP1",
+        Quantity_BP1: "จำนวน BP1",
+        Thickness_Pad1: "ความหนาผ้า 1",
+        Erp_Id_BP2: "รหัส ERP BP2",
+        Name_BP2: "ชื่อ ERP BP2",
+        Id_BP2: "ID BP2",
+        Quantity_BP2: "จำนวน BP2",
+        Thickness_Pad2: "ความหนาผ้า 2",
+        Erp_Id_BP3: "รหัส ERP BP3",
+        Name_BP3: "ชื่อ ERP BP3",
+        Id_BP3: "ID BP3",
+        Quantity_BP3: "จำนวน BP3",
+        Thickness_Pad3: "ความหนาผ้า 3",
+        Erp_Id_BP4: "รหัส ERP BP4",
+        Name_BP4: "ชื่อ ERP BP4",
+        Id_BP4: "ID BP4",
+        Quantity_BP4: "จำนวน BP4",
+        Thickness_Pad4: "ความหนาผ้า 4",
+        Erp_Id_WD1: "รหัส ERP WD1",
+        Name_WD1: "ชื่อ ERP WD1",
+        Id_WD1: "ID WD1",
+        Quantity_WD1: "จำนวน WD1",
+        Erp_Id_WD2: "รหัส ERP WD2",
+        Name_WD2: "ชื่อ ERP WD2",
+        Id_WD2: "ID WD2",
+        Quantity_WD2: "จำนวน WD2",
+        Erp_Id_WD3: "รหัส ERP WD3",
+        Name_WD3: "ชื่อ ERP WD3",
+        Id_WD3: "ID WD3",
+        Quantity_WD3: "จำนวน WD3",
     };
 
-    // Fetch shim data on component mount
+    // Fetch drawing data on component mount
     useEffect(() => {
         const load = async (id) => {
             try {
-                const data = (await fetchShim(id)).data[0]; // Fetch data by ID
+                const data = (await fetchDrawing(id)).data[0]; // Fetch data by ID
 
                 if (data) {
-                    const formData = {};
-                    for (let key in fieldLabels) {
-                        formData[key] = data[key];
-                    }
-
-                    form.setFieldsValue(formData); // Populate form with data
+                    form.setFieldsValue(data); // Populate form with data
                     setLoading(false);
                 } else {
                     setLoading(false);
@@ -54,7 +65,7 @@ const UpdateShim = () => {
                 }
             } catch (error) {
                 setLoading(false);
-                console.error('Error fetching data:', error);
+                console.error('Error fetching data:', error); // Log the error for debugging
                 showNotification('Failed to load data', 'error');
             }
         };
@@ -69,10 +80,10 @@ const UpdateShim = () => {
         setIsPending(true);
 
         try {
-            const updatedShim = { ...values, UpdateBy: '-' }; // Include UpdateBy field
-            const result = await updateShim(id, updatedShim); // Update the package
+            const updatedDrawing = { ...values, UpdateBy: '-' }; // Include UpdateBy field
+            const result = await updateDrawingapi(id, updatedDrawing); // Update the drawing
             showNotification(result.msg, 'success');
-            setTimeout(() => navigate('/shim'), 2500); // Redirect after update
+            setTimeout(() => navigate('/drawing'), 2500); // Redirect after update
         } catch (error) {
             showNotification(error.message, 'fail');
         } finally {
@@ -97,39 +108,27 @@ const UpdateShim = () => {
 
     return (
         <div className="container-fluid">
-            <h2>แก้ไข Shim (Update Shim)</h2>
+            <h2>แก้ไข Drawing (Update Drawing)</h2>
             <Form
                 form={form}
                 layout="vertical"
                 onFinish={handleSubmit}
             >
                 <div className="row">
-                    {Object.keys(fieldLabels).map((key) => (
+                    {Object.entries(columnNameLabels).map(([key, label]) => (
                         <div className="col-xl-4 col-lg-4 col-md-12" key={key}>
                             <Form.Item
-                                label={fieldLabels[key]}
+                                label={label}
                                 name={key}
-                                rules={[
-                                    {
-                                        required: key === "Status" || key !== "Compact_No_Modify", // Make Status required
-                                        message: `กรุณากรอก ${fieldLabels[key]}`
-                                    }
-                                ]}
+                                rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
                             >
-                                {key === "Status" ? (
-                                    <Select placeholder="Status">
-                                        <Option value="Master">Master</Option>
-                                        <Option value="Intensive">Intensive</Option>
-                                    </Select>
-                                ) : (
-                                    <Input />
-                                )}
+                                <Input />
                             </Form.Item>
                         </div>
                     ))}
                     <div className="col-12">
                         <Form.Item>
-                            <Button type="default" className="me-2" onClick={() => navigate('/shim')}>
+                            <Button type="default" className="me-2" onClick={() => navigate('/drawing')}>
                                 Back
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>
@@ -140,6 +139,7 @@ const UpdateShim = () => {
                 </div>
             </Form>
 
+            {/* Display notification if available */}
             {notification && (
                 <Notification
                     message={notification.message}
@@ -151,4 +151,4 @@ const UpdateShim = () => {
     );
 };
 
-export default UpdateShim;
+export default UpdateDrawing;

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createProductspec } from '../../Ultility/Productspecapi';
+import { Select } from 'antd';
 
 const CreateProductSpec = () => {
     const [form] = Form.useForm();
@@ -74,6 +75,12 @@ const CreateProductSpec = () => {
         { label: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ', name: 'Additional_Tool_Erp_Id' },
         { label: 'จำนวน อุปกรณ์เสริมอื่น ๆ', name: 'Num_Additional_Tool' },
         { label: 'Column_36', name: 'Column_36' },
+        { label: 'Status', name: 'Status' },
+    ];
+    const statusOptions = [
+        { label: 'Master', value: 'Master' },
+        { label: 'Intensive', value: 'Intensive' },
+
     ];
 
     return (
@@ -88,13 +95,23 @@ const CreateProductSpec = () => {
                 <div className="row">
                     {attributes.map((attr, index) => (
                         <div key={attr.name} className="col-xl-4 col-lg-4 col-md-6 mb-3">
-                            <Form.Item
-                                label={attr.label}
-                                name={attr.name}
-                                rules={[{ required: true, message: `กรุณากรอก ${attr.label}` }]}
-                            >
-                                <Input />
-                            </Form.Item>
+                            {attr.name === 'Status' ? (
+                                <Form.Item
+                                    label={attr.label}
+                                    name={attr.name}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
+                                >
+                                    <Select options={statusOptions} />
+                                </Form.Item>
+                            ) : (
+                                <Form.Item
+                                    label={attr.label}
+                                    name={attr.name}
+                                    rules={[{ required: true, message: `กรุณากรอก ${attr.label}` }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -111,7 +128,7 @@ const CreateProductSpec = () => {
                     </div>
                 </div>
             </Form>
-
+    
             {notification && (
                 <Notification
                     message={notification.message}

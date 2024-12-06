@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { CreateDatasheetapi } from '../../Ultility/Datasheet';
+const { Option } = Select;
 
 const CreateDatasheet = () => {
     const [form] = Form.useForm(); // Initialize Form instance
@@ -22,6 +23,7 @@ const CreateDatasheet = () => {
         Weight_U1: "น้ำหนักเคมี U1",
         Weight_U2: "น้ำหนักเคมี U2",
         Formular: "สูตร",
+        Status: "Status",
     };
 
     const handleSubmit = async (values) => {
@@ -67,6 +69,7 @@ const CreateDatasheet = () => {
                     Weight_U1: '',
                     Weight_U2: '',
                     Formular: '',
+                    Status: '',
                 }}
             >
                 <div className="row">
@@ -149,6 +152,18 @@ const CreateDatasheet = () => {
                             rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels.Formular}` }]}
                         >
                             <Input />
+                        </Form.Item>
+                    </div>
+                    <div className="col-xl-6 col-lg-6 col-md-12">
+                        <Form.Item
+                            label={columnNameLabels.Status}
+                            name="Status"
+                            rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels.Status}` }]}
+                        >
+                            <Select placeholder="กรุณาเลือก Status">
+                                <Select.Option value="Master">Master</Select.Option>
+                                <Select.Option value="Intensive">Intensive</Select.Option>
+                            </Select>
                         </Form.Item>
                     </div>
 

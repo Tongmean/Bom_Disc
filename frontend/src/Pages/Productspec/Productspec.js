@@ -55,6 +55,7 @@ const Productspec = () =>{
         { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ', field: 'Additional_Tool_Erp_Id' },
         { headerName: 'จำนวน อุปกรณ์เสริมอื่น ๆ', field: 'Num_Additional_Tool' },
         { headerName: 'Column_36', field: 'Column_36' },
+        { headerName: 'Status', field: 'Status' },
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
@@ -146,6 +147,7 @@ const Productspec = () =>{
                 Additional_Tool_Erp_Id: i.Additional_Tool_Erp_Id,
                 Num_Additional_Tool: i.Num_Additional_Tool,
                 Column_36: i.Column_36,
+                Status: i.Status,
 
                 CreateBy: i.CreateBy,
                 CreateAt: i.CreateAt

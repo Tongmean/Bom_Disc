@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createShim } from '../../Ultility/Shimapi'; // Assuming you have a similar API function
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 
-const { Option } = Select; // Destructure Select.Option for use
 
 const CreateShim = () => {
     const [form] = Form.useForm();
@@ -100,9 +100,7 @@ const CreateShim = () => {
                             rules={[{ required: true, message: 'กรุณาเลือก Status' }]}
                         >
                             <Select placeholder="เลือก Status">
-                                <Option value="Master">Active</Option>
-                                <Option value="Intensive">Intensive</Option>
-                            </Select>
+                            <Select options={fetchStatus} /></Select>
                         </Form.Item>
                     </div>
 

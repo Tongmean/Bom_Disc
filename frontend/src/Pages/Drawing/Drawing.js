@@ -57,6 +57,7 @@ const Drawing = () =>{
         { headerName: 'ชื่อ ERP WD3', field: 'Name_WD3' },
         { headerName: 'ID WD3', field: 'Id_WD3' },
         { headerName: 'จำนวน WD3', field: 'Quantity_WD3' },
+        { headerName: 'Status', field: 'Status' },
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
@@ -151,6 +152,7 @@ const Drawing = () =>{
                 Name_WD3: i.Name_WD3,
                 Id_WD3: i.Id_WD3,
                 Quantity_WD3: i.Quantity_WD3,
+                Status: i.Status,
              
      
 

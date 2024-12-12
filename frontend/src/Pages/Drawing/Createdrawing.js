@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { CreateDrawingapi } from '../../Ultility/Drawingapi';
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 
 const CreateDrawing = () => {
     const [form] = Form.useForm();
@@ -46,6 +47,7 @@ const CreateDrawing = () => {
         Name_WD3: "ชื่อ ERP WD3",
         Id_WD3: "ID WD3",
         Quantity_WD3: "จำนวน WD3",
+        Status: "Status"
     };
 
     const initialValues = {
@@ -83,6 +85,7 @@ const CreateDrawing = () => {
         Name_WD3: "",
         Id_WD3: "",
         Quantity_WD3: "",
+        Status: "" 
     };
 
     const handleSubmit = async (values) => {
@@ -118,13 +121,24 @@ const CreateDrawing = () => {
                 <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
                         <div className={`col-xl-4 col-lg-4 col-md-6`} key={index}>
-                            <Form.Item
-                                label={label}
-                                name={key}
-                                rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
-                            >
-                                <Input />
-                            </Form.Item>
+                            {key === "Status" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`} >
+                                    <Select options={fetchStatus} /></Select>
+                                </Form.Item>
+                            ) : (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            )}
                         </div>
                     ))}
                     <div className="col-12">

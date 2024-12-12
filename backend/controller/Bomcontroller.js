@@ -1,6 +1,16 @@
 //call database connection
 const dbconnect = require('../middleware/Dbconnect');
 const { logUpdate } = require('../utility/updateLog');
+const nodemailer = require('nodemailer');
+// Set up Nodemailer with Outlook SMTP
+const transporter = nodemailer.createTransport({
+    service: 'Outlook',
+    auth: {
+      user: 'TEANG_T@su.ac.th',
+      pass: 'King0965358947', // Use App password if 2FA is enabled
+    },
+});
+
 //Get All record
 const getBoms = async (req, res) => {
     try {
@@ -102,6 +112,22 @@ const postBom = async (req, res) => {
         ];
 
         const insertResult = await dbconnect.query(sqlCommand, values);
+        // Send email notification on success
+        // const mailOptions = {
+        //     from: 'TEANG_T@su.ac.th',
+        //     to: 'tongmeanfc@gmail.com',
+        //     subject: 'Notification from Express.js',
+        //     text: `This is a success notification from your Express.js application. ${values}`,
+        // };
+
+        // transporter.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //     console.log(error);
+        //     return res.status(500).send('Error sending notification.');
+        //     }
+        //     console.log('Email sent: ' + info.response);
+        //     res.status(200).send('Notification sent via Outlook!');
+        // });
 
         return res.status(200).json({
             success: true,

@@ -145,6 +145,60 @@ const getProductspeclog = async (req, res) => {
         });
     }
 }
+//product spec
+const getDrawingfilelog = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const Bomlog = await dbconnect.query(`SELECT * FROM update_log WHERE record_id = $1 AND table_name = 'drawingfile' AND column_name != 'path' `, [id]);
+        return res.status(200).json({
+            success: true,
+            data: Bomlog.rows,
+            msg: `ดึงประวิติการแก้ไขสำเร็จแล้ว ครับ`
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: error,
+            msg: "มีข้อผิดพลาดเกิดขึ้นระหว่างการบันทึกข้อมูล กรุณาลองอีกครั้ง"
+        });
+    }
+}
+//product spec
+const getProductspecfilelog = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const Bomlog = await dbconnect.query(`SELECT * FROM update_log WHERE record_id = $1 AND table_name = 'productspecfile' AND column_name != 'path' `, [id]);
+        return res.status(200).json({
+            success: true,
+            data: Bomlog.rows,
+            msg: `ดึงประวิติการแก้ไขสำเร็จแล้ว ครับ`
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: error,
+            msg: "มีข้อผิดพลาดเกิดขึ้นระหว่างการบันทึกข้อมูล กรุณาลองอีกครั้ง"
+        });
+    }
+}
+
+const getEmarklog = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const Bomlog = await dbconnect.query(`SELECT * FROM update_log WHERE record_id = $1 AND table_name = 'Emark' AND column_name != 'path' `, [id]);
+        return res.status(200).json({
+            success: true,
+            data: Bomlog.rows,
+            msg: `ดึงประวิติการแก้ไขสำเร็จแล้ว ครับ`
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: error,
+            msg: "มีข้อผิดพลาดเกิดขึ้นระหว่างการบันทึกข้อมูล กรุณาลองอีกครั้ง"
+        });
+    }
+}
 module.exports = {
     getBomlog,
     getPackagelog,
@@ -153,7 +207,10 @@ module.exports = {
     getDatasheetlog,
     getShimlog,
     getDrawinglog,
-    getProductspeclog
+    getProductspeclog,
+    getDrawingfilelog,
+    getProductspecfilelog,
+    getEmarklog
 
 
 

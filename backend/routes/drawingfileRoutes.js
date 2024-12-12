@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { uploadMidleware } = require('../middleware/multerMiddleware');
-const { createDrawingFile } =  require("../controller/Drawingfilecontroller");
+const { createDrawingFile, getDrawingfiles, uploadDrawingMiddleware, updateDrawingFile, getDrawingfile } =  require("../controller/Drawingfilecontroller");
 
-router.post('/drawing',uploadMidleware, createDrawingFile);
+router.get('/drawing', getDrawingfiles);
+router.post('/drawing/create', uploadDrawingMiddleware, createDrawingFile);
+router.put('/drawing/update/:id', uploadDrawingMiddleware, updateDrawingFile);
+router.get('/drawing/:id', getDrawingfile);
 
 
 

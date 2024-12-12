@@ -13,6 +13,13 @@ const path = require('path');
 // Serve static files from the 'Assets' folder
 app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 
+// const fs = require('fs'); // Import fs module
+// // Load SSL certificate files
+// const privateKey = fs.readFileSync('path/to/private.key', 'utf8');
+// const certificate = fs.readFileSync('path/to/certificate.crt', 'utf8');
+// const ca = fs.readFileSync('path/to/ca.crt', 'utf8');
+
+// const credentials = { key: privateKey, cert: certificate, ca: ca };
 
 const requireAuth = require('./middleware/requireAuth');
 const UserRouter = require('./routes/userRoutes')
@@ -26,6 +33,8 @@ const drawingRouter = require('./routes/drawingRoutes');
 const productspecRouter = require('./routes/product_specRoutes');
 const displayRouter = require('./routes/displayRoutes');
 const drawingfileRouter = require('./routes/drawingfileRoutes');
+const productspecfileRouter = require('./routes/productspecfileRoutes');
+const emarkRouter = require('./routes/emarkRoutes');
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
 const sellectedbomRouter = require('./routes/sellectedbomRoutes')
@@ -43,6 +52,8 @@ app.use('/api/historylog', requireAuth, historylogRouter);
 app.use('/api/sellectedbom', requireAuth, sellectedbomRouter);
 app.use('/api/display', requireAuth, displayRouter);
 app.use('/api/file', requireAuth, drawingfileRouter);
+app.use('/api/file', requireAuth, productspecfileRouter);
+app.use('/api/emark', requireAuth, emarkRouter);
 
 require('dotenv').config();
 const port = process.env.PORT || 8001;

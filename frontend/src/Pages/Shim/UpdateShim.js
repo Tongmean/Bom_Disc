@@ -4,8 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchShim, updateShim } from '../../Ultility/Shimapi';
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 
-const { Option } = Select; // Destructure Option for the Select component
 
 const UpdateShim = () => {
     const [form] = Form.useForm(); // Initialize Form instance
@@ -118,9 +118,7 @@ const UpdateShim = () => {
                             >
                                 {key === "Status" ? (
                                     <Select placeholder="Status">
-                                        <Option value="Master">Master</Option>
-                                        <Option value="Intensive">Intensive</Option>
-                                    </Select>
+                                        <Select options={fetchStatus} /></Select>
                                 ) : (
                                     <Input />
                                 )}

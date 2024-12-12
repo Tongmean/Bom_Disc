@@ -18,6 +18,7 @@ const Wipdisplay = () =>{
         { headerName: 'จำนวน WIP1', field: 'Quantity_BP1' },
         { headerName: 'WIP2', field: 'WIP2' },
         { headerName: 'จำนวน WIP2', field: 'Quantity_BP2' },
+
         { headerName: 'WIP3', field: 'WIP3' },
         { headerName: 'จำนวน WIP3', field: 'Quantity_BP3' },
         { headerName: 'WIP4', field: 'WIP4' },
@@ -45,14 +46,18 @@ const Wipdisplay = () =>{
                     pads.every(p => p.Thickness === pad.Thickness)
                 ) {
                     acc[padKey] =
-                        pad.Thickness === "-" || !pad.Id_BP?.includes("BP")
-                            ? "-"
-                            : `${pad.Id_BP}${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+                        pad.Thickness === "-" && pad.Id_BP?.includes("BP")
+                            ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+                            : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
+                                ? "-"
+                                : `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
                 } else {
                     acc[padKey] =
-                        pad.Thickness === "-" || !pad.Id_BP?.includes("BP")
-                            ? "-"
-                            : `${pad.Id_BP}(${pad.Thickness})${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+                        pad.Thickness === "-" && pad.Id_BP?.includes("BP")
+                            ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+                            : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
+                                ? "-"
+                                : `${pad.Id_BP}(${pad.Thickness})-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
                 }
                 // Add Quantity for each pad
                 acc[`Quantity_BP${index + 1}`] = pad.Quantity || "-";
@@ -66,6 +71,8 @@ const Wipdisplay = () =>{
             };
         });
     };
+    
+    
 
 
 

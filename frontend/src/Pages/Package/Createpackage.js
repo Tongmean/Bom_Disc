@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createPackage } from '../../Ultility/Packageapi';
-
+import { fetchStatusetypemark } from '../../Ultility/ApiSetup/staticData';
 const CreateDisplayBox = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);

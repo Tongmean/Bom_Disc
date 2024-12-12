@@ -8,6 +8,8 @@ import Loginpage from "./Components/Loginpage";
 //Display
 import Homepage from './Pages/Display/Home';
 import Wipdisplay from './Pages/Display/Wipdisplay';
+import Qcdisplay from './Pages/Display/Qcdisplay';
+import Saledisplay from './Pages/Display/Saledisplay';
 //Protect Route
 import ProtectedRoute from './Components/ProtectedRoute';
 //package
@@ -44,6 +46,16 @@ import CreateBom from './Pages/Bom/Createbom';
 import UpdateBom from './Pages/Bom/Updatebom';
 //Drawing File
 import Drawingfile from './Pages/Drawingfile/Drawingfile';
+import CreateDrawingFile from './Pages/Drawingfile/Createdraingfile';
+import UpdateDrawingFile from './Pages/Drawingfile/Updatedrawingfile';
+//Productspecfile
+import Productspecfile from './Pages/Productspecfile/Productspecfile';
+import CreateProductspecFile from './Pages/Productspecfile/Createproductspecfile';
+import UpdateProductspecFile from './Pages/Productspecfile/Updateproductspec';
+//emark
+import Emark from './Pages/Emark/Emark';
+import CreateEmark from './Pages/Emark/Createemark';
+import UpdateEmark from './Pages/Emark/Updateemark';
 //user
 import Usermanagement from './Pages/Users/Users';
 import CreateUser from './Pages/Users/Createuser';
@@ -82,6 +94,8 @@ const App = () => {
               <Route path='/login' element={isAuthenticated ? <Navigate to='/Home' /> : <Loginpage />} />
               <Route path='/Home' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
               <Route path='/wipdisplay' element={isAuthenticated ? <Wipdisplay /> : <Navigate to='/login' />} />
+              <Route path='/Qcdisplay' element={isAuthenticated ? <Qcdisplay /> : <Navigate to='/login' />} />
+              <Route path='/saledisplay' element={isAuthenticated ? <Saledisplay /> : <Navigate to='/login' />} />
 
               <Route path="/Package" element={isAuthenticated ? <Package /> : <Navigate to='/login' />} />
 
@@ -144,9 +158,21 @@ const App = () => {
 
               <Route path="/drawingfile" element={isAuthenticated ? <Drawingfile /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                <Route path="/createuser" element={<CreateUser />} />
-                <Route path="/user/:id" element={<UpdateUser />} />
+                <Route path="/createdrawingfile" element={<CreateDrawingFile />} />
+                <Route path="/drawingfile/:id" element={<UpdateDrawingFile />} />
                 {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
+              </Route>
+
+              <Route path="/productspecfile" element={isAuthenticated ? <Productspecfile /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createproductspecfile" element={<CreateProductspecFile />} />
+                <Route path="/productspecfile/:id" element={<UpdateProductspecFile />} />
+                {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
+              </Route>
+              <Route path="/emark" element={isAuthenticated ? <Emark /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createemark" element={<CreateEmark />} />
+                <Route path="/emark/:id" element={<UpdateEmark />} />
               </Route>
 
 

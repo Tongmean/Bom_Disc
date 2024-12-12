@@ -144,10 +144,113 @@ const Wipdisplay = async (req, res) => {
     }
 };
 
+const Qcdisplay = async (req, res) => {
+    const sqlCommand = 
+    `
+    SELECT 
+	"bom"."Code_Fg", "bom"."Part_No", "bom"."Drawing_No", "bom"."Product_Spec_No", "bom"."Num",
+	"drawingfile"."unqiuename" AS "drawingfile", "productspecfile"."unqiuename" AS "productspecfile",
+	"bom"."Customer_Name",
+	"Product_Spec"."Slot", "Product_Spec"."Chamfer", "Product_Spec"."Color", "Product_Spec"."Coating", "Product_Spec"."Scoarching",
+	"Product_Spec"."Scoarching","Product_Spec"."Scoarching_Coating_Id", "Product_Spec"."Color_Id", "Product_Spec"."Shim" 
+    FROM 
+        "bom"
+    LEFT JOIN 
+        "drawingfile" 
+    ON 
+        "bom"."Drawing_No" = "drawingfile"."drawing_no"
+    LEFT JOIN 
+        "productspecfile" 
+    ON 
+        "bom"."Product_Spec_No" = "productspecfile"."productspec_no"
+    LEFT JOIN 
+        "Product_Spec" 
+    ON 
+        "Product_Spec"."Product_Spec_Id" = "bom"."Product_Spec_No"
+    
+    `
+    try {
+        dbconnect.query(sqlCommand, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+
+
+const Saledisplay = async (req, res) => {
+    const sqlCommand = 
+    `
+    SELECT 
+  	 "bom"."Code_Fg", "bom"."Part_No", "bom"."Drawing_No", "bom"."Product_Spec_No", "bom"."Num",
+	   "bom"."Sale_Code_Bom", "bom"."Shim_Attach", "bom"."Data_Sheet_No", "bom"."Display_Box_Id", "bom"."Pcs_Per_Set", "bom"."Outer_Package",
+	   "bom"."Customer_Name",
+	  "drawingfile"."unqiuename" AS "drawingfile", "productspecfile"."unqiuename" AS "productspecfile"
+        
+    FROM 
+        "bom"
+    LEFT JOIN 
+        "drawingfile" 
+    ON 
+        "bom"."Drawing_No" = "drawingfile"."drawing_no"
+    LEFT JOIN 
+        "productspecfile" 
+    ON 
+        "bom"."Product_Spec_No" = "productspecfile"."productspec_no"
+    
+    `
+    try {
+        dbconnect.query(sqlCommand, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+
+
+
+
 module.exports = {
     Homedisplay,
-    Wipdisplay
-
+    Wipdisplay,
+    Qcdisplay,
+    Saledisplay
 
 }
 

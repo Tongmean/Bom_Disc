@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
+import { fetchStatusproduct } from '../../Ultility/ApiSetup/staticData';
 import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings} from '../../Ultility/Sellectedbom'
 const { Option } = Select;
 const CreateBom = () => {
@@ -41,6 +42,8 @@ const CreateBom = () => {
 
                 const drawingData = await fetchDrawings(); 
                 setDrawingoptions(drawingData.data); 
+
+                console.log('shimOptions', shimOptions)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -145,10 +148,8 @@ const CreateBom = () => {
                     <div className="col-lg-4 col-md-6 col-sm-12">
                         <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'กรุณากรอก Status' }]}>
                             <Select placeholder="กรุณาเลือก Status">
-                                <Select.Option value="พร้อมจำหน่าย">พร้อมจำหน่าย</Select.Option>
-                                <Select.Option value="ประเมินราคา">ประเมินราคา</Select.Option>
-                                <Select.Option value="ทดลองผลิต APQP">ทดลองผลิต APQP</Select.Option>
-                                <Select.Option value="Obsolete">Obsolete</Select.Option>
+                                <Select.Option  options = {fetchStatusproduct}></Select.Option>
+                        
                             </Select>
                         </Form.Item>
                     </div>

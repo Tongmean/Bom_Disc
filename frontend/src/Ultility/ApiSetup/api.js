@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+export const baseURL = 'http://localhost:3031';
+
 // Create a base Axios instance with default configurations
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3031/api', // Replace with your API's base URL
+  baseURL: `${baseURL}/api`, // Replace with your API's base URL
   timeout: 5000, // Set a default timeout for requests
   headers: {
     'Content-Type': 'application/json', // Set default Content-Type for requests

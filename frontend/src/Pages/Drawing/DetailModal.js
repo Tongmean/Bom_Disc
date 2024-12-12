@@ -45,6 +45,9 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
             Name_WD3: "ชื่อ ERP WD3",
             Id_WD3: "ID WD3",
             Quantity_WD3: "จำนวน WD3",
+            CreateBy: "กรอกโดย",
+            CreateAt: "กรอกเมื่อ",
+
         };
 
     return (

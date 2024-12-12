@@ -62,7 +62,7 @@ const getDrawing = async (req,res) =>{
 //post drawing
 const postDrawing = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy} = req.body;
+    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Thickness_Pad1, Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy, Status} = req.body;
     try {
         // Check for duplicate Code_Fg
         const sqlCheck = `SELECT * FROM "Drawing" WHERE "Compact_No_Modify_Drawing" = $1`;
@@ -75,13 +75,33 @@ const postDrawing = async (req, res) =>{
                 msg: `รหัส Compact No (ปรับ): ${Compact_No_Modify_Drawing} มีในฐานข้อมูลอยู่แล้ว กรุณาลองรหัสใหม่!`
             });
         }
-        //Insert New Record
+        ///Insert new record
         const sqlCommand = `
             INSERT INTO "Drawing" 
-            ("Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4", "Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1", "Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2", "Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3", "CreateBy") 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31 ) RETURNING *
+            ("Compact_No_Modify_Drawing", "Part_No", 
+            "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1",
+            "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Thickness_Pad2",
+            "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Thickness_Pad3",
+            "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4", "Thickness_Pad4",
+            "Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1", 
+            "Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2", 
+            "Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3", 
+            "CreateBy", "Status") 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 
+                    $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, 
+                    $29, $30, $31, $32, $33, $34, $35, $36) RETURNING *
         `;
-        const values = [Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, userEmail];
+        const values = [
+            Compact_No_Modify_Drawing, Part_No, 
+            Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1, Thickness_Pad1,
+            Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2,
+            Erp_Id_BP3, Name_BP3, Id_BP3,Quantity_BP3, Thickness_Pad3,
+            Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4,
+            Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, 
+            Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, 
+            Erp_Id_WD3,Name_WD3, Id_WD3, Quantity_WD3, 
+            userEmail, Status
+        ];
 
         const insertResult = await dbconnect.query(sqlCommand, values);
 
@@ -105,7 +125,7 @@ const postDrawing = async (req, res) =>{
 const updateDrawing = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1,Thickness_Pad1 , Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy} = req.body;
+    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1,Thickness_Pad1 , Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy, Status} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Drawing" WHERE id = $1`;
@@ -157,7 +177,8 @@ const updateDrawing = async (req, res) =>{
                 "Id_WD3" = $33,
                 "Quantity_WD3" = $34,
                 "CreateBy" = $35
-            WHERE "id" = $36
+                "Status" = $36,
+            WHERE "id" = $37
             RETURNING *;
         `;
 
@@ -170,7 +191,7 @@ const updateDrawing = async (req, res) =>{
             Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1,
             Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2,
             Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3,
-            CreateBy, id
+            CreateBy, Status, id
         ];
 
         const updateResult = await dbconnect.query(updateSql, values);
@@ -178,7 +199,7 @@ const updateDrawing = async (req, res) =>{
 
         // Log changes
         const columns = [
-            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1", "Thickness_Pad2", "Thickness_Pad3", "Thickness_Pad4", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy"
+            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1", "Thickness_Pad2", "Thickness_Pad3", "Thickness_Pad4", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy" ,"Status"
         ];
 
         // const action = updated;

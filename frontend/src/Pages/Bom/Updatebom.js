@@ -12,6 +12,7 @@ import {
     fetchShims,
     fetchDrawings,
 } from '../../Ultility/Sellectedbom';
+import { fetchStatusproduct } from '../../Ultility/ApiSetup/staticData';
 
 const { Option } = Select;
 
@@ -49,6 +50,9 @@ const UpdateBom = () => {
                 setProductspecoptions(productspecs.data);
                 setShimoptions(shims.data);
                 setDrawingoptions(drawings.data);
+
+                console.log('productspecOptions', productspecOptions)
+
             } catch (error) {
                 showNotification('Failed to fetch dropdown data', 'warning');
             } finally {
@@ -155,10 +159,7 @@ const UpdateBom = () => {
                     <div className="col-lg-4 col-md-6 col-sm-12">
                         <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'กรุณากรอก Status' }]}>
                             <Select placeholder="กรุณาเลือก Status">
-                                <Select.Option value="พร้อมจำหน่าย">พร้อมจำหน่าย</Select.Option>
-                                <Select.Option value="ประเมินราคา">ประเมินราคา</Select.Option>
-                                <Select.Option value="ทดลองผลิต APQP">ทดลองผลิต APQP</Select.Option>
-                                <Select.Option value="Obsolete">Obsolete</Select.Option>
+                                <Select.Option options = {fetchStatusproduct}></Select.Option>
                             </Select>
                         </Form.Item>
                     </div>
@@ -172,7 +173,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(drawingOptions).map((option) => (
+                                {(drawingOptions).map((option) => (
                                     <Option key={option.Compact_No_Modify_Drawing} value={option.Compact_No_Modify_Drawing}>
                                         {option.Compact_No_Modify_Drawing}
                                     </Option>
@@ -195,7 +196,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(shimOptions).map((option) => (
+                                {shimOptions.map((option) => (
                                     <Option key={option.Compact_No_Modify} value={option.Compact_No_Modify}>
                                         {option.Compact_No_Modify}
                                     </Option>
@@ -214,7 +215,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(productspecOptions).map((option) => (
+                                {(productspecOptions).map((option) => (
                                     <Option key={option.Product_Spec_Id} value={option.Product_Spec_Id}>
                                         {option.Product_Spec_Id}
                                     </Option>
@@ -233,7 +234,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(datasheetOptions).map((i) => (
+                                {datasheetOptions.map((i) => (
                                     <Option key={i.Data_Sheet_No} value={i.Data_Sheet_No}>
                                         {i.Data_Sheet_No}
                                     </Option>
@@ -255,7 +256,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(packageOptions).map((i) => (
+                                {packageOptions.map((i) => (
                                     <Option key={i.Display_Box_id} value={i.Display_Box_id}>
                                         {i.Display_Box_id}
                                     </Option>
@@ -283,7 +284,7 @@ const UpdateBom = () => {
                                 showSearch
                             >
                                 <Option value="-">-</Option>
-                                {getUniqueOptions(outerOptions).map((option) => (
+                                {(outerOptions).map((option) => (
                                     <Option key={option.Outer_Id} value={option.Outer_Id}>
                                         {option.Outer_Id}
                                     </Option>

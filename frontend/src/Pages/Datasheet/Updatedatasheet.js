@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchDatasheet, updateDatasheet } from '../../Ultility/Datasheet';
-const { Option } = Select;
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 
 const UpdateDatasheet = () => {
     const [form] = Form.useForm(); // Initialize Form instance
@@ -197,8 +197,7 @@ const UpdateDatasheet = () => {
                             rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels.Status}` }]}
                         >
                             <Select placeholder="กรุณาเลือก Status">
-                                <Select.Option value="Master">Master</Select.Option>
-                                <Select.Option value="Intensive">Intensive</Select.Option>
+                                <Select.Option options={fetchStatus}></Select.Option>
                             </Select>
                         </Form.Item>
                     </div>

@@ -4,7 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchproductspec, updateProductspec } from '../../Ultility/Productspecapi';
-
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusslot, fetchStatuschamfer, fetchStatuscolorid, fetchStatuscoatingscorching} from '../../Ultility/ApiSetup/staticData';
 const UpdateProductSpec = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);
@@ -116,14 +117,41 @@ const UpdateProductSpec = () => {
     const fields = [
         { label: 'รหัส Product Spec', name: 'Product_Spec_Id' },
         { label: 'Code การขาย', name: 'Sale_Code' },
-        { label: 'Coating', name: 'Coating' },
-        { label: 'Scoarching', name: 'Scoarching' },
-        { label: 'รหัสการ Scoarching/Coating', name: 'Scoarching_Coating_Id' },
+        {   
+            label: 'Coating', 
+            name: 'Coating' ,
+        },
+        {   
+            label: 'Scoarching', 
+            name: 'Scoarching' ,
+        },
+        { 
+            label: 'รหัสการ Scoarching/Coating', 
+            name: 'Scoarching_Coating_Id',
+            type: 'select',
+            options: fetchStatuscoatingscorching,
+        },
         { label: 'ติดแผน Shim', name: 'Shim' },
-        { label: 'Slot', name: 'Slot' },
-        { label: 'Chamfer', name: 'Chamfer' },
+        {   
+            label: 'Slot', 
+            name: 'Slot',
+            type: 'select',
+            options: fetchStatusslot,
+        },
+        {   
+            label: 'Chamfer', 
+            name: 'Chamfer',
+            type: 'select',
+            options: fetchStatuschamfer,
+        },
         { label: 'พ่นสี', name: 'Color' },
-        { label: 'รหัสสี', name: 'Color_Id' },
+        {   
+            label: 'รหัสสี', 
+            name: 'Color_Id',
+            type: 'select',
+            options: fetchStatuscolorid,
+        
+        },
         { label: 'ชื่อลูกค้า', name: 'Customer_Name_Product_Spec' },
         { label: 'สูตรเคมี', name: 'Chem_Formular' },
         { label: 'สูตร Under layer', name: 'Formula_Under_Layer' },
@@ -156,10 +184,7 @@ const UpdateProductSpec = () => {
             label: 'Status',
             name: 'Status',
             type: 'select',
-            options: [
-                { value: 'Master', label: 'Master' },
-                { value: 'Intensive', label: 'Intensive' },
-            ],
+            options: fetchStatus,
         },
     ];
     

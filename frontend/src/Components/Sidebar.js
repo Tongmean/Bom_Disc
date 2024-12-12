@@ -28,33 +28,37 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
     { key: 'Display', icon: <ExceptionOutlined />, label: 'Display', children: [
       { key: '11', label: <Link to="/wipdisplay">WIP Code</Link> },
+      { key: '12', label: <Link to="/Qcdisplay">Quality Control</Link> },
+      { key: '13', label: <Link to="/saledisplay">Sale</Link> },
     ]},
+    { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/bom">Product Register</Link>},
+    { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
+      { key: '50', label: <Link to="/productspec">Report</Link> },
+      { key: '51', label: <Link to="/productspecfile">Product Spec File</Link> },
+    ]},
+
+    { key: 'Drawing', icon: <FileExcelOutlined />, label: 'Drawing', children: [
+      { key: '80', label: <Link to="/drawing">Report</Link> },
+      { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
+    ]},
+    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: <Link to="/dataSheet">Data Sheet</Link>},
+
+    { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
 
     { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">กล่อง</Link>},
 
     { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">Outer</Link>},
 
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
+    { key: 'E-mark', icon: <FileExcelOutlined />, label: <Link to="/emark">E-mark</Link>},
 
-    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: <Link to="/dataSheet">Data Sheet</Link>},
 
-    { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
-      { key: '50', label: <Link to="/productspec">Report</Link> },
-      { key: '51', label: <Link to="/productspecfile">Product Spec File</Link> },
-    ]},
-
-    { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
-
-    { key: 'Drawing', icon: <FileExcelOutlined />, label: 'Drawing', children: [
-      { key: '80', label: <Link to="/drawing">Report</Link> },
-      { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
-    ]},
-    { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/bom">Bom</Link>},
     
-    // { key: 'Product-Data', icon: <FileExcelOutlined />, label: 'Product Data', children: [
-    //   { key: '110', label: <Link to="/Product-Data">Report</Link> },
-    // ]},
-    { key: 'user', icon: <UserOutlined />, key: '120', label: <Link to="/usermanagement">User management</Link>},
+
+
+
+    
+    { key: 'user', icon: <UserOutlined />, label: <Link to="/usermanagement">User management</Link>},
    
   ].filter(item => !item.hidden); // Filter out hidden items
 

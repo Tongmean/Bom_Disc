@@ -5,7 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createProductspec } from '../../Ultility/Productspecapi';
 import { Select } from 'antd';
-
+import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusslot, fetchStatuschamfer, fetchStatuscolorid, fetchStatuscoatingscorching} from '../../Ultility/ApiSetup/staticData';
 const CreateProductSpec = () => {
     const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
@@ -77,11 +78,10 @@ const CreateProductSpec = () => {
         { label: 'Column_36', name: 'Column_36' },
         { label: 'Status', name: 'Status' },
     ];
-    const statusOptions = [
-        { label: 'Master', value: 'Master' },
-        { label: 'Intensive', value: 'Intensive' },
 
-    ];
+    
+
+
 
     return (
         <div className="container-fluid">
@@ -101,9 +101,45 @@ const CreateProductSpec = () => {
                                     name={attr.name}
                                     rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
                                 >
-                                    <Select options={statusOptions} />
+                                    <Select options={fetchStatus} />
                                 </Form.Item>
-                            ) : (
+                            ) : attr.name === 'Slot' ? (
+                                <Form.Item
+                                label={attr.label}
+                                name={attr.name}
+                                rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
+                                >
+                                    <Select options={fetchStatusslot} />
+                                </Form.Item>
+                            ): attr.name === 'Chamfer' ? (
+                                <Form.Item
+                                label={attr.label}
+                                name={attr.name}
+                                rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
+                                >
+                                    <Select options={fetchStatuschamfer} />
+                                </Form.Item> 
+                            )
+                            : attr.name === 'Color_Id' ? (
+                                <Form.Item
+                                label={attr.label}
+                                name={attr.name}
+                                rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
+                                >
+                                    <Select options={fetchStatuscolorid} />
+                                </Form.Item> 
+                            )
+                            : attr.name === 'Scoarching_Coating_Id' ? (
+                                <Form.Item
+                                label={attr.label}
+                                name={attr.name}
+                                rules={[{ required: true, message: `กรุณาเลือก ${attr.label}` }]}
+                                >
+                                    <Select options={fetchStatuscoatingscorching} />
+                                </Form.Item> 
+                            )
+                            : 
+                            (
                                 <Form.Item
                                     label={attr.label}
                                     name={attr.name}

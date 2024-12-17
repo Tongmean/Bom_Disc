@@ -3,6 +3,7 @@ import Notification from './Notification';
 
 const ClipboardButton = ({ gridApi }) => {
     const [notification, setNotification] = useState(null);
+    // console.log('gridApi', gridApi)
 
     const copySelectedRowsToClipboard = () => {
         if (!gridApi) {
@@ -15,8 +16,9 @@ const ClipboardButton = ({ gridApi }) => {
             showNotification('No rows selected to copy.', 'warning');
             return;
         }
+        console.log('selectedRows', selectedRows)
 
-        const cleanedRows = selectedRows.map(({ No, CreateBy, CreateAt, ...rest }) => rest);
+        const cleanedRows = selectedRows.map(({ CreateBy, CreateAt, create_at,create_by, ...rest }) => rest);
         const tsvData = cleanedRows
             .map(row => Object.values(row).join('\t'))
             .join('\n');
@@ -37,6 +39,8 @@ const ClipboardButton = ({ gridApi }) => {
         };
 
         copyToClipboard(tsvData);
+        console.log('tsvData', tsvData)
+        console.log('cleanedRows', cleanedRows)
     };
 
     const showNotification = (message, type) => {

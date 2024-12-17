@@ -176,8 +176,8 @@ const updateDrawing = async (req, res) =>{
                 "Name_WD3" = $32,
                 "Id_WD3" = $33,
                 "Quantity_WD3" = $34,
-                "CreateBy" = $35
-                "Status" = $36,
+                "CreateBy" = $35,
+                "Status" = $36
             WHERE "id" = $37
             RETURNING *;
         `;

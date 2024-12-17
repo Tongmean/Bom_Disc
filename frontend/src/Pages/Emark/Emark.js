@@ -18,11 +18,11 @@ const Emark = () => {
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Emark ID', field: 'Emark_Id'},
-        { headerName: 'Part Number', field: 'Part_No' },
+        { headerName: 'E-mark ID', field: 'Emark_Id'},
+        { headerName: 'Part No. ', field: 'Part_No' },
         { headerName: 'Brake Pad', field: 'Brake_Pad' },
         { headerName: 'Material', field: 'Material' },
-        { headerName: 'Type', field: 'Type_Emark' },
+        { headerName: 'Type of E-mark', field: 'Type_Emark' },
         { headerName: 'Approval Code', field: 'Approval_Code' },
         { headerName: 'Revision', field: 'Revision' },
         { headerName: 'Approved Date', field: 'Approved_Date' },

@@ -70,7 +70,8 @@ const storage = multer.diskStorage({
         cb(null, uploadDir); // Save files to 'Assets/Drawing' folder
     },
     filename: (req, file, cb) => {
-        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_');
+        // Sanitize the filename to replace spaces and unsafe characters
+        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');
         const uniqueSuffix = `${Date.now()}`;
         cb(null, `${uniqueSuffix}-${sanitizedFilename}`);
     }
@@ -222,6 +223,11 @@ const createProductspecFile = async (req, res) => {
         return res.status(400).json({ msg: 'No file uploaded.' });
     }
     const { filename, originalname, path: filePath } = file;
+
+    // Encoding the originalname to UTF-8
+    const encodedOriginalName = Buffer.from(originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');
+    
+    console.log(encodedOriginalName); // This will log the UTF-8 encoded name
     // Check if Product_Spec_Id already exists in the database
     const sqlCheck = `SELECT * FROM "productspecfile" WHERE "productspec_no" = $1`;
     const checkResult = await dbconnect.query(sqlCheck, [Product_Spec_Id]);
@@ -245,7 +251,7 @@ const createProductspecFile = async (req, res) => {
             (productspec_no, unqiuename, originalname, path, create_by) 
             VALUES ($1, $2, $3, $4, $5) 
             RETURNING *`;
-        const values = [Product_Spec_Id, filename, originalname, filePath, userEmail];
+        const values = [Product_Spec_Id, filename, encodedOriginalName, filePath, userEmail];
 
         const result = await dbconnect.query(sqlCommand, values);
 

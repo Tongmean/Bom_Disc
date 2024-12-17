@@ -146,8 +146,7 @@ const Homepage = () => {
     { headerName: 'ชื่อ ERP Sticker', field: 'Name_Outer_Erp_Sticker' },
     { headerName: 'จำนวน Sticker', field: 'Num_Sticker' },
     { headerName: 'จำนวน Outer/ พาเลท', field: 'Outer_Per_pallet' },
-
-
+    { headerName: 'รหัส Product spec', field: 'Product_Spec_Id' },
 
 
   ];
@@ -156,8 +155,10 @@ const Homepage = () => {
     const load = async () => {
       try {
         const packageData = (await fetchDisplayhome()).data;
+        console.log('packageData',packageData)
 
         setRowData(packageData);
+
         setFilteredData(packageData);
       } catch (err) {
         setError(err.message);
@@ -169,6 +170,7 @@ const Homepage = () => {
   }, []);
 
   const onGridReady = (params) => {
+    // console.log('params.api', params.api)
     setGridApi(params.api);
   };
 

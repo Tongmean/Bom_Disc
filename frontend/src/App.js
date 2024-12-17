@@ -144,7 +144,7 @@ const App = () => {
               </Route>
 
               <Route path="/bom" element={isAuthenticated ? <Bom /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productregister']} />}>
                 <Route path="/createbom" element={<CreateBom />} />
                 <Route path="/bom/:id" element={<UpdateBom />} />
               </Route>
@@ -176,11 +176,9 @@ const App = () => {
               </Route>
 
 
-              {/* Add more routes as needed */}
             </Routes>
           </Content>
 
-          {/* Footer */}
           <FooterComponent />
         </Layout>
       </Layout>

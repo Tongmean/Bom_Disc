@@ -3,25 +3,47 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../Hook/useAuthContext';
 import Notification from './Notification'; // Import the Notification component
 
-const ProtectedRoute = ({ allowedRoles }) => {
+const ProtectedRoute = ({ allowedRoles, allowedPermissions }) => {
     const { user } = useAuthContext(); // Get the current user from the AuthContext
     const [notification, setNotification] = useState(null); // State to manage notifications
     const navigate = useNavigate(); // For navigation control, in case you need to redirect
-    // console.log('user', user.data.role)
+
     useEffect(() => {
+        // If no user exists, navigate to login
         if (!user) {
             navigate('/login');
-        } else if (allowedRoles && !allowedRoles.includes(user.data.role)) {
-            // If user doesn't have the required role, show the permission-denied notification
+            return;
+        }
+
+        const userPermissions = [
+            user.data.permission1,
+            user.data.permission2,
+            user.data.permission3,
+            user.data.permission4
+        ].filter(permission => permission && permission !== '-'); // Filter out invalid permissions
+
+        const hasValidRole = allowedRoles?.includes(user.data.role);
+        const hasValidPermission = allowedPermissions?.some(permission =>
+            userPermissions.includes(permission)
+        );
+        console.log('hasValidPermission', hasValidPermission)
+        console.log('hasValidRole', hasValidRole)
+        console.log('!hasValidRole && !hasValidPermission', !hasValidRole && !hasValidPermission)
+        console.log('User Role:', user.data.role);
+        console.log('User Permissions:', userPermissions);
+        console.log('Allowed Roles:', allowedRoles);
+        console.log('Allowed Permissions:', allowedPermissions);
+
+        // If the user role and permissions do not match, show notification
+        if (!hasValidRole && !hasValidPermission) {
             setNotification({
                 message: 'Access Denied: กรุณาติดต่อ admin เพื่อตำเนินการ.',
                 type: 'warning',
             });
         } else {
-            // If user is authenticated and has the required role, clear the notification
-            setNotification(null);
+            setNotification(null); // Clear notification if access is granted
         }
-    }, [user, allowedRoles, navigate]);
+    }, [user, allowedRoles, allowedPermissions, navigate]);
 
     // Function to close the notification and navigate back
     const handleNotificationClose = () => {
@@ -42,7 +64,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
         );
     }
 
-    // Render the child routes (protected content) if the user is authenticated and has the correct role
+    // Render the child routes (protected content) if access is granted
     return <Outlet />;
 };
 

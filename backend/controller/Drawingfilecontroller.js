@@ -71,8 +71,7 @@ const storage = multer.diskStorage({
         cb(null, uploadDir); // Save files to 'Assets/Drawing' folder
     },
     filename: (req, file, cb) => {
-        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_');
-        const uniqueSuffix = `${Date.now()}`;
+        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');        const uniqueSuffix = `${Date.now()}`;
         cb(null, `${uniqueSuffix}-${sanitizedFilename}`);
     }
 });
@@ -97,6 +96,8 @@ const createDrawingFile = async (req, res) => {
         return res.status(400).json({ msg: 'No file uploaded.' });
     }
     const { filename, originalname, path: filePath } = file;
+    // Encoding the originalname to UTF-8
+    const encodedOriginalName = Buffer.from(originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');
     //Check if exit Drawing_No 
     const sqlCheck = `SELECT * FROM "drawingfile" WHERE "drawing_no" = $1`;
     const checkResult = await dbconnect.query(sqlCheck, [Drawing_No]);
@@ -118,7 +119,7 @@ const createDrawingFile = async (req, res) => {
             (drawing_no, unqiuename, originalname, path, create_by) 
             VALUES ($1, $2, $3, $4, $5) 
             RETURNING *`;
-        const values = [Drawing_No, filename, originalname, filePath, userEmail];
+        const values = [Drawing_No, filename, encodedOriginalName, filePath, userEmail];
 
         const result = await dbconnect.query(sqlCommand, values);
         res.status(200).json({ msg: `บันทึกไฟล์เขียนแบบ Drawing: ${Drawing_No} สำเร็จแล้ว `, data: result.rows[0] , success: true});

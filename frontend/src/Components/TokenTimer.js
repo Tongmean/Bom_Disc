@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {jwtDecode} from "jwt-decode";
 import { useLogout } from "../Hook/useLogout";
 
 const TokenTimer = ({ token }) => {
   const [timeLeft, setTimeLeft] = useState(null);
   const { logout } = useLogout();
-
+  const stableLogout = useCallback(logout, []);
   useEffect(() => {
     if (!token) {
-      logout(); // Logs out the user
+      stableLogout(); // Logs out the user
       return;
     }
 

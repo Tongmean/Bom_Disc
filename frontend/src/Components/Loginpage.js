@@ -37,7 +37,7 @@ const Loginpage = () => {
                 <MDBCol col="12" md="6" className="d-flex flex-column align-items-center text-center">
 
                     <div className="text-center mt-4">
-                        <h5>ระบบจัดการข้อมูลผลิตภัณฑ์ดิสเบรก</h5>
+                        <h5>ระบบจัดการข้อมูลผลิตภัณฑ์ดิสเบรกสำหรับการผลิต</h5>
                     </div>
                     <div className="d-flex justify-content-center w-100">
                         <img

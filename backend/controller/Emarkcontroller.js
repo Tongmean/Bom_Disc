@@ -3,7 +3,7 @@ const { logUpdate } = require('../utility/updateLog');
 //Get all record
 const getEmarks = (req, res) =>{
     try {
-        dbconnect.query(`SELECT * FROM "Emark" `, (err, result) => {
+        dbconnect.query(`SELECT * FROM "Emark" ORDER BY id ASC`, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

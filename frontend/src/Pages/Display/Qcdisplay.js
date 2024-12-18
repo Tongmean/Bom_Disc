@@ -4,7 +4,7 @@ import Tablecomponent from '../../Components/Tablecomponent';
 import { fetchDisplayQc } from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import { baseURL } from '../../Ultility/ApiSetup/api';
+import { baseURLproductspec,baseURLdrawing } from '../../Ultility/ApiSetup/api';
 import DetailModal from './DetailModalQc';
 const { Option } = Select;
 
@@ -37,7 +37,7 @@ const Qcdisplay = () => {
                 <>
                     {params.data.productspecfile && (
                         <a
-                            href={`${baseURL}/Assets/Productspec/${encodeURIComponent(params.data.productspecfile)}`}
+                            href={`${baseURLproductspec}/${encodeURIComponent(params.data.productspecfile)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -52,7 +52,7 @@ const Qcdisplay = () => {
 
                     {params.data.drawingfile && (
                         <a
-                            href={`${baseURL}/Assets/Drawing/${encodeURIComponent(params.data.drawingfile)}`}
+                            href={`${baseURLdrawing}/${encodeURIComponent(params.data.drawingfile)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -107,7 +107,7 @@ const Qcdisplay = () => {
     setFilteredData(filtered);
   };
 
-  useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, productspecFilter, customerNameFilter]);
+  useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, productspecFilter, customerNameFilter, rowData]);
 
     const clearFilters = () => {
         setCodeFgFilter([]);

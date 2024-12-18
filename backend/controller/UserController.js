@@ -58,7 +58,7 @@ const getSingleUser = async (req, res) => {
 
 //Create user
 const createUser = async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password, role, permission1, permission2, permission3, permission4 } = req.body;
     try {
         // Check if email already exists
         dbconnect.query('SELECT "email" FROM "users" WHERE "email" = $1', [email], async (err, result) => {
@@ -82,8 +82,8 @@ const createUser = async (req, res) => {
             // const hashpassword = await bcrypt.hash(password, 10);
             
             // Insert new user into the database
-            dbconnect.query('INSERT INTO "users"("email", "password", "role") VALUES($1, $2, $3)', 
-            [email, password, role], 
+            dbconnect.query('INSERT INTO "users"("email", "password", "role", "permission1", "permission2", "permission3", "permission4") VALUES($1, $2, $3, $4, $5, $6, $7)', 
+            [email, password, role, permission1, permission2, permission3, permission4], 
             (err, result) => {
                 if (err) {
                     res.status(500).json({

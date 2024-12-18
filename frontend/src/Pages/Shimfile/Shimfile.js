@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { baseURLproductspec } from '../../Ultility/ApiSetup/api';
+import { baseURLshim } from '../../Ultility/ApiSetup/api';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchProductspecfiles, fetchHistoryLog} from '../../Ultility/Productspecfileapi';
+import {fetchShimfiles, fetchHistoryLog} from '../../Ultility/Shimfileapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import { useNavigate } from 'react-router-dom';
-import DetailModal from '../Productspecfile/DetailModal'
+import DetailModal from '../Shimfile/DetailModal'
 
-const Productspecfile = () =>{
+const Shimfile = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -19,7 +19,7 @@ const Productspecfile = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'id' , checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัส Product Spec', field: 'productspec_no' },
+        { headerName: 'Compact No (ปรับ)', field: 'shim_no' },
         { headerName: 'File name', field: 'originalname' },
         { headerName: 'File path', field: 'unqiuename' },
         {
@@ -30,15 +30,15 @@ const Productspecfile = () =>{
                     <>
                         
                         <a
-                            href={`${baseURLproductspec}/${encodeURIComponent(params.data.unqiuename)}`} // Use drawingPath as the link
+                            href={`${baseURLshim}/${encodeURIComponent(params.data.unqiuename)}`} // Use drawingPath as the link
                             target="_blank" // Open link in new tab
                             rel="noopener noreferrer" // Security best practice
                             >
                             <button
-                                className="btn btn-info btn-sm"
+                                className="btn btn-warning btn-sm"
                                 style={{ marginRight: '5px' }}
                             >
-                                P
+                                S
                             </button>
                         </a>
                         <button
@@ -91,9 +91,9 @@ const Productspecfile = () =>{
     useEffect(() => {
         const load = async () => {
           try {
-            const packageData = (await fetchProductspecfiles()).data;
-            // console.log('aa',encodeURIComponent(packageData.unqiuename))
-            setRowData(packageData); // Set the users from the API response
+            const Data = (await fetchShimfiles()).data;
+            console.log('aa', Data)
+            setRowData(Data); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -114,16 +114,16 @@ const Productspecfile = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createproductspecfile');
+        navigate('/createshimfile');
     };
     const handleShowEdit = (data) => {
-        navigate(`/productspecfile/${data}`);
+        navigate(`/shimfile/${data}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Product-spec-file"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "shim"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -143,10 +143,10 @@ const Productspecfile = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'Product-spec-file'
+                Tablename = 'shim'
             />
         </>
     )
 }
 
-export default Productspecfile;
+export default Shimfile;

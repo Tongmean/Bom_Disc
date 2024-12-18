@@ -4,7 +4,7 @@ import Tablecomponent from '../../Components/Tablecomponent';
 import { fetchDisplaySale } from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import { baseURL } from '../../Ultility/ApiSetup/api';
+import { baseURLdrawing, baseURLproductspec } from '../../Ultility/ApiSetup/api';
 const { Option } = Select;
 
 const Saledisplay = () => {
@@ -42,7 +42,7 @@ const Saledisplay = () => {
                 <>
                     {params.data.productspecfile && (
                         <a
-                            href={`${baseURL}/Assets/Productspec/${encodeURIComponent(params.data.productspecfile)}`}
+                            href={`${baseURLproductspec}/${encodeURIComponent(params.data.productspecfile)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -57,7 +57,7 @@ const Saledisplay = () => {
 
                     {params.data.drawingfile && (
                         <a
-                            href={`${baseURL}/Assets/Drawing/${encodeURIComponent(params.data.drawingfile)}`}
+                            href={`${baseURLdrawing}/${encodeURIComponent(params.data.drawingfile)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -104,7 +104,7 @@ const Saledisplay = () => {
     setFilteredData(filtered);
   };
 
-  useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, productspecFilter]);
+  useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, productspecFilter, rowData]);
 
   const clearFilters = () => {
     setCodeFgFilter([]);

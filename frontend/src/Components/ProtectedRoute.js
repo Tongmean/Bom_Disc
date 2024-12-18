@@ -14,6 +14,11 @@ const ProtectedRoute = ({ allowedRoles, allowedPermissions }) => {
             navigate('/login');
             return;
         }
+        // Bypass all checks for the 'superadmin' role
+        if (user.data.role === 'superadmin') {
+            setNotification(null); // Clear any existing notifications
+            return; // Exit the useEffect early since superadmin has full access
+        }
 
         const userPermissions = [
             user.data.permission1,
@@ -28,14 +33,23 @@ const ProtectedRoute = ({ allowedRoles, allowedPermissions }) => {
         );
         console.log('hasValidPermission', hasValidPermission)
         console.log('hasValidRole', hasValidRole)
-        console.log('!hasValidRole && !hasValidPermission', !hasValidRole && !hasValidPermission)
         console.log('User Role:', user.data.role);
         console.log('User Permissions:', userPermissions);
         console.log('Allowed Roles:', allowedRoles);
         console.log('Allowed Permissions:', allowedPermissions);
 
         // If the user role and permissions do not match, show notification
-        if (!hasValidRole && !hasValidPermission) {
+        if (!hasValidRole) {
+            setNotification({
+                message: 'Access Denied: กรุณาติดต่อ admin เพื่อตำเนินการ.',
+                type: 'warning',
+            });
+        } else {
+            setNotification(null); // Clear notification if access is granted
+        }
+
+        // If the user role and permissions do not match, show notification
+        if (!hasValidPermission) {
             setNotification({
                 message: 'Access Denied: กรุณาติดต่อ admin เพื่อตำเนินการ.',
                 type: 'warning',

@@ -43,7 +43,12 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     ]},
     { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: <Link to="/dataSheet">Data Sheet</Link>},
 
-    { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
+    // { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
+    { key: 'Shim', icon: <FileExcelOutlined />,  label: 'Shim', children: [
+      { key: '111', label: <Link to="/shim">Shim</Link> },
+      { key: '112', label: <Link to="/shimfile">Shim File</Link> },
+     
+    ]},
 
     { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">กล่อง</Link>},
 

@@ -35,6 +35,7 @@ const displayRouter = require('./routes/displayRoutes');
 const drawingfileRouter = require('./routes/drawingfileRoutes');
 const productspecfileRouter = require('./routes/productspecfileRoutes');
 const emarkRouter = require('./routes/emarkRoutes');
+const shimfileRouter = require('./routes/shimfileRoutes');
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
 const sellectedbomRouter = require('./routes/sellectedbomRoutes')
@@ -53,6 +54,7 @@ app.use('/api/sellectedbom', requireAuth, sellectedbomRouter);
 app.use('/api/display', requireAuth, displayRouter);
 app.use('/api/file', requireAuth, drawingfileRouter);
 app.use('/api/file', requireAuth, productspecfileRouter);
+app.use('/api/file', requireAuth, shimfileRouter);
 app.use('/api/emark', requireAuth, emarkRouter);
 
 require('dotenv').config();

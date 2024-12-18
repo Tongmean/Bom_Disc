@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createUser } from '../../Ultility/Usersapi';
-
+import { fetchUserrole, fetchUserpermission } from '../../Ultility/ApiSetup/staticData';
 const CreateUser = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);
@@ -48,6 +48,10 @@ const CreateUser = () => {
                     email: '',
                     password: '',
                     role: '',
+                    permission1: '',
+                    permission2: '-',
+                    permission3: '-',
+                    permission4: '-',
                 }}
             >
                 <div className="row">
@@ -74,11 +78,54 @@ const CreateUser = () => {
                             rules={[{ required: true, message: 'กรุณาเลือก Role' }]}
                         >
                             <Select placeholder="Select a role">
-                                <Select.Option value="admin">admin</Select.Option>
-                                <Select.Option value="user">user</Select.Option>
+                                <Select.Option options= {fetchUserrole}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Permission 1"
+                            name="permission1"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
                             </Select>
                         </Form.Item>
                     </div>
+                    <div className="col-xl-6 col-lg-6 col-md-12">
+                        <Form.Item
+                            label="Permission 2"
+                            name="permission2"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Permission 4"
+                            name="permission4"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
+
+                    </div>
+                    <div className="col-xl-6 col-lg-6 col-md-12">
+
+       
+                        <Form.Item
+                            label="Permission 3"
+                            name="permission3"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </div>
+                   
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/usermanagement')}>

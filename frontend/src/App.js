@@ -60,6 +60,10 @@ import UpdateEmark from './Pages/Emark/Updateemark';
 import Usermanagement from './Pages/Users/Users';
 import CreateUser from './Pages/Users/Createuser';
 import UpdateUser from './Pages/Users/Updateuser';
+//shimfile
+import Shimfile from './Pages/Shimfile/Shimfile';
+import CreateShimFile from './Pages/Shimfile/Createshimfile';
+import UpdateShimFile from './Pages/Shimfile/Updateshimfile';
 
 import { useAuthContext } from './Hook/useAuthContext';
 const { Content } = Layout;
@@ -103,8 +107,6 @@ const App = () => {
                 <Route path="/createPackage" element={<CreateDisplayBox />} />
                 <Route path="/Package/:id" element={<UpdateDisplayBox />} />
               </Route>
-              {/* <Route path="/createPackage" element={isAuthenticated ? <CreateDisplayBox /> : <Navigate to='/login' />} /> */}
-              {/* <Route path="/Package/:id" element={isAuthenticated ? <UpdateDisplayBox /> : <Navigate to='/login' />} /> */}
 
               <Route path="/outer" element={isAuthenticated ? <Outer /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
@@ -149,30 +151,33 @@ const App = () => {
                 <Route path="/bom/:id" element={<UpdateBom />} />
               </Route>
 
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
                 <Route path="/usermanagement" element={<Usermanagement />} />
                 <Route path="/createuser" element={<CreateUser />} />
                 <Route path="/user/:id" element={<UpdateUser />} />
-                {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
               </Route>
 
               <Route path="/drawingfile" element={isAuthenticated ? <Drawingfile /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/createdrawingfile" element={<CreateDrawingFile />} />
                 <Route path="/drawingfile/:id" element={<UpdateDrawingFile />} />
-                {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
               </Route>
 
               <Route path="/productspecfile" element={isAuthenticated ? <Productspecfile /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/createproductspecfile" element={<CreateProductspecFile />} />
                 <Route path="/productspecfile/:id" element={<UpdateProductspecFile />} />
-                {/* <Route path="/Package/:id" element={<UpdateDisplayBox />} /> */}
               </Route>
               <Route path="/emark" element={isAuthenticated ? <Emark /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/createemark" element={<CreateEmark />} />
                 <Route path="/emark/:id" element={<UpdateEmark />} />
+              </Route>
+
+              <Route path="/shimfile" element={isAuthenticated ? <Shimfile /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/createshimfile" element={<CreateShimFile />} />
+                <Route path="/shimfile/:id" element={<UpdateShimFile />} />
               </Route>
 
 

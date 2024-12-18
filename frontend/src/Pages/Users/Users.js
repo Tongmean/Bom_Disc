@@ -17,9 +17,13 @@ const Usermanagement = () =>{
         { headerName: 'Email', field: 'email' },
         { headerName: 'Password', field: 'password' },
         { headerName: 'Role', field: 'role' },
+        { headerName: 'permission 1', field: 'permission1' },
+        { headerName: 'permission 2', field: 'permission2' },
+        { headerName: 'permission 3', field: 'permission3' },
+        { headerName: 'permission 4', field: 'permission4' },
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
-        // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
+        // { headerName: 'กรอกเมื่อ', field: 'create_at' },
         {
             headerName: 'Actions',
             field: 'actions',
@@ -42,17 +46,17 @@ const Usermanagement = () =>{
     useEffect(() => {
         const load = async () => {
           try {
-            const packageData = (await fetchusers()).data;
+            const Data = (await fetchusers()).data;
             
-            const mappedData = packageData.map(i => ({
-                No: i.id,
-                email: i.email,
-                password: i.password,
-                role: i.role,
+            // const mappedData = packageData.map(i => ({
+            //     No: i.id,
+            //     email: i.email,
+            //     password: i.password,
+            //     role: i.role,
 
-            }));
+            // }));
             // console.log('Mapped Data', mappedData)
-            setRowData(mappedData); // Set the users from the API response
+            setRowData(Data); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -76,7 +80,7 @@ const Usermanagement = () =>{
         navigate('/createuser');
     };
     const handleShowEdit = (data) => {
-        navigate(`/user/${data.No}`);
+        navigate(`/user/${data.id}`);
     };
     return (
         <>

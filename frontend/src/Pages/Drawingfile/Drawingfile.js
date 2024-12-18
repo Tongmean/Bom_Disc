@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { baseURL } from '../../Ultility/ApiSetup/api';
+import { baseURLdrawing } from '../../Ultility/ApiSetup/api';
 import Tablecomponent from '../../Components/Tablecomponent';
 import {fetchDrawingfiles, fetchHistoryLog} from '../../Ultility/Drawingfileapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
@@ -30,7 +30,7 @@ const Drawingfile = () =>{
                     <>
                         
                         <a
-                            href={`${baseURL}/Assets/Drawing/${encodeURIComponent(params.data.unqiuename)}`} // Use drawingPath as the link
+                            href={`${baseURLdrawing}/${encodeURIComponent(params.data.unqiuename)}`} // Use drawingPath as the link
                             target="_blank" // Open link in new tab
                             rel="noopener noreferrer" // Security best practice
                             >
@@ -92,8 +92,7 @@ const Drawingfile = () =>{
         const load = async () => {
           try {
             const packageData = (await fetchDrawingfiles()).data;
-            console.log('baseURL', baseURL)
-            // console.log('aa',encodeURIComponent(packageData.unqiuename))
+            console.log('Drawing File',encodeURIComponent(packageData))
             setRowData(packageData); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong

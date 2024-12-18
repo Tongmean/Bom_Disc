@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchUser, updateUser } from '../../Ultility/Usersapi'; // Adjusted API import
+import { fetchUserrole, fetchUserpermission } from '../../Ultility/ApiSetup/staticData';
 
 const UpdateUser = () => {
     const [form] = Form.useForm(); // Initialize Form instance
@@ -20,14 +21,18 @@ const UpdateUser = () => {
                 const data = (await fetchUser(id)).data[0]; // Fetch user data by ID
                 // Ensure the fetched data matches the form field names
                 if (data) {
-                    const formData = {
-                        email: data.email,
-                        password: data.password,
-                        role: data.role,
-                    };
+                    // const formData = {
+                    //     email: data.email,
+                    //     password: data.password,
+                    //     role: data.role,
+                    //     permission1: data.permission1,
+                    //     permission2: data.permission1,
+                    //     permission3: data.permission1,
+                    //     permission4 data.permission1,
+                    // };
 
                     // Set form values with fetched data
-                    form.setFieldsValue(formData);
+                    form.setFieldsValue(data);
                     setLoading(false);
                 } else {
                     setLoading(false);
@@ -100,6 +105,25 @@ const UpdateUser = () => {
                         >
                             <Input.Password />
                         </Form.Item>
+                      
+                        <Form.Item
+                            label="Permission 2"
+                            name="permission2"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Permission 4"
+                            name="permission4"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
                     </div>
                     <div className="col-xl-6 col-lg-6 col-md-12">
                         <Form.Item
@@ -108,8 +132,27 @@ const UpdateUser = () => {
                             rules={[{ required: true, message: 'กรุณากรอก Role' }]}
                         >
                             <Select>
-                                <Select.Option value="admin">admin</Select.Option>
-                                <Select.Option value="user">user</Select.Option>
+                                <Select.Option options= {fetchUserrole}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Permission 1"
+                            name="permission1"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
+                            </Select>
+                        </Form.Item>
+                        
+           
+                        <Form.Item
+                            label="Permission 3"
+                            name="permission3"
+                            rules={[{ required: true, message: 'กรุณาเลือก Permission' }]}
+                        >
+                            <Select placeholder="Select a permmision">
+                                <Select.Option options= {fetchUserpermission}></Select.Option>
                             </Select>
                         </Form.Item>
                     </div>

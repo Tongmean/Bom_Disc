@@ -155,11 +155,11 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const id = req.params.id;
-    const { email, password, role } = req.body; // Ensure role is included in the request body
+    const { email, password, role, permission1, permission2, permission3, permission4 } = req.body; // Ensure role is included in the request body
 
     try {
-        const sqlCommand = `UPDATE "users" SET email = $1, password = $2, role = $3 WHERE id = $4`;
-        const values = [email, password, role, id]; // Add id to the values array
+        const sqlCommand = `UPDATE "users" SET email = $1, password = $2, role = $3, permission1 = $4, permission2 = $5, permission3 = $6, permission4 = $7 WHERE id = $8`;
+        const values = [email, password, role, permission1, permission2, permission3, permission4, id]; // Add id to the values array
         
         dbconnect.query(sqlCommand, values, (err, result) => {
             if (err) {

@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createShim } from '../../Ultility/Shimapi'; // Assuming you have a similar API function
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
-
+import { fetchmaterialsp } from '../../Ultility/Sellectedbom';
+const { Option } = Select;
 
 const CreateShim = () => {
     const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
     const navigate = useNavigate();
+    const [spoptions, setShimoption] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    //Loading Sp Dropdown
+    useEffect(() => {
+        const load = async () => {
+            setLoading(true);
+            try {
+                const Data = await fetchmaterialsp(); 
+                setShimoption(Data.data); 
+
+            } catch (error) {
+                showNotification('Failed to fetch data', 'warning');
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, []);
 
     const columnNameLabels = {
         Compact_No_Modify: "Compact No (ปรับ)",
@@ -28,6 +48,7 @@ const CreateShim = () => {
         Erp_Id_SP3: "รหัส SP3",
         Id_SP3: "ID SP3",
         Quantity_SP3: "จำนวน SP3",
+        Status: "Status",
     };
 
     const handleSubmit = async (values) => {
@@ -53,7 +74,6 @@ const CreateShim = () => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
     };
-
     return (
         <div className="container-fluid">
             <h2>แบบฟอร์มบันทึก Shim</h2>
@@ -80,29 +100,81 @@ const CreateShim = () => {
                 }}
             >
                 <div className="row">
-                    {Object.entries(columnNameLabels).map(([fieldName, label]) => (
-                        <div className="col-xl-4 col-lg-4 col-md-6" key={fieldName}>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className="col-xl-4 col-lg-4 col-md-6" key={index}>
                             <Form.Item
                                 label={label}
-                                name={fieldName}
+                                name={key}
                                 rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
                             >
-                                <Input />
+                                {key === 'Status' ? (
+                                    <Select>
+                                        {fetchStatus.map((status) => (
+                                            <Option key={status.value} value={status.value}>
+                                                {status.label}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP1" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {spoptions.map((i) => (
+                                        <Option key={i.ID} value={i.ID}>
+                                            {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP2" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {spoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP3" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {spoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                (
+                                    <Input />
+                                )}
                             </Form.Item>
                         </div>
                     ))}
 
-                    {/* Add the dropdown for Status */}
-                    <div className="col-xl-4 col-lg-4 col-md-6">
-                        <Form.Item
-                            label="Status"
-                            name="Status"
-                            rules={[{ required: true, message: 'กรุณาเลือก Status' }]}
-                        >
-                            <Select placeholder="เลือก Status">
-                            <Select options={fetchStatus} /></Select>
-                        </Form.Item>
-                    </div>
+
+
+        
 
                     <div className="col-12">
                         <Form.Item>

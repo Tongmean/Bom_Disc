@@ -12,7 +12,7 @@ import {
     fetchShims,
     fetchDrawings,
 } from '../../Ultility/Sellectedbom';
-import { fetchStatusproduct } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
 
 const { Option } = Select;
 
@@ -31,6 +31,30 @@ const UpdateBom = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const columnNameLabels = {
+        Customer_Name: "ชื่อลูกค้า",
+        Type_Customer: "ประเภทลูกค้า",
+        Sale_Code_Bom: "Code การขาย",
+        Num: "เบอร์",
+        Part_No: "Part No.",
+        Code_Fg: "รหัส ERP (Code_Fg)",
+        Drawing_No: "Drawing No.",
+        Shim_Attach: "การติด Shim",
+        Shim_No: "Shim No",
+        Product_Spec_No: "Product Spec No.",
+        Data_Sheet_No: "Data Sheet No.",
+        Pcs_Per_Set: "จำนวนชิ้น/ชุด",
+        Display_Box_Id: "เบอร์กล่อง",
+        Quantity_Display_Box: "จำนวนกล่อง",
+        Outer_Package: "ใส่ Outer",
+        Outer_Id: "รหัส Outer",
+        Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
+        Status: "Status",
+
+        Start_Sale_Date: "วันเริ่มขาย"
+    };
+
+    
     useEffect(() => {
         const fetchDropdownData = async () => {
             setDropdownLoading(true);
@@ -101,13 +125,6 @@ const UpdateBom = () => {
         setTimeout(() => setNotification(null), 3000);
     };
 
-    const getUniqueOptions = (options) => {
-        // Filter out duplicates while including the default "-" option only once
-        const uniqueOptions = Array.from(new Set(options.map(item => item.Compact_No_Modify_Drawing || item.Display_Box_id || item.Outer_Id)))
-            .map(value => options.find(item => item.Compact_No_Modify_Drawing === value || item.Display_Box_id === value || item.Outer_Id === value));
-        return uniqueOptions;
-    };
-
     if (loading) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
@@ -121,193 +138,196 @@ const UpdateBom = () => {
             <h2>แก้ไข Bill of Material (Update BOM)</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัส ERP (Code_Fg)" name="Code_Fg" rules={[{ required: true, message: 'กรุณากรอก รหัส ERP (Code_Fg)' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="เบอร์" name="Num" rules={[{ required: true, message: 'กรุณากรอก เบอร์' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Part No." name="Part_No" rules={[{ required: true, message: 'กรุณากรอก Part No.' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Code การขาย" name="Sale_Code_Bom" rules={[{ required: true, message: 'กรุณากรอก Code การขาย' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ประเภทลูกค้า" name="Type_Customer" rules={[{ required: true, message: 'กรุณากรอก ประเภทลูกค้า' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ชื่อลูกค้า" name="Customer_Name" rules={[{ required: true, message: 'กรุณากรอก ชื่อลูกค้า' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="วันเริ่มขาย" name="Start_Sale_Date" rules={[{ required: true, message: 'กรุณากรอก วันเริ่มขาย' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'กรุณากรอก Status' }]}>
-                            <Select placeholder="กรุณาเลือก Status">
-                                <Select.Option options = {fetchStatusproduct}></Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    {/* Drawing No. Dropdown */}
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Drawing No." name="Drawing_No" rules={[{ required: true, message: 'กรุณาเลือก Drawing No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Drawing No."
-                                loading={dropdownLoading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {(drawingOptions).map((option) => (
-                                    <Option key={option.Compact_No_Modify_Drawing} value={option.Compact_No_Modify_Drawing}>
-                                        {option.Compact_No_Modify_Drawing}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="การติด Shim" name="Shim_Attach" rules={[{ required: true, message: 'กรุณากรอก การติด Shim' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                        {/* Shim No. Dropdown */}
-                        <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Shim No." name="Shim_No" rules={[{ required: true, message: 'กรุณากรอก Shim No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Shim No."
-                                loading={dropdownLoading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {shimOptions.map((option) => (
-                                    <Option key={option.Compact_No_Modify} value={option.Compact_No_Modify}>
-                                        {option.Compact_No_Modify}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
+                            {key === "Status" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchStatusproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Outer_Package" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchOuterproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Drawing_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {drawingOptions.map((i) => (
+                                            <Option key={i.Compact_No_Modify_Drawing} value={i.Compact_No_Modify_Drawing}>
+                                                {i.Compact_No_Modify_Drawing}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Shim_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {shimOptions.map((i) => (
+                                            <Option key={i.Compact_No_Modify} value={i.Compact_No_Modify}>
+                                                {i.Compact_No_Modify}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Product_Spec_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {productspecOptions.map((i) => (
+                                            <Option key={i.Product_Spec_Id} value={i.Data_Sheet_Id}>
+                                                {i.Product_Spec_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Data_Sheet_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {datasheetOptions.map((i) => (
+                                            <Option key={i.Data_Sheet_No} value={i.Data_Sheet_No}>
+                                                {i.Data_Sheet_No}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Display_Box_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {packageOptions.map((i) => (
+                                            <Option key={i.Display_Box_id} value={i.Display_Box_id}>
+                                                {i.Display_Box_id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Outer_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {outerOptions.map((i) => (
+                                            <Option key={i.Outer_Id} value={i.Outer_Id}>
+                                                {i.Outer_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            )}
+                        </div>
+                    ))}
 
-                    {/* Product Spec No. Dropdown */}
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Product Spec No." name="Product_Spec_No" rules={[{ required: true, message: 'กรุณากรอก Product Spec No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Product Spec No."
-                                loading={dropdownLoading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {(productspecOptions).map((option) => (
-                                    <Option key={option.Product_Spec_Id} value={option.Product_Spec_Id}>
-                                        {option.Product_Spec_Id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
 
-
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Data Sheet No." name="Data_Sheet_No" rules={[{ required: true, message: 'กรุณากรอก Data Sheet No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Data Sheet No."
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {datasheetOptions.map((i) => (
-                                    <Option key={i.Data_Sheet_No} value={i.Data_Sheet_No}>
-                                        {i.Data_Sheet_No}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item
-                            label="เบอร์กล่อง"
-                            name="Display_Box_Id"
-                            rules={[{ required: true, message: 'กรุณาเลือก เบอร์กล่อง' }]}
-                        >
-                            <Select
-                                placeholder="กรุณาเลือก เบอร์กล่อง"
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {packageOptions.map((i) => (
-                                    <Option key={i.Display_Box_id} value={i.Display_Box_id}>
-                                        {i.Display_Box_id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="จำนวนกล่อง" name="Quantity_Display_Box" rules={[{ required: true, message: 'กรุณากรอก จำนวนกล่อง' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ใส่ Outer" name="Outer_Package" rules={[{ required: true, message: 'กรุณากรอก ใส่ Outer' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    {/* Outer Package Dropdown */}
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัส Outer" name="Outer_Package" rules={[{ required: true, message: 'กรุณากรอก Outer Package' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Outer Package"
-                                loading={dropdownLoading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {(outerOptions).map((option) => (
-                                    <Option key={option.Outer_Id} value={option.Outer_Id}>
-                                        {option.Outer_Id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="จำนวนชิ้น/ชุด" name="Pcs_Per_Set" rules={[{ required: true, message: 'กรุณากรอก จำนวนชิ้น/ชุด' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา" name="Additional_Package_Id" rules={[{ required: true, message: 'กรุณากรอก รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
 
 
                     <div className="col-12">
                         <Form.Item>
-                            <Button type="default" className="me-2" onClick={() => navigate('/bom')}>
+                            <Button type="default" className="me-2" onClick={() => navigate('/productregister')}>
                                 Back
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>

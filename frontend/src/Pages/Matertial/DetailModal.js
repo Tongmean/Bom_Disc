@@ -6,49 +6,49 @@ import 'antd/dist/reset.css';
 import { convertToUTCPlus7 } from '../../Ultility/Moment-timezone';
 
 const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
-    const [showHistoryLog, setShowHistoryLog] = useState(false); // State for toggling history log visibility
+    const [showHistoryLog, setShowHistoryLog] = useState(false);
 
     if (!data) return null;
-        // Mapping column_name to labels
-        const columnNameLabels = {
-            Compact_No_Modify_Drawing: "Compact No (ปรับ)",
-            Part_No: "Part No.",
-            Erp_Id_BP1: "รหัส ERP BP1",
-            Name_BP1: "ชื่อ ERP BP1",
-            Id_BP1: "ID BP1",
-            Quantity_BP1: "จำนวน BP1",
-            Thickness_Pad1: "ความหนาผ้า 1",
-            Erp_Id_BP2: "รหัส ERP BP2",
-            Name_BP2: "ชื่อ ERP BP2",
-            Id_BP2: "ID BP2",
-            Quantity_BP2: "จำนวน BP2",
-            Thickness_Pad2: "ความหนาผ้า 2",
-            Erp_Id_BP3: "รหัส ERP BP3",
-            Name_BP3: "ชื่อ ERP BP3",
-            Id_BP3: "ID BP3",
-            Quantity_BP3: "จำนวน BP3",
-            Thickness_Pad3: "ความหนาผ้า 3",
-            Erp_Id_BP4: "รหัส ERP BP4",
-            Name_BP4: "ชื่อ ERP BP4",
-            Id_BP4: "ID BP4",
-            Quantity_BP4: "จำนวน BP4",
-            Thickness_Pad4: "ความหนาผ้า 4",
-            Erp_Id_WD1: "รหัส ERP WD1",
-            Name_WD1: "ชื่อ ERP WD1",
-            Id_WD1: "ID WD1",
-            Quantity_WD1: "จำนวน WD1",
-            Erp_Id_WD2: "รหัส ERP WD2",
-            Name_WD2: "ชื่อ ERP WD2",
-            Id_WD2: "ID WD2",
-            Quantity_WD2: "จำนวน WD2",
-            Erp_Id_WD3: "รหัส ERP WD3",
-            Name_WD3: "ชื่อ ERP WD3",
-            Id_WD3: "ID WD3",
-            Quantity_WD3: "จำนวน WD3",
-            CreateBy: "กรอกโดย",
-            CreateAt: "กรอกเมื่อ",
 
-        };
+    // Define fields dynamically from the given headerName and field mapping
+    const fields = [
+        { label: 'ที่', value: 'id' },
+        { label: 'Compact_No (ปรับ)', value: 'Compact_No_Modify' },
+        { label: 'Compact_No (Catalog)', value: 'Compact_No_Catalog' },
+        { label: 'Drawing Number', value: 'Drawing_no' },
+        { label: 'Type Drawing', value: 'Type_Drawing' },
+        { label: 'เบอร์', value: 'Num' },
+        { label: 'Sheet', value: 'Sheet' },
+        { label: 'Date Approve', value: 'Data_Approve' },
+        { label: 'Edion', value: 'Edion' },
+        { label: 'รหัสตู้', value: 'Cabinet_Id' },
+        { label: 'หมายเหตุ', value: 'Remark' },
+        { label: 'Document_Id', value: 'รหัสเอกสาร' },
+        { label: 'Type1', value: 'Type1' },
+        { label: 'Type2', value: 'Type2' },
+        { label: 'Type3', value: 'Type3' },
+        { label: 'ID', value: 'ID' },
+        { label: 'กว้าง', value: 'Width' },
+        { label: 'ยาว', value: 'Length' },
+        { label: 'หนา', value: 'Thick' },
+        { label: 'หนารวมชิม', value: 'Shim_Thick' },
+        { label: 'สูง', value: 'Height' },
+        { label: 'ระยะการใช้งาน', value: 'Working_Duration' },
+        { label: 'ขนาดรู', value: 'Hole_Scale' },
+        { label: 'จำนวนชิ้น', value: 'Quantity_Shim' },
+        { label: 'Option', value: 'Option' },
+        { label: 'Area', value: 'Area' },
+        { label: 'เจาะรู', value: 'Drill' },
+        { label: 'ลักษณะชิม', value: 'Type_Shim' },
+        { label: 'กรอกเมื่อ', value: 'create_at', formatter: convertToUTCPlus7 },
+        { label: 'กรอกโดย', value: 'create_by' },
+    ];
+
+    // Create a mapping of column names to their labels
+    const columnLabelMap = fields.reduce((map, field) => {
+        map[field.value] = field.label;
+        return map;
+    }, {});
 
     return (
         <Modal show={show} onHide={onHide} centered size="xl">
@@ -59,11 +59,11 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                 {/* Main Detail Section */}
                 <h5 className="text-primary">Detail Information</h5>
                 <div className="row">
-                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                    {fields.map((field, index) => (
                         <div key={index} className="col-xl-3 col-lg-3 col-md-3 col-sm-6 mb-3">
                             <div className="p-2 border border-primary rounded bg-light">
-                                <h6 className="text-secondary mb-1">{label}</h6>
-                                <p className="m-0">{data[key] || "-"}</p>
+                                <h6 className="text-secondary mb-1">{field.label}</h6>
+                                <p className="m-0">{field.formatter ? field.formatter(data[field.value]) : data[field.value] || "-"}</p>
                             </div>
                         </div>
                     ))}
@@ -80,7 +80,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                                         <Timeline.Item key={index} color="blue">
                                             <p style={{ margin: 0 }}>
                                                 <strong>{index + 1}. </strong>
-                                                <span>Column: <strong>{columnNameLabels[log.column_name] || log.column_name}</strong> | </span>
+                                                <span>Column: <strong>{columnLabelMap[log.column_name] || log.column_name}</strong> | </span>
                                                 <span>Old Value: <strong>{log.old_value || "-"}</strong> | </span>
                                                 <span>New Value: <strong>{log.new_value || "-"}</strong> | </span>
                                                 <span>Updated By: <strong>{log.action_by || "-"}</strong> | </span>
@@ -96,7 +96,6 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                     </div>
                 )}
             </Modal.Body>
-
             <Modal.Footer>
                 <Button
                     variant={showHistoryLog ? "danger" : "primary"}

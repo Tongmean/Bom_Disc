@@ -191,6 +191,88 @@ const Selecteddrawing = async (req, res) => {
     }
 };
 
+//Sellected Material
+const SelectedmaterialWd = async (req, res) => {
+    try {
+        dbconnect.query(`Select DISTINCT id, "Type1", "Type2", "Type3", "ID" FROM "Material" WHERE "Type2" = 'WD' `, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+const Selectedmaterialbp = async (req, res) => {
+    try {
+        dbconnect.query(`Select DISTINCT id, "Type1", "Type2", "Type3", "ID" FROM "Material" WHERE "Type2" = 'BP' `, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+const Selectedmaterialsp = async (req, res) => {
+    try {
+        dbconnect.query(`Select DISTINCT id, "Type1", "Type2", "Type3", "ID" FROM "Material" WHERE "Type2" = 'SP' `, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+
+
+
 module.exports = {
     SelectedPackages,
     SelectedOuters,
@@ -198,7 +280,11 @@ module.exports = {
     SelectedProductspecs,
     Selectedadditionalpackages,
     Selectedshims,
-    Selecteddrawing
+    Selecteddrawing,
+
+    SelectedmaterialWd,
+    Selectedmaterialbp,
+    Selectedmaterialsp
 
 
 }

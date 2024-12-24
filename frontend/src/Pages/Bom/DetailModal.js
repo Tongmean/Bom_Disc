@@ -65,7 +65,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "กรอกโดย", value: data.CreateBy },
                         { label: "กรอกเมื่อ", value: convertToUTCPlus7(data.CreateAt) },
                     ].map((field, index) => (
-                        <div key={index} className="col-md-4 mb-3">
+                        <div key={index} className="col-xl-3 col-lg-3 col-md-3 col-sm-6 mb-3">
                             <div className="p-2 border border-primary rounded bg-light">
                                 <h6 className="text-secondary mb-1">{field.label}</h6>
                                 <p className="m-0">{field.value || "-"}</p>

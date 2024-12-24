@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 //Get All record
 const getBoms = async (req, res) => {
     try {
-        dbconnect.query(`SELECT * FROM "bom" ORDER BY "Code_Fg" ASC `, (err, result) => {
+        dbconnect.query(`SELECT * FROM "bom" ORDER BY id ASC `, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

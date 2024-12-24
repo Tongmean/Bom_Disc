@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchShim, updateShim } from '../../Ultility/Shimapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+import { fetchmaterialsp } from '../../Ultility/Sellectedbom';
+const { Option } = Select;
 
 
 const UpdateShim = () => {
@@ -14,7 +16,25 @@ const UpdateShim = () => {
     const [loading, setLoading] = useState(true);
     const { id } = useParams(); // Extract ID from route params
     const navigate = useNavigate();
+    const [spoptions, setShimoption] = useState([]);
+    // const [loading, setLoading] = useState(false);
 
+    //Loading Sp Dropdown
+    useEffect(() => {
+        const load = async () => {
+            setLoading(true);
+            try {
+                const Data = await fetchmaterialsp(); 
+                setShimoption(Data.data); 
+
+            } catch (error) {
+                showNotification('Failed to fetch data', 'warning');
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, []);
     // Mapping the new attributes to their labels
     const fieldLabels = {
         Compact_No_Modify: "Compact No (ปรับ)",
@@ -104,27 +124,80 @@ const UpdateShim = () => {
                 onFinish={handleSubmit}
             >
                 <div className="row">
-                    {Object.keys(fieldLabels).map((key) => (
-                        <div className="col-xl-4 col-lg-4 col-md-12" key={key}>
+                    {Object.entries(fieldLabels).map(([key, label], index) => (
+                        <div className="col-xl-4 col-lg-4 col-md-6" key={index}>
                             <Form.Item
-                                label={fieldLabels[key]}
+                                label={label}
                                 name={key}
-                                rules={[
-                                    {
-                                        required: key === "Status" || key !== "Compact_No_Modify", // Make Status required
-                                        message: `กรุณากรอก ${fieldLabels[key]}`
-                                    }
-                                ]}
+                                rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
                             >
-                                {key === "Status" ? (
-                                    <Select placeholder="Status">
-                                        <Select options={fetchStatus} /></Select>
-                                ) : (
+                                {key === 'Status' ? (
+                                    <Select>
+                                        {fetchStatus.map((status) => (
+                                            <Option key={status.value} value={status.value}>
+                                                {status.label}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP1" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {spoptions.map((i) => (
+                                        <Option key={i.ID} value={i.ID}>
+                                            {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP2" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {spoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Id_SP3" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {spoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                (
                                     <Input />
                                 )}
                             </Form.Item>
                         </div>
                     ))}
+
+
+
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/shim')}>

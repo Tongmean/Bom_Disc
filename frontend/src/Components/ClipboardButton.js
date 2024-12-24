@@ -19,9 +19,35 @@ const ClipboardButton = ({ gridApi }) => {
         console.log('selectedRows', selectedRows)
 
         const cleanedRows = selectedRows.map(({ CreateBy, CreateAt, create_at,create_by, ...rest }) => rest);
+        // const tsvData = cleanedRows
+        //     .map(row => Object.values(row).join('\t'))
+        //     .join('\n');
+        // const tsvData = cleanedRows
+        //     .map(row => 
+        //         Object.values(row)
+        //             .map(value => value.includes('\n') ? `"${value.replace(/\n/g, '\\n')}"` : value) // Handle newlines by escaping them
+        //             .join('\t')
+        //     )
+        //     .join('\n');
+        // const tsvData = cleanedRows
+        //         .map(row => 
+        //             Object.values(row)
+        //                 .map(value => {
+        //                     const stringValue = String(value); // Ensure value is a string
+        //                     return stringValue.includes('\n') ? `"${stringValue.replace(/\n/g, '\\n')}"` : stringValue;
+        //                 })
+        //                 .join('\t')
+        //         )
+        //         .join('\n');
         const tsvData = cleanedRows
-            .map(row => Object.values(row).join('\t'))
+            .map(row => 
+                Object.values(row)
+                    .map(value => String(value).replace(/\n/g, ''))  // Convert to string and remove all newlines
+                    .join('\t')
+            )
             .join('\n');
+
+
 
         const copyToClipboard = (text) => {
             const textarea = document.createElement('textarea');

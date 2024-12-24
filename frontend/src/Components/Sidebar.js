@@ -22,7 +22,6 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   if (!user) return null;
 
   const items = [
-
     
     { key: '1', icon: <HomeOutlined />, label: <Link to="/home">Home</Link> },
 
@@ -31,7 +30,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       { key: '12', label: <Link to="/Qcdisplay">Quality Control</Link> },
       { key: '13', label: <Link to="/saledisplay">Sale</Link> },
     ]},
-    { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/bom">Product Register</Link>},
+    { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/productregister">Product Register</Link>},
     { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
       { key: '50', label: <Link to="/productspec">Report</Link> },
       { key: '51', label: <Link to="/productspecfile">Product Spec File</Link> },
@@ -56,6 +55,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
     { key: 'E-mark', icon: <FileExcelOutlined />, label: <Link to="/emark">E-mark</Link>},
+    { key: 'Material', icon: <FileExcelOutlined />, label: <Link to="/material">Material</Link>},
 
 
     

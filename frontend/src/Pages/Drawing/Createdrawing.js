@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { CreateDrawingapi } from '../../Ultility/Drawingapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
-
+import { fetchmaterialbp, fetchmaterialwd } from '../../Ultility/Sellectedbom';
+const { Option } = Select;
 const CreateDrawing = () => {
     const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
     const navigate = useNavigate();
+    const [wdoptions, setWdoption] = useState([]);
+    const [bpoptions, setBpoption] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    //Loading Bp & Wd Dropdown
+    useEffect(() => {
+        const load = async () => {
+            setLoading(true);
+            try {
+                const Databp = await fetchmaterialbp(); 
+                setBpoption(Databp.data); 
+                const Datawd = await fetchmaterialwd(); 
+                setWdoption(Datawd.data); 
+                console.log('Datawd', Datawd)
+
+            } catch (error) {
+                showNotification('Failed to fetch data', 'warning');
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, []);
 
     const columnNameLabels = {
         Compact_No_Modify_Drawing: "Compact No (ปรับ)",
@@ -120,7 +144,7 @@ const CreateDrawing = () => {
             >
                 <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
-                        <div className={`col-xl-4 col-lg-4 col-md-6`} key={index}>
+                        <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
                             {key === "Status" ? (
                                 <Form.Item
                                     label={label}
@@ -130,7 +154,163 @@ const CreateDrawing = () => {
                                     <Select placeholder={`เลือก ${label}`} >
                                     <Select options={fetchStatus} /></Select>
                                 </Form.Item>
-                            ) : (
+                            )
+                            :
+                            key === "Id_BP1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bpoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_BP2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bpoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_BP3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bpoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_BP4" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bpoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_WD1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wdoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_WD2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wdoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Id_WD3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wdoptions.map((i) => (
+                                            <Option key={i.ID} value={i.ID}>
+                                                {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            (
                                 <Form.Item
                                     label={label}
                                     name={key}

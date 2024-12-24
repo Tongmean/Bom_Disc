@@ -120,11 +120,60 @@ export const fetchDrawings = async () => {
   }
 };
 
+//Selected material
+export const fetchmaterialbp = async () => {
+  try {
+    const response = await apiClient.get('/sellectedbom/bp'); // Send the GET request to the server
 
-// router.get('/package', SelectedPackages);
-// router.get('/outer', SelectedOuters);
-// router.get('/datasheet', SelectedDatasheets);
-// router.get('/productspec', SelectedProductspecs);
-// router.get('/additionalpackage', Selectedadditionalpackages);
-// router.get('/shim', Selectedshims);
-// router.get('/drawing', Selecteddrawing);
+    // Check the response's 'success' field to determine if the request was successful
+    if (response.data.success) {
+      // If successful, return the 'data' part of the response
+      return response.data; // Assuming 'data' contains the users
+    } else {
+      // If success is false, throw an error with the server message
+      throw new Error(response.data.msg);
+    }
+  } catch (error) {
+    // Catch and rethrow the error with a message from the server or a generic one
+    throw new Error(error.response?.data?.msg);
+  }
+};
+export const fetchmaterialwd = async () => {
+  try {
+    const response = await apiClient.get('/sellectedbom/wd'); // Send the GET request to the server
+
+    // Check the response's 'success' field to determine if the request was successful
+    if (response.data.success) {
+      // If successful, return the 'data' part of the response
+      return response.data; // Assuming 'data' contains the users
+    } else {
+      // If success is false, throw an error with the server message
+      throw new Error(response.data.msg);
+    }
+  } catch (error) {
+    // Catch and rethrow the error with a message from the server or a generic one
+    throw new Error(error.response?.data?.msg);
+  }
+};
+export const fetchmaterialsp = async () => {
+  try {
+    const response = await apiClient.get('/sellectedbom/sp'); // Send the GET request to the server
+
+    // Check the response's 'success' field to determine if the request was successful
+    if (response.data.success) {
+      // If successful, return the 'data' part of the response
+      return response.data; // Assuming 'data' contains the users
+    } else {
+      // If success is false, throw an error with the server message
+      throw new Error(response.data.msg);
+    }
+  } catch (error) {
+    // Catch and rethrow the error with a message from the server or a generic one
+    throw new Error(error.response?.data?.msg);
+  }
+};
+
+
+// router.get('/bp', Selectedmaterialbp);
+// router.get('/wd', SelectedmaterialWd);
+// router.get('/sp', Selectedmaterialsp);

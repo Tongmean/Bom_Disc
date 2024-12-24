@@ -24,6 +24,7 @@ app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 const requireAuth = require('./middleware/requireAuth');
 const UserRouter = require('./routes/userRoutes')
 const Bomsrouter = require('./routes/BomRoutes');
+const BomsFilterrouter = require('./routes/BomfilterRoutes');
 const packageRouter = require('./routes/packageRoutes');
 const outerRouter = require('./routes/outerRoutes');
 const additional_ToolRouter = require('./routes/additional_ToolRoutes');
@@ -36,12 +37,14 @@ const drawingfileRouter = require('./routes/drawingfileRoutes');
 const productspecfileRouter = require('./routes/productspecfileRoutes');
 const emarkRouter = require('./routes/emarkRoutes');
 const shimfileRouter = require('./routes/shimfileRoutes');
+const materialRouter = require('./routes/materialRoutes');
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
 const sellectedbomRouter = require('./routes/sellectedbomRoutes')
 
 app.use('/api/user', UserRouter);
 app.use('/api/bom',requireAuth, Bomsrouter);
+app.use('/api/bomfilter',requireAuth, BomsFilterrouter);
 app.use('/api/package', requireAuth,packageRouter);
 app.use('/api/outer', requireAuth, outerRouter);
 app.use('/api/additionaltool', requireAuth, additional_ToolRouter);
@@ -56,6 +59,7 @@ app.use('/api/file', requireAuth, drawingfileRouter);
 app.use('/api/file', requireAuth, productspecfileRouter);
 app.use('/api/file', requireAuth, shimfileRouter);
 app.use('/api/emark', requireAuth, emarkRouter);
+app.use('/api/material', requireAuth, materialRouter);
 
 require('dotenv').config();
 const port = process.env.PORT || 8001;

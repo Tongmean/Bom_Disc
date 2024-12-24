@@ -4,6 +4,7 @@ import Sidebar from './Components/Sidebar';
 import HeaderComponent from './Components/Header';
 import FooterComponent from './Components/Footer';
 import { Layout } from 'antd';
+import { useAuthContext } from './Hook/useAuthContext';
 import Loginpage from "./Components/Loginpage";
 //Display
 import Homepage from './Pages/Display/Home';
@@ -64,8 +65,11 @@ import UpdateUser from './Pages/Users/Updateuser';
 import Shimfile from './Pages/Shimfile/Shimfile';
 import CreateShimFile from './Pages/Shimfile/Createshimfile';
 import UpdateShimFile from './Pages/Shimfile/Updateshimfile';
+//Material
+import Material from './Pages/Matertial/Material';
+import CreateMaterial from './Pages/Matertial/CreateMaterial';
+import UpdateMaterial from './Pages/Matertial/UpdateMaterial';
 
-import { useAuthContext } from './Hook/useAuthContext';
 const { Content } = Layout;
 
 const App = () => {
@@ -121,7 +125,7 @@ const App = () => {
               </Route>
 
               <Route path="/productspec" element={isAuthenticated ? <Productspec /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productspec']}/>}>
                 <Route path="/createproductspec" element={<CreateProductSpec />} />
                 <Route path="/productspec/:id" element={<UpdateProductSpec />} />
               </Route>
@@ -140,15 +144,15 @@ const App = () => {
               </Route>
 
               <Route path="/drawing" element={isAuthenticated ? <Drawing /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['drawing']}/>}>
                 <Route path="/createdrawing" element={<CreateDrawing />} />
                 <Route path="/drawing/:id" element={<UpdateDrawing />} />
               </Route>
 
-              <Route path="/bom" element={isAuthenticated ? <Bom /> : <Navigate to='/login' />} />
+              <Route path="/productregister" element={isAuthenticated ? <Bom /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productregister']} />}>
-                <Route path="/createbom" element={<CreateBom />} />
-                <Route path="/bom/:id" element={<UpdateBom />} />
+                <Route path="/createproductregister" element={<CreateBom />} />
+                <Route path="/productregister/:id" element={<UpdateBom />} />
               </Route>
 
               <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
@@ -178,6 +182,12 @@ const App = () => {
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                 <Route path="/createshimfile" element={<CreateShimFile />} />
                 <Route path="/shimfile/:id" element={<UpdateShimFile />} />
+              </Route>
+
+              <Route path="/material" element={isAuthenticated ? <Material /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/creatematerial" element={<CreateMaterial />} />
+                <Route path="/material/:id" element={<UpdateMaterial />} />
               </Route>
 
 

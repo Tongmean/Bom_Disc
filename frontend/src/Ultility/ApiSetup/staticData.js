@@ -11,6 +11,11 @@ export const fetchStatusproduct = [
     { label: 'ทดลองผลิต APQP', value: 'ทดลองผลิต APQP' },
     { label: 'Obsolete', value: 'Obsolete' },
 ]
+export const fetchOuterproduct = [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+
+]
 
 //Product spec
 export const fetchStatusslot = [
@@ -66,4 +71,92 @@ export const fetchUserpermission = [
     { label: 'Product Spec.', value: 'productspec' },
     { label: 'Prackage', value: 'prackage' },
     { label: 'E-mark', value: 'emark' },
+]
+//Material
+export const fetchMaterialtypedrawing = [
+    { label: '-', value: '-' },
+    { label: 'Intensive', value: 'Intensive' },
+    { label: 'Intensive Hold', value: 'Intensive Hold' },
+    { label: 'Intensive00', value: 'Intensive00' },
+    { label: 'Master', value: 'Master' },
+]
+export const fetchMaterialcabinetid = [
+    { label: '-', value: '-' },
+    { label: 'DATA:D', value: 'DATA:D' },
+    { label: 'PDS.01', value: 'PDS.01' },
+    { label: 'PDS.02', value: 'PDS.02' },
+    { label: 'PDS.03', value: 'PDS.03' },
+    { label: 'PDS.04', value: 'PDS.04' },
+    { label: 'PDS.08', value: 'PDS.08' },
+]
+export const fetchMaterialremark = [
+    { label: '-', value: '-' },
+    { label: 'After', value: 'After' },
+    { label: 'EV', value: 'EV' },
+]
+export const fetchMaterialdocumentid = [
+    { label: '-', value: '-' },
+    { label: 'DDS', value: 'DDS' },
+    { label: 'PDS', value: 'PDS' },
+    { label: 'PSD', value: 'PSD' },
+    { label: 'TE', value: 'TE' },
+    { label: 'TE', value: 'TE' },
+    { label: 'ลืมใส่', value: 'ลืมใส่' },
+]
+export const fetchMaterialtype1 = [
+    { label: '-', value: '-' },
+    { label: 'AC', value: 'AC' },
+    { label: 'BP', value: 'BP' },
+    { label: 'CC', value: 'CC' },
+    { label: 'D', value: 'D' },
+    { label: 'ER', value: 'ER' },
+    { label: 'ES', value: 'ES' },
+    { label: 'F', value: 'F' },
+    { label: 'FC', value: 'FC' },
+    { label: 'FP', value: 'FP' },
+    { label: 'FW', value: 'FW' },
+    { label: 'PP', value: 'PP' },
+    { label: 'RR', value: 'RR' },
+    { label: 'SD', value: 'SD' },
+    { label: 'SI', value: 'SI' },
+    { label: 'SP', value: 'SP' },
+    { label: 'TS', value: 'TS' },
+    { label: 'WD', value: 'WD' },
+]
+export const fetchMaterialtype2 = [
+    { label: '-', value: '-' },
+    { label: 'BP', value: 'BP' },
+    { label: 'D', value: 'D' },
+    { label: 'F', value: 'F' },
+    { label: 'FP', value: 'FP' },
+    { label: 'SD', value: 'SD' },
+    { label: 'SP', value: 'SP' },
+    { label: 'WD', value: 'WD' },
+]
+export const fetchMaterialtype3 = [
+    { label: '-', value: '-' },
+    { label: 'BP-1', value: 'BP-1' },
+    { label: 'BP-2', value: 'BP-2' },
+    { label: 'BP-3', value: 'BP-3' },
+    { label: 'BP-4', value: 'BP-4' },
+    { label: 'D', value: 'D' },
+    { label: 'D-1', value: 'D-1' },
+    { label: 'D-2', value: 'D-2' },
+    { label: 'D-3', value: 'D-3' },
+    { label: 'D-4', value: 'D-4' },
+    { label: 'F', value: 'F' },
+    { label: 'F-1', value: 'F-1' },
+    { label: 'F-2', value: 'F-2' },
+    { label: 'FC', value: 'FC' },
+    { label: 'SD', value: 'SD' },
+    { label: 'SD-1', value: 'SD-1' },
+    { label: 'SP', value: 'SP' },
+    { label: 'SP-1', value: 'SP-1' },
+    { label: 'SP-2', value: 'SP-2' },
+    { label: 'SP-3', value: 'SP-3' },
+    { label: 'WD', value: 'WD' },
+    { label: 'WD-1', value: 'WD-1' },
+    { label: 'WD-2', value: 'WD-2' },
+    { label: 'WD-3', value: 'WD-3' },
+    { label: 'WD-4', value: 'WD4' },
 ]

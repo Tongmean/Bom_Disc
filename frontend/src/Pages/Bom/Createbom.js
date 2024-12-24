@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
-import { fetchStatusproduct } from '../../Ultility/ApiSetup/staticData';
-import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings} from '../../Ultility/Sellectedbom'
+import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
+import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings} from '../../Ultility/Sellectedbom';
+import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
+
 const { Option } = Select;
 const CreateBom = () => {
     const [form] = Form.useForm();
@@ -19,8 +21,40 @@ const CreateBom = () => {
     const [shimOptions, setShimoptions] = useState([]);
     const [drawingOptions, setDrawingoptions] = useState([]);
     const navigate = useNavigate();
-    // Fetch display box data on component mount
+    //Filter
+    const [error, setError] = useState('');
+    const [rowData, setRowData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [codeFgFilter, setCodeFgFilter] = useState([]);
+    const [partNoFilter, setPartNoFilter] = useState([]);
+    const [statusFilter, setStatusFilter] = useState([]);
+    const [customerNameFilter, setCustomerNameFilter] = useState([]);
 
+    // Fetch display box data on component mount
+    const columnNameLabels = {
+        Customer_Name: "ชื่อลูกค้า",
+        Type_Customer: "ประเภทลูกค้า",
+        Sale_Code_Bom: "Code การขาย",
+        Num: "เบอร์",
+        Part_No: "Part No.",
+        Code_Fg: "รหัส ERP (Code_Fg)",
+        Drawing_No: "Drawing No.",
+        Shim_Attach: "การติด Shim",
+        Shim_No: "Shim No",
+        Product_Spec_No: "Product Spec No.",
+        Data_Sheet_No: "Data Sheet No.",
+        Pcs_Per_Set: "จำนวนชิ้น/ชุด",
+        Display_Box_Id: "เบอร์กล่อง",
+        Quantity_Display_Box: "จำนวนกล่อง",
+        Outer_Package: "ใส่ Outer",
+        Outer_Id: "รหัส Outer",
+        Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
+        Status: "Status",
+
+        Start_Sale_Date: "วันเริ่มขาย"
+    };
+
+    //Dropdown Value
     useEffect(() => {
         const load = async () => {
             setLoading(true);
@@ -54,6 +88,7 @@ const CreateBom = () => {
         load();
     }, []);
 
+
     const handleSubmit = async (values) => {
         setIsPending(true);
         const bomData = { ...values, CreateBy: '-' }; // Add CreateBy field
@@ -79,10 +114,166 @@ const CreateBom = () => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
     };
+    //Filter Component
+    useEffect(() => {
+        const load = async () => {
+          try {
+            const Data = (await fetchBomfilter()).data;
+            // console.log('FilterData', Data)
+            setRowData(Data);
+            setFilteredData(Data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+        load();
+    }, []);
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+          (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+          (!statusFilter.length || statusFilter.includes(item.Status)) &&
+          (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) 
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, statusFilter, customerNameFilter, rowData]);
+    
+    const clearFilters = () => {
+        setCodeFgFilter([]);
+        setPartNoFilter([]);
+        setStatusFilter([]);
+        setCustomerNameFilter([])
+    };
+    // console.log('codeFgFilter', codeFgFilter)
 
+    const HandleFilter = async () => {
+
+        setIsPending(true);
+        const Code_Fg = { Code_Fg: `${codeFgFilter}` }; // Filter payload
+        console.log('Code_Fg', Code_Fg);
+    
+        try {
+            const result = await fetchBomfilterbycodefg(Code_Fg); // Fetch filtered data
+            console.log('result', result);
+    
+            if (result.data && result.data.length > 0) {
+                const initialValues = result.data[0]; // Assuming you use the first result
+                console.log('initialValues', initialValues);
+    
+                // Update form fields with fetched data
+                form.setFieldsValue({
+                    ...initialValues, // Populate all matched keys
+                });
+    
+                showNotification('Data loaded into the form successfully', 'success');
+            } else {
+                showNotification('No data found for the selected filter', 'warning');
+            }
+        } catch (error) {
+            showNotification(`Failed to fetch data: ${error.message}`, 'warning');
+        } finally {
+            setIsPending(false);
+        }
+    };
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
+    
     return (
-        <div className="container-fluid">
-            <h2>แบบฟอร์มบันทึก BOM (Bill of Materials)</h2>
+        <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by รหัส Status:</label>
+                        <Select
+                        
+                        showSearch
+                        placeholder="Select Status"
+                        style={{ width: '100%' }}
+                        value={statusFilter}
+                        onChange={(value) => setStatusFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Status))].map((Status) => (
+                            <Option key={Status} value={Status}>
+                            {Status}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Part No.:</label>
+                        <Select
+                        
+                        showSearch
+                        placeholder="Select Part No."
+                        style={{ width: '100%' }}
+                        value={partNoFilter}
+                        onChange={(value) => setPartNoFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+                            <Option key={partNo} value={partNo}>
+                            {partNo}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by ชื่อลูกค้า:</label>
+                        <Select
+                        
+                        showSearch
+                        placeholder="Select Customer Name."
+                        style={{ width: '100%' }}
+                        value={customerNameFilter}
+                        onChange={(value) => setCustomerNameFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Customer_Name))].map((Customer_Name) => (
+                            <Option key={Customer_Name} value={Customer_Name}>
+                            {Customer_Name}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Code_Fg (ERP):</label>
+                        <Select
+                        showSearch
+                        placeholder="Select Code_Fg"
+                        style={{ width: '100%' }}
+                        value={codeFgFilter}
+                        onChange={(value) => setCodeFgFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
+                            <Option key={code} value={code}>
+                            {code}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+                </div>
+
+                <Button type="default" style={{ marginTop: '10px',  marginRight: '10px',backgroundColor: 'blue',color: 'white',}} onClick={HandleFilter}>
+                    Filter
+                </Button>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                    Clear Filters
+                </Button>
+            </div>
+
+
+            <div className="container-fluid">
+            <h2>แบบฟอร์มลงทะเบียนผลิตภัณฑ์ (Product Register)</h2>
             <Form
                 form={form}
                 layout="vertical"
@@ -110,190 +301,200 @@ const CreateBom = () => {
                 }}
             >
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัส ERP (Code_Fg)" name="Code_Fg" rules={[{ required: true, message: 'กรุณากรอก รหัส ERP (Code_Fg)' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="เบอร์" name="Num" rules={[{ required: true, message: 'กรุณากรอก เบอร์' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Part No." name="Part_No" rules={[{ required: true, message: 'กรุณากรอก Part No.' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Code การขาย" name="Sale_Code_Bom" rules={[{ required: true, message: 'กรุณากรอก Code การขาย' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ประเภทลูกค้า" name="Type_Customer" rules={[{ required: true, message: 'กรุณากรอก ประเภทลูกค้า' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ชื่อลูกค้า" name="Customer_Name" rules={[{ required: true, message: 'กรุณากรอก ชื่อลูกค้า' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="วันเริ่มขาย" name="Start_Sale_Date" rules={[{ required: true, message: 'กรุณากรอก วันเริ่มขาย' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'กรุณากรอก Status' }]}>
-                            <Select placeholder="กรุณาเลือก Status">
-                                <Select.Option  options = {fetchStatusproduct}></Select.Option>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
+                            {key === "Status" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchStatusproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
                         
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Drawing No." name="Drawing_No" rules={[{ required: true, message: 'กรุณากรอก Drawing No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Drawing No."
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {drawingOptions.map((i) => (
-                                    <Option key={i.Compact_No_Modify_Drawing} value={i.Compact_No_Modify_Drawing}>
-                                        {i.Compact_No_Modify_Drawing}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="การติด Shim" name="Shim_Attach" rules={[{ required: true, message: 'กรุณากรอก การติด Shim' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Shim No" name="Shim_No" rules={[{ required: true, message: 'กรุณากรอก Shim No' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Shim No."
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {shimOptions.map((i) => (
-                                    <Option key={i.Compact_No_Modify} value={i.Compact_No_Modify}>
-                                        {i.Compact_No_Modify}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Product Spec No." name="Product_Spec_No" rules={[{ required: true, message: 'กรุณากรอก Product Spec No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Product Spec No."
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {productspecOptions.map((i) => (
-                                    <Option key={i.Product_Spec_Id} value={i.Data_Sheet_Id}>
-                                        {i.Product_Spec_Id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="Data Sheet No." name="Data_Sheet_No" rules={[{ required: true, message: 'กรุณากรอก Data Sheet No.' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก Data Sheet No."
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {datasheetOptions.map((i) => (
-                                    <Option key={i.Data_Sheet_No} value={i.Data_Sheet_No}>
-                                        {i.Data_Sheet_No}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item
-                            label="เบอร์กล่อง"
-                            name="Display_Box_Id"
-                            rules={[{ required: true, message: 'กรุณาเลือก เบอร์กล่อง' }]}
-                        >
-                            <Select
-                                placeholder="กรุณาเลือก เบอร์กล่อง"
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {packageOptions.map((i) => (
-                                    <Option key={i.Display_Box_id} value={i.Display_Box_id}>
-                                        {i.Display_Box_id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="จำนวนกล่อง" name="Quantity_Display_Box" rules={[{ required: true, message: 'กรุณากรอก จำนวนกล่อง' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="ใส่ Outer" name="Outer_Package" rules={[{ required: true, message: 'กรุณากรอก ใส่ Outer' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัส Outer" name="Outer_Id" rules={[{ required: true, message: 'กรุณากรอก รหัส Outer' }]}>
-                            <Select
-                                placeholder="กรุณาเลือก รหัส Outer"
-                                loading={loading}
-                                allowClear
-                                showSearch
-                            >
-                                <Option value="-">-</Option>
-                                {outerOptions.map((i) => (
-                                    <Option key={i.Outer_Id} value={i.Outer_Id}>
-                                        {i.Outer_Id}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="จำนวนชิ้น/ชุด" name="Pcs_Per_Set" rules={[{ required: true, message: 'กรุณากรอก จำนวนชิ้น/ชุด' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12">
-                        <Form.Item label="รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา" name="Additional_Package_Id" rules={[{ required: true, message: 'กรุณากรอก รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา' }]}>
-                            <Input />
-                        </Form.Item>
-                    </div>
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Outer_Package" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchOuterproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Drawing_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {drawingOptions.map((i) => (
+                                            <Option key={i.Compact_No_Modify_Drawing} value={i.Compact_No_Modify_Drawing}>
+                                                {i.Compact_No_Modify_Drawing}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Shim_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {shimOptions.map((i) => (
+                                            <Option key={i.Compact_No_Modify} value={i.Compact_No_Modify}>
+                                                {i.Compact_No_Modify}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Product_Spec_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {productspecOptions.map((i) => (
+                                            <Option key={i.Product_Spec_Id} value={i.Data_Sheet_Id}>
+                                                {i.Product_Spec_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Data_Sheet_No" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {datasheetOptions.map((i) => (
+                                            <Option key={i.Data_Sheet_No} value={i.Data_Sheet_No}>
+                                                {i.Data_Sheet_No}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Display_Box_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {packageOptions.map((i) => (
+                                            <Option key={i.Display_Box_id} value={i.Display_Box_id}>
+                                                {i.Display_Box_id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Outer_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {outerOptions.map((i) => (
+                                            <Option key={i.Outer_Id} value={i.Outer_Id}>
+                                                {i.Outer_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            )}
+                        </div>
+                    ))}
                 </div>
                 <div className="col-12">
                     <Form.Item>
-                        <Button type="default" className="me-2" onClick={() => navigate('/bom')}>
+                        <Button type="default" className="me-2" onClick={() => navigate('/productregister')}>
                             Back
                         </Button>
                         <Button type="primary" htmlType="submit" disabled={isPending}>
                             {isPending ? 'Saving...' : 'Save Data'}
+                        </Button>
+                        <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                                Clear
                         </Button>
                     </Form.Item>
                 </div>
@@ -307,6 +508,9 @@ const CreateBom = () => {
                 />
             )}
         </div>
+        </>
+
+
     );
 };
 

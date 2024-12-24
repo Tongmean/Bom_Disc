@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchBoms, fetchHistoryLog} from '../../Ultility/Bomapi';
+import {fetchMaterials, fetchHistoryLog} from '../../Ultility/Materialapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import DetailModal from '../Bom/DetailModal'
+import DetailModal from './DetailModal';
 import { useNavigate } from 'react-router-dom';
-const Bom = () =>{
+const Material = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState();
@@ -16,28 +16,34 @@ const Bom = () =>{
     const navigate = useNavigate();
 
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' },
+        { headerName: 'ที่', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
+        { headerName: 'Compact_No (ปรับ)', field: 'Compact_No_Modify' },
+        { headerName: 'Compact_No (Catalog)', field: 'Compact_No_Catalog' },
+        { headerName: 'Drawing Number', field: 'Drawing_no' },
+        { headerName: 'Type Drawing', field: 'Type_Drawing' },
         { headerName: 'เบอร์', field: 'Num' },
-        { headerName: 'Part No.', field: 'Part_No' },
-        { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
-        { headerName: 'ประเภทลูกค้า', field: 'Type_Customer' },
-        { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
-        { headerName: 'วันเริ่มขาย', field: 'Start_Sale_Date' },
-        { headerName: 'Status', field: 'Status' },
-        { headerName: 'Drawing No.', field: 'Drawing_No' },
-        { headerName: 'การติด Shim', field: 'Shim_Attach' },
-        { headerName: 'Shim No', field: 'Shim_No' },
-        { headerName: 'Product Spec No.', field: 'Product_Spec_No' },
-        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' },
-        { headerName: 'เบอร์กล่อง', field: 'Display_Box_Id' },
-        { headerName: 'จำนวนกล่อง', field: 'Quantity_Display_Box' },
-        { headerName: 'ใส่ Outer', field: 'Outer_Package' },
-        { headerName: 'รหัส Outer', field: 'Outer_Id' },
-        { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
-        { headerName: 'รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา', field: 'Additional_Package_Id' },
-
-
+        { headerName: 'Sheet', field: 'Sheet' },
+        { headerName: 'Date Approve', field: 'Data_Approve' },
+        { headerName: 'Edion', field: 'Edion' },
+        { headerName: 'รหัสตู้', field: 'Cabinet_Id' },
+        { headerName: 'หมายเหตุ', field: 'Remark' },
+        { headerName: 'รหัสเอกสาร', field: 'Document_Id' },
+        { headerName: 'Type1', field: 'Type1' },
+        { headerName: 'Type2', field: 'Type2' },
+        { headerName: 'Type3', field: 'Type3' },
+        { headerName: 'ID', field: 'ID' },
+        { headerName: 'กว้าง', field: 'Width' },
+        { headerName: 'ยาว', field: 'Length' },
+        { headerName: 'หนา', field: 'Thick' },
+        { headerName: 'หนารวมชิม', field: 'Shim_Thick' },
+        { headerName: 'สูง', field: 'Height' },
+        { headerName: 'ระยะการใช้งาน', field: 'Working_Duration' },
+        { headerName: 'ขนาดรู', field: 'Hole_Scale' },
+        { headerName: 'จำนวนชิ้น', field: 'Quantity_Shim' },
+        { headerName: 'Option', field: 'Option' },
+        { headerName: 'Area', field: 'Area' },
+        { headerName: 'เจาะรู', field: 'Drill' },
+        { headerName: 'ลักษณะชิม', field: 'Type_Shim' },
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -66,7 +72,7 @@ const Bom = () =>{
     const handleShowDetails = async (data) => {
         setSelectedData(data);
         try {
-            const history = await fetchHistoryLog(data.No); // API call to fetch the history log
+            const history = await fetchHistoryLog(data.id); // API call to fetch the history log
             setHistoryLog(history);
         } catch (err) {
             console.error('Failed to fetch history log:', err.message);
@@ -86,38 +92,21 @@ const Bom = () =>{
     useEffect(() => {
         const load = async () => {
           try {
-            const packageData = (await fetchBoms()).data;
+            const Data = (await fetchMaterials()).data;
             
-            const mappedData = packageData.map(i => ({
-                No: i.id,
-                Code_Fg: i.Code_Fg,
-                Num: i.Num,
-                Part_No: i.Part_No,
-                Sale_Code_Bom: i.Sale_Code_Bom,
-                Type_Customer: i.Type_Customer,
-                Customer_Name: i.Customer_Name,
-                Start_Sale_Date: i.Start_Sale_Date,
-                Status: i.Status,
-                Drawing_No: i.Drawing_No,
-                Shim_Attach: i.Shim_Attach,
-                Product_Spec_No: i.Product_Spec_No,
-                Data_Sheet_No: i.Data_Sheet_No,
-                Display_Box_Id: i.Display_Box_Id,
-                Quantity_Display_Box: i.Quantity_Display_Box,
-                Outer_Package: i.Outer_Package,
-                Outer_Id: i.Outer_Id,
+            // const mappedData = packageData.map(i => ({
+            //     No: i.id,
+            //     Display_Box_id: i.Display_Box_id,
+            //     Display_Box_Erp_Id: i.Display_Box_Erp_Id,
+            //     Name_Display_Box_Erp: i.Name_Display_Box_Erp,
+            //     Num_Display_Box: i.Num_Display_Box,
+            //     Display_Box_Group: i.Display_Box_Group,
+            //     CreateBy: i.CreateBy,
+            //     CreateAt: i.CreateAt
 
-                Pcs_Per_Set: i.Pcs_Per_Set,
-                Additional_Package_Id: i.Additional_Package_Id,
-
-
-                CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
-
-            }));
-            // console.log('Mapped Data', mappedData)
-            console.log('Bom Data', packageData)
-            setRowData(mappedData); // Set the users from the API response
+            // }));
+            console.log('Mapped Data', Data)
+            setRowData(Data); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -138,16 +127,16 @@ const Bom = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/createproductregister');
+        navigate('/creatematerial');
     };
     const handleShowEdit = (data) => {
-        navigate(`/productregister/${data.No}`);
+        navigate(`/material/${data.id}`);
     };
     return (
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Bom"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Material"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -167,10 +156,10 @@ const Bom = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'Bom'
+                Tablename = 'Material'
             />
         </>
     )
 }
 
-export default Bom;
+export default Material;

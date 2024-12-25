@@ -13,7 +13,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   const isAuthenticated = user && user.token;
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && window.location.pathname !== '/') {
       navigate('/login'); // Redirect to login page if user is not authenticated
     }
   }, [isAuthenticated, navigate]);
@@ -22,7 +22,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   if (!user) return null;
 
   const items = [
-    
+
     { key: '1', icon: <HomeOutlined />, label: <Link to="/home">Home</Link> },
 
     { key: 'Display', icon: <ExceptionOutlined />, label: 'Display', children: [

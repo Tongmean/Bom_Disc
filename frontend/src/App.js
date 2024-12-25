@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import { useAuthContext } from './Hook/useAuthContext';
 import Loginpage from "./Components/Loginpage";
 //Display
+import HomepageTwin from './Components/Homepage';
 import Homepage from './Pages/Display/Home';
 import Wipdisplay from './Pages/Display/Wipdisplay';
 import Qcdisplay from './Pages/Display/Qcdisplay';
@@ -75,8 +76,9 @@ const { Content } = Layout;
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuthContext();
-  const isAuthenticated = Boolean(user && user.token);
-  console.log('user', user, isAuthenticated)
+  // const isAuthenticated = Boolean(user && user.token);
+  const isAuthenticated = Boolean(user && user.token && window.location.pathname !== '/');
+  // console.log('user', user, isAuthenticated)
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
@@ -99,6 +101,8 @@ const App = () => {
           >
 
             <Routes>
+              <Route path='' element={<HomepageTwin/>} />
+
               <Route path='/login' element={isAuthenticated ? <Navigate to='/Home' /> : <Loginpage />} />
               <Route path='/Home' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
               <Route path='/wipdisplay' element={isAuthenticated ? <Wipdisplay /> : <Navigate to='/login' />} />

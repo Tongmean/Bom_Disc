@@ -155,7 +155,7 @@ const Homepage = () => {
     const load = async () => {
       try {
         const packageData = (await fetchDisplayhome()).data;
-        console.log('packageData',packageData)
+        // console.log('packageData',packageData)
 
         setRowData(packageData);
 

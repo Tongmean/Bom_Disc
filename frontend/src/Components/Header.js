@@ -18,7 +18,7 @@ const HeaderComponent = () => {
   }
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && window.location.pathname !== '/') {
       navigate('/login'); // Redirect to login page if user is not authenticated
     }
   }, [isAuthenticated, navigate]);

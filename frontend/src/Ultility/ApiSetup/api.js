@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+export const baseURLclient = 'http://localhost:3001';
 export const baseURL = 'http://localhost:3031';
 export const baseURLdrawing = `${baseURL}/Assets/Drawing`;
 export const baseURLproductspec = `${baseURL}/Assets/Productspec`;

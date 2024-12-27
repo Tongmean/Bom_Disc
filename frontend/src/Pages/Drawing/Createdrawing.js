@@ -6,6 +6,8 @@ import Notification from '../../Components/Notification';
 import { CreateDrawingapi } from '../../Ultility/Drawingapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialbp, fetchmaterialwd } from '../../Ultility/Sellectedbom';
+import { fetchmaterialfilterbycompactno, fetchmaterialfilterdrawing } from '../../Ultility/Bomfilterapi';
+
 const { Option } = Select;
 const CreateDrawing = () => {
     const [form] = Form.useForm();
@@ -15,7 +17,12 @@ const CreateDrawing = () => {
     const [wdoptions, setWdoption] = useState([]);
     const [bpoptions, setBpoption] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    //Filter
+    const [error, setError] = useState('');
+    const [rowData, setRowData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [numFilter, setNumFilter] = useState([]);
+    const [compactnoFilter, setCompactnoFilter] = useState([]);
     //Loading Bp & Wd Dropdown
     useEffect(() => {
         const load = async () => {
@@ -133,8 +140,122 @@ const CreateDrawing = () => {
         setTimeout(() => setNotification(null), 3000);
     };
 
+    //Filter Component
+    useEffect(() => {
+        const load = async () => {
+            try {
+            const Data = (await fetchmaterialfilterdrawing()).data;
+            // console.log('FilterData', Data)
+            setRowData(Data);
+            setFilteredData(Data);
+            } catch (err) {
+            setError(err.message);
+            } finally {
+            setLoading(false);
+            }
+        };
+        load();
+    }, []);
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!numFilter.length || numFilter.includes(item.Num)) &&
+          (!compactnoFilter.length || compactnoFilter.includes(item.Compact_No_Modify_Drawing)) 
+          
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [compactnoFilter,  numFilter, rowData]);
+    
+    const clearFilters = () => {
+        setCompactnoFilter([]);
+        setNumFilter([]);
+        
+    };
+    const HandleFilter = async () => {
+
+        setIsPending(true);
+        const Compact_No_Modify_Drawing = { Compact_No_Modify_Drawing: `${compactnoFilter}` }; // Filter payload
+        // console.log('Code_Fg', Code_Fg);
+    
+        try {
+            const result = await fetchmaterialfilterbycompactno(Compact_No_Modify_Drawing); // Fetch filtered data
+            console.log('result', result);
+    
+            if (result.data && result.data.length > 0) {
+                const initialValues = result.data[0]; // Assuming you use the first result
+                console.log('initialValues', initialValues);
+    
+                // Update form fields with fetched data
+                form.setFieldsValue({
+                    ...initialValues, // Populate all matched keys
+                });
+    
+                showNotification('Data loaded into the form successfully', 'success');
+            } else {
+                showNotification('No data found for the selected filter', 'warning');
+            }
+        } catch (error) {
+            showNotification(`Failed to fetch data: ${error.message}`, 'warning');
+        } finally {
+            setIsPending(false);
+        }
+    };
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
+    // console.log('codeFgFilter', codeFgFilter)
     return (
         <div className="container-fluid">
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Part No:</label>
+                        <Select
+                        
+                        showSearch
+                        placeholder="Select Part No"
+                        style={{ width: '100%' }}
+                        value={numFilter}
+                        onChange={(value) => setNumFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Num))].map((Num) => (
+                            <Option key={Num} value={Num}>
+                            {Num}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by compact no.</label>
+                        <Select
+                        
+                        showSearch
+                        placeholder="Select compact no."
+                        style={{ width: '100%' }}
+                        value={compactnoFilter}
+                        onChange={(value) => setCompactnoFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Compact_No_Modify_Drawing))].map((Compact_No_Modify_Drawing) => (
+                            <Option key={Compact_No_Modify_Drawing} value={Compact_No_Modify_Drawing}>
+                            {Compact_No_Modify_Drawing}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+                </div>
+
+                <Button type="default" style={{ marginTop: '10px',  marginRight: '10px',backgroundColor: 'blue',color: 'white',}} onClick={HandleFilter}>
+                    Filter
+                </Button>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                    Clear Filters
+                </Button>
+            </div>
             <h2>แบบฟอร์มบันทึก Drawing</h2>
             <Form
                 form={form}
@@ -328,6 +449,9 @@ const CreateDrawing = () => {
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>
                                 {isPending ? 'Saving...' : 'Save Data'}
+                            </Button>
+                            <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                                Clear
                             </Button>
                         </Form.Item>
                     </div>

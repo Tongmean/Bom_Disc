@@ -154,7 +154,7 @@ const CreateBom = () => {
 
         setIsPending(true);
         const Code_Fg = { Code_Fg: `${codeFgFilter}` }; // Filter payload
-        console.log('Code_Fg', Code_Fg);
+        // console.log('Code_Fg', Code_Fg);
     
         try {
             const result = await fetchBomfilterbycodefg(Code_Fg); // Fetch filtered data

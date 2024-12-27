@@ -24,7 +24,7 @@ app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 const requireAuth = require('./middleware/requireAuth');
 const UserRouter = require('./routes/userRoutes')
 const Bomsrouter = require('./routes/BomRoutes');
-const BomsFilterrouter = require('./routes/BomfilterRoutes');
+const Filterrouter = require('./routes/FilterRoutes');
 const packageRouter = require('./routes/packageRoutes');
 const outerRouter = require('./routes/outerRoutes');
 const additional_ToolRouter = require('./routes/additional_ToolRoutes');
@@ -44,7 +44,7 @@ const sellectedbomRouter = require('./routes/sellectedbomRoutes')
 
 app.use('/api/user', UserRouter);
 app.use('/api/bom',requireAuth, Bomsrouter);
-app.use('/api/bomfilter',requireAuth, BomsFilterrouter);
+app.use('/api/bomfilter',requireAuth, Filterrouter);
 app.use('/api/package', requireAuth,packageRouter);
 app.use('/api/outer', requireAuth, outerRouter);
 app.use('/api/additionaltool', requireAuth, additional_ToolRouter);

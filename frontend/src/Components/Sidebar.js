@@ -51,7 +51,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
     { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">กล่อง</Link>},
 
-    { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">Outer</Link>},
+    { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">รูปแบบ Outer</Link>},
 
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
     { key: 'E-mark', icon: <FileExcelOutlined />, label: <Link to="/emark">E-mark</Link>},

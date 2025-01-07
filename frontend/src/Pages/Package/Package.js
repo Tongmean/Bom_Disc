@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
 import {fetchPackages, fetchHistoryLog} from '../../Ultility/Packageapi';
+import { baseURLpackage} from '../../Ultility/ApiSetup/api';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Package/DetailModal'
@@ -15,13 +16,22 @@ const Package = () =>{
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
+    
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-        { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-        { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
-        { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'กลุ่ม', field: 'Display_Box_Group' },
+        { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
+        { headerName: 'รหัสเรียก', field: 'Rm_Pk_Id' },
+        { headerName: 'กลุ่มสินค้า', field: 'Mat_Cat' },
+        { headerName: 'กลุ่ม', field: 'Group' },
+        { headerName: 'กลุ่มสินค้าย่อย', field: 'Sub_Mat_Cat' },
+
+
+        { headerName: 'รหัสสินค้า Erp', field: 'Erp_Id' },
+        { headerName: 'ชื่อสินค้า Erp', field: 'Name_Erp' },
+        { headerName: 'ขนาด (Demension)', field: 'Dimension' },
+        { headerName: 'น้ำหนัก', field: 'Weight' },
+        { headerName: 'Spec', field: 'Spec' },
+        { headerName: 'หน่วย', field: 'Unit' },
+        { headerName: 'Status', field: 'Status' },
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
@@ -29,6 +39,20 @@ const Package = () =>{
             field: 'actions',
             cellRenderer: (params) => (
                 <div>
+                    {params.data.unqiuename && (
+                        <a
+                            href={`${baseURLpackage}/${encodeURIComponent(params.data.unqiuename)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <button
+                                className="btn btn-info btn-sm"
+                                style={{ marginRight: '5px' }}
+                            >
+                                P
+                            </button>
+                        </a>
+                    )}
                     <button
                         className="btn btn-primary btn-sm"
                         onClick={() => handleShowDetails(params.data)}
@@ -47,10 +71,13 @@ const Package = () =>{
             ),
         }
     ];
+
+
+
     const handleShowDetails = async (data) => {
         setSelectedData(data);
         try {
-            const history = await fetchHistoryLog(data.No); // API call to fetch the history log
+            const history = await fetchHistoryLog(data.id); // API call to fetch the history log
             setHistoryLog(history);
         } catch (err) {
             console.error('Failed to fetch history log:', err.message);
@@ -71,20 +98,8 @@ const Package = () =>{
         const loadpackages = async () => {
           try {
             const packageData = (await fetchPackages()).data;
-            
-            const mappedData = packageData.map(i => ({
-                No: i.id,
-                Display_Box_id: i.Display_Box_id,
-                Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-                Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-                Num_Display_Box: i.Num_Display_Box,
-                Display_Box_Group: i.Display_Box_Group,
-                CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
-
-            }));
-            // console.log('Mapped Data', mappedData)
-            setRowData(mappedData); // Set the users from the API response
+            setRowData(packageData); // Set the users from the API response
+            console.log('packageData', packageData)
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -108,7 +123,7 @@ const Package = () =>{
         navigate('/createPackage');
     };
     const handleShowEdit = (data) => {
-        navigate(`/package/${data.No}`);
+        navigate(`/package/${data.id}`);
     };
     return (
         <>
@@ -127,14 +142,17 @@ const Package = () =>{
                     rowData={rowData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
+                    
                 />
+            
+                
             )}
             <DetailModal
                 show={showModal}
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'กล่อง'
+                Tablename = 'RM&PK'
             />
         </>
     )

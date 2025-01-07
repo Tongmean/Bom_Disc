@@ -49,7 +49,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
      
     ]},
 
-    { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">กล่อง</Link>},
+    { key: 'Package', icon: <ExceptionOutlined />, label: <Link to="/package">PK & RM</Link>},
 
     { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">รูปแบบ Outer</Link>},
 

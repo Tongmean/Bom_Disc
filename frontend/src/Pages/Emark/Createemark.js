@@ -129,7 +129,7 @@ const CreateEmark = () => {
                             name="Approved_Date"
                             rules={[{ required: true, message: 'กรุณากรอก วันที่อนุมัติ' }]}
                         >
-                            <Input />
+                            <Input placeholder="DD/MM/YYYY" />
                         </Form.Item>
                         <Form.Item
                             label="สถานะ (Status)"

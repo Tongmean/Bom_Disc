@@ -1,18 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Spin } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Select, Upload } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { baseURLpackage} from '../../Ultility/ApiSetup/api';
 import Notification from '../../Components/Notification';
-import { fetchPackage, updatePackage } from '../../Ultility/Packageapi';
+import { updatePackage, fetchPackage } from '../../Ultility/Packageapi';
+import { fetchStatusemark, fetchmatcat, fetchgroupoptions } from '../../Ultility/ApiSetup/staticData';
+import { UploadOutlined } from '@ant-design/icons';
 
-const UpdateDisplayBox = () => {
-    const [form] = Form.useForm(); // Initialize Form instance
+const { Option } = Select;
+
+const UpdatePackage = () => {
+    const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const { id } = useParams(); // Extract ID from route params
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [fileList, setFileList] = useState([]); // Declare fileList state
 
+
+    // Mapping header names to database fields
+    const columnNameLabels = [
+        { headerName: 'รหัสเรียก', field: 'Rm_Pk_Id' },
+        { headerName: 'กลุ่มสินค้า', field: 'Mat_Cat' },
+        { headerName: 'กลุ่ม', field: 'Group' },
+        { headerName: 'กลุ่มสินค้าย่อย', field: 'Sub_Mat_Cat' },
+        { headerName: 'รหัสสินค้า Erp', field: 'Erp_Id' },
+        { headerName: 'ชื่อสินค้า Erp', field: 'Name_Erp' },
+        { headerName: 'ขนาด (Dimension)', field: 'Dimension' },
+        { headerName: 'น้ำหนัก', field: 'Weight' },
+        { headerName: 'Spec', field: 'Spec' },
+        { headerName: 'หน่วย', field: 'Unit' },
+        { headerName: 'Status', field: 'Status' },
+        { headerName: 'ไฟล์ PDF', field: 'file' }, // Ensure the file field is added here
+    ];
     // Fetch display box data on component mount
     useEffect(() => {
         const fetchDisplayBox = async (id) => { 
@@ -22,26 +43,32 @@ const UpdateDisplayBox = () => {
 
                 // Ensure the fetched data matches the form field names
                 if (data) {
+                    form.setFieldsValue(data); // Populate form with data
+                    setIsPending(false);
+                    console.log('data', data); // Log the fetched data to debug
 
-                    const formData = {
-                        Display_Box_id: data.Display_Box_id,
-                        Display_Box_Erp_Id: data.Display_Box_Erp_Id,
-                        Name_Display_Box_Erp: data.Name_Display_Box_Erp,
-                        Num_Display_Box: data.Num_Display_Box,
-                        Display_Box_Group: data.Display_Box_Group
-                    };
-
-                    // Check if the form is ready and set the values
-                    form.setFieldsValue(formData); // Populate form with data
-                    setLoading(false);
-                    // console.log('formData', formData); // Log the fetched data to debug
+                    if (data.unqiuename) {
+                        setFileList([
+                            {
+                                uid: '-1',
+                                name: data.unqiuename,
+                                status: 'done',
+                                url: `${baseURLpackage}/${data.unqiuename}`,
+                            },
+                        ]);
+                    } else {
+                        setFileList([]);
+    
+                        console.log('Fetched Drawing File:', data);
+    
+                    }
 
                 } else {
-                    setLoading(false);
+                    setIsPending(false);
                     showNotification('No data found', 'error');
                 }
             } catch (error) {
-                setLoading(false);
+                setIsPending(false);
                 console.error('Error fetching data:', error); // Log the error for debugging
                 showNotification('Failed to load data', 'error');
             }
@@ -52,85 +79,162 @@ const UpdateDisplayBox = () => {
         }
     }, [id, form]);
 
-    // Handle form submission
     const handleSubmit = async (values) => {
         setIsPending(true);
-        // console.log('Submitted values:', values); // Debugging form submission
-
+        const packageData = { ...values, CreateBy: '-' }; // Add CreateBy field
+    
+        // Create FormData to send as multipart form data
+        const formData = new FormData();
+    
+        // Append form fields to FormData
+        Object.keys(packageData).forEach((key) => {
+            formData.append(key, packageData[key]);
+        });
+    
+        // Append the file
+        const file = values.file && values.file[0]; // Assuming only one file
+        // if (file) {
+        //     formData.append('file', file.originFileObj); // Attach the file object from Ant Design's Upload
+        // }
+        if (fileList.length > 0) {
+            formData.append('file', fileList[0].originFileObj); // Attach the file
+        }
+    
         try {
-            const updatedBox = { ...values, UpdateBy: '-' }; // Include UpdateBy field
-            const result = await updatePackage(id, updatedBox); // Update the package
+            const result = await updatePackage(id, formData); // Make sure your API accepts FormData
             showNotification(result.msg, 'success');
-            setTimeout(() => navigate('/package'), 2000); // Redirect after update
+            form.resetFields(); // Clear form fields after success
+            setTimeout(() => navigate('/package'), 2000);
         } catch (error) {
-            showNotification(error.message, 'fail');
+            showNotification(error.message, 'warning');
         } finally {
             setIsPending(false);
         }
-    };
+    };    
 
-    // Show notification
     const showNotification = (message, type) => {
         setNotification({ message, type });
-        setTimeout(() => setNotification(null), 2000); // Clear notification after 3 seconds
+        setTimeout(() => setNotification(null), 3000);
     };
 
-    // Loading spinner while fetching data
-    if (loading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-                <Spin size="large" />
-            </div>
-        ); // Show a spinner until the data is loaded
-    }
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
 
     return (
-        <div className="container-fluid">
-            <h2>แก้ไขกล่อง (Update Display Box)</h2>
-            <Form
-                form={form} // Connect form instance
-                layout="vertical"
-                onFinish={handleSubmit}
-            >
-                <div className="row">
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="รหัสกล่อง"
-                            name="Display_Box_id"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัสกล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="รหัส ERP กล่อง"
-                            name="Display_Box_Erp_Id"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัส ERP กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="ชื่อ ERP กล่อง"
-                            name="Name_Display_Box_Erp"
-                            rules={[{ required: true, message: 'กรุณากรอก ชื่อ ERP กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="เบอร์กล่อง"
-                            name="Num_Display_Box"
-                            rules={[{ required: true, message: 'กรุณากรอก เบอร์กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="กลุ่ม"
-                            name="Display_Box_Group"
-                            rules={[{ required: true, message: 'กรุณากรอก กลุ่ม' }]}
-                        >
-                            <Input />
-                        </Form.Item>
+        <>
+            <div className="container-fluid">
+                <h2>แบบฟอร์มแก้ไข RM และ PK</h2>
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSubmit}
+                    initialValues={{
+                        Rm_Pk_Id: '',
+                        Mat_Cat: '',
+                        Group: '',
+                        Erp_Id: '',
+                        Name_Erp: '',
+                        Dimension: '',
+                        Weight: '',
+                        Spec: '',
+                        Unit: '',
+                        Status: '',
+                        file: [], // Default value for PDF
+                    }}
+                >
+                    <div className="row">
+                        {columnNameLabels.map(({ headerName, field }, index) => (
+                            <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
+                                {
+                                field === 'Status' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchStatusemark.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Mat_Cat' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchmatcat.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Group' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchgroupoptions.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'file' ? (
+                                    <Form.Item label="PDF File" name="file" valuePropName="file">
+                                        <Upload
+                                            beforeUpload={(file) => {
+                                                setFileList([
+                                                    {
+                                                        uid: '-1',
+                                                        name: file.name,
+                                                        originFileObj: file,
+                                                        status: 'done',
+                                                    },
+                                                ]);
+                                                return false;
+                                            }}
+                                            fileList={fileList}
+                                            onChange={({ fileList }) =>
+                                                setFileList(fileList.length > 0 ? [fileList[fileList.length - 1]] : [])
+                                            }
+                                            accept=".pdf"
+                                            maxCount={1}
+                                            onRemove={() => form.setFieldsValue({ file: null })}
+                                        >
+                                            <Button icon={<UploadOutlined />}>Upload PDF</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                ) : (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        rules={[{ required: true, message: `กรุณากรอก ${headerName}` }]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                )}
+                            </div>
+                        ))}
                     </div>
                     <div className="col-12">
                         <Form.Item>
@@ -138,23 +242,25 @@ const UpdateDisplayBox = () => {
                                 Back
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>
-                                {isPending ? 'Updating...' : 'Update Data'}
+                                {isPending ? 'Saving...' : 'Save Data'}
+                            </Button>
+                            <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                                Clear
                             </Button>
                         </Form.Item>
                     </div>
-                </div>
-            </Form>
+                </Form>
 
-            {/* Display notification if available */}
-            {notification && (
-                <Notification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => setNotification(null)}
-                />
-            )}
-        </div>
+                {notification && (
+                    <Notification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification(null)}
+                    />
+                )}
+            </div>
+        </>
     );
 };
 
-export default UpdateDisplayBox;
+export default UpdatePackage;

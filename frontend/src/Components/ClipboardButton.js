@@ -18,27 +18,7 @@ const ClipboardButton = ({ gridApi }) => {
         }
         console.log('selectedRows', selectedRows)
 
-        const cleanedRows = selectedRows.map(({ CreateBy, CreateAt, create_at,create_by, ...rest }) => rest);
-        // const tsvData = cleanedRows
-        //     .map(row => Object.values(row).join('\t'))
-        //     .join('\n');
-        // const tsvData = cleanedRows
-        //     .map(row => 
-        //         Object.values(row)
-        //             .map(value => value.includes('\n') ? `"${value.replace(/\n/g, '\\n')}"` : value) // Handle newlines by escaping them
-        //             .join('\t')
-        //     )
-        //     .join('\n');
-        // const tsvData = cleanedRows
-        //         .map(row => 
-        //             Object.values(row)
-        //                 .map(value => {
-        //                     const stringValue = String(value); // Ensure value is a string
-        //                     return stringValue.includes('\n') ? `"${stringValue.replace(/\n/g, '\\n')}"` : stringValue;
-        //                 })
-        //                 .join('\t')
-        //         )
-        //         .join('\n');
+        const cleanedRows = selectedRows.map(({ CreateBy, CreateAt, create_at,create_by, originalname , unqiuename , path , ...rest }) => rest);
         const tsvData = cleanedRows
             .map(row => 
                 Object.values(row)

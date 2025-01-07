@@ -1,96 +1,181 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select, Upload } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createPackage } from '../../Ultility/Packageapi';
-import { fetchStatusetypemark } from '../../Ultility/ApiSetup/staticData';
-const CreateDisplayBox = () => {
-    const [form] = Form.useForm(); // Initialize Form instance
+import { fetchStatusemark, fetchmatcat, fetchgroupoptions } from '../../Ultility/ApiSetup/staticData';
+
+const { Option } = Select;
+
+const CreatePackage = () => {
+    const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
     const navigate = useNavigate();
 
+    // Mapping header names to database fields
+    const columnNameLabels = [
+        { headerName: 'รหัสเรียก', field: 'Rm_Pk_Id' },
+        { headerName: 'กลุ่มสินค้า', field: 'Mat_Cat' },
+        { headerName: 'กลุ่ม', field: 'Group' },
+        { headerName: 'กลุ่มสินค้าย่อย', field: 'Sub_Mat_Cat' },
+        { headerName: 'รหัสสินค้า Erp', field: 'Erp_Id' },
+        { headerName: 'ชื่อสินค้า Erp', field: 'Name_Erp' },
+        { headerName: 'ขนาด (Dimension)', field: 'Dimension' },
+        { headerName: 'น้ำหนัก', field: 'Weight' },
+        { headerName: 'Spec', field: 'Spec' },
+        { headerName: 'หน่วย', field: 'Unit' },
+        { headerName: 'Status', field: 'Status' },
+        { headerName: 'ไฟล์ PDF', field: 'file' }, // Ensure the file field is added here
+    ];
+
     const handleSubmit = async (values) => {
         setIsPending(true);
-
-        const displayBox = { ...values, CreateBy: '-' }; // Merge form values with CreateBy
-
+        const packageData = { ...values, CreateBy: '-' }; // Add CreateBy field
+    
+        // Create FormData to send as multipart form data
+        const formData = new FormData();
+    
+        // Append form fields to FormData
+        Object.keys(packageData).forEach((key) => {
+            formData.append(key, packageData[key]);
+        });
+    
+        // Append the file
+        const file = values.file && values.file[0]; // Assuming only one file
+        if (file) {
+            formData.append('file', file.originFileObj); // Attach the file object from Ant Design's Upload
+        }
+    
         try {
-            const result = await createPackage(displayBox);
+            const result = await createPackage(formData); // Make sure your API accepts FormData
             showNotification(result.msg, 'success');
-            console.log('Display Box:', displayBox);
+            form.resetFields(); // Clear form fields after success
+            console.log('Package Data:', packageData);
             console.log('API Result:', result);
-
-            form.resetFields(); // Clear the form fields upon success
-            // Optionally navigate to another route
-            // setTimeout(() => navigate('/package'), 2000);
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {
             setIsPending(false);
         }
-    };
+    };    
 
     const showNotification = (message, type) => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
     };
 
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
+
     return (
-        <div className="container-fluid">
-            <h2>แบบฟอร์มบันทึกกล่อง (Display Box)</h2>
-            <Form
-                form={form} // Associate the form instance with the Form component
-                layout="vertical"
-                onFinish={handleSubmit}
-                initialValues={{
-                    Display_Box_id: '',
-                    Display_Box_Erp_Id: '',
-                    Name_Display_Box_Erp: '',
-                    Num_Display_Box: '',
-                    Display_Box_Group: '',
-                }}
-            >
-                <div className="row">
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="รหัสกล่อง"
-                            name="Display_Box_id"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัสกล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="รหัส ERP กล่อง"
-                            name="Display_Box_Erp_Id"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัส ERP กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="ชื่อ ERP กล่อง"
-                            name="Name_Display_Box_Erp"
-                            rules={[{ required: true, message: 'กรุณากรอก ชื่อ ERP กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="เบอร์กล่อง"
-                            name="Num_Display_Box"
-                            rules={[{ required: true, message: 'กรุณากรอก เบอร์กล่อง' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="กลุ่ม"
-                            name="Display_Box_Group"
-                            rules={[{ required: true, message: 'กรุณากรอก กลุ่ม' }]}
-                        >
-                            <Input />
-                        </Form.Item>
+        <>
+            <div className="container-fluid">
+                <h2>แบบฟอร์มบันทึก RM และ PK</h2>
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleSubmit}
+                    initialValues={{
+                        Rm_Pk_Id: '',
+                        Mat_Cat: '',
+                        Group: '',
+                        Erp_Id: '',
+                        Name_Erp: '',
+                        Dimension: '',
+                        Weight: '',
+                        Spec: '',
+                        Unit: '',
+                        Status: '',
+                        file: [], // Default value for PDF
+                    }}
+                >
+                    <div className="row">
+                        {columnNameLabels.map(({ headerName, field }, index) => (
+                            <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
+                                {
+                                field === 'Status' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchStatusemark.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Mat_Cat' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchmatcat.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Group' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchgroupoptions.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'file' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        valuePropName="fileList"
+                                        getValueFromEvent={(e) => e?.fileList || []}
+                                        // rules={[{ message: `กรุณาเลือก ${headerName}` }]} // Ensure file is required
+                                    >
+                                        <Upload
+                                            accept="application/pdf"
+                                            beforeUpload={() => false} // Prevent automatic upload
+                                            listType="picture"
+                                            maxCount={1}
+                                        >
+                                            <Button>Select PDF</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                ) : (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        rules={[{ required: true, message: `กรุณากรอก ${headerName}` }]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                )}
+                            </div>
+                        ))}
                     </div>
                     <div className="col-12">
                         <Form.Item>
@@ -100,20 +185,23 @@ const CreateDisplayBox = () => {
                             <Button type="primary" htmlType="submit" disabled={isPending}>
                                 {isPending ? 'Saving...' : 'Save Data'}
                             </Button>
+                            <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                                Clear
+                            </Button>
                         </Form.Item>
                     </div>
-                </div>
-            </Form>
+                </Form>
 
-            {notification && (
-                <Notification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => setNotification(null)}
-                />
-            )}
-        </div>
+                {notification && (
+                    <Notification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification(null)}
+                    />
+                )}
+            </div>
+        </>
     );
 };
 
-export default CreateDisplayBox;
+export default CreatePackage;

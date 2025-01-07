@@ -16,19 +16,17 @@ const Outer = () =>{
     const navigate = useNavigate();
 
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัส Outer', field: 'Outer_Id' },
-        { headerName: 'เบอร์กล่อง', field: 'Num_Display_Box' },
-        { headerName: 'ลักษณะ Die Cut', field: 'Type_Diecut' },
-        { headerName: 'เบอร์ Outer', field: 'Num_Outer' },
-        { headerName: 'รหัส ERP', field: 'Outer_Erp_Id' },
-        { headerName: 'ชื่อ Outer', field: 'Name_Outer_Erp' },
+        { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
+        { headerName: 'แบบการบรรจุ', field: 'Outer_Id' },
+        { headerName: 'รหัส Erp (Outer)', field: 'Erp_Id_Outer' },
+        { headerName: 'ชื่อ Erp (Outer)', field: 'Name_Erp_Outer' },
+        { headerName: 'เบอร์กล่อง (Outer)', field: 'Num_Outer' },
+        { headerName: 'รหัส ERP (Inner)', field: 'Erp_Id_Inner' },
+        { headerName: 'ชื่อ Erp (Inner)', field: 'Name_Erp_Inner' },
+        { headerName: 'Die Cut', field: 'Die_Cut' },
         { headerName: 'จำนวน Set/ Outer', field: 'Set_Per_Outer' },
-        { headerName: 'จำนวน Set/ Outer_1', field: 'Set_Per_Outer_1' },
-        { headerName: 'รหัส ERP Sticker', field: 'Outer_Erp_Sticker' },
-        { headerName: 'ชื่อ ERP Sticker', field: 'Name_Outer_Erp_Sticker' },
-        { headerName: 'จำนวน Sticker', field: 'Num_Sticker' },
         { headerName: 'จำนวน Outer/ พาเลท', field: 'Outer_Per_pallet' },
+        { headerName: 'จำนวน Set/ พาเลท', field: 'Set_Per_Pallet' },
         {
             headerName: 'Actions',
             field: 'actions',
@@ -55,7 +53,7 @@ const Outer = () =>{
     const handleShowDetails = async (data) => {
         setSelectedData(data);
         try {
-            const history = await fetchHistoryLog(data.No); // API call to fetch the history log
+            const history = await fetchHistoryLog(data.id); // API call to fetch the history log
             setHistoryLog(history);
         } catch (err) {
             console.error('Failed to fetch history log:', err.message);
@@ -75,28 +73,28 @@ const Outer = () =>{
     useEffect(() => {
         const loadouter = async () => {
           try {
-            const packageData = (await fetchOuters()).data;
-        
-            const mappedData = packageData.map((i) => ({
-                No: i.id, // Assuming you want to assign a sequential number starting at 1
-                Outer_Id: i.Outer_Id || "-",
-                Num_Display_Box: i.Num_Display_Box || "-",
-                Type_Diecut: i.Type_Diecut || "-",
-                Num_Outer: i.Num_Outer || "-",
-                Outer_Erp_Id: i.Outer_Erp_Id || "-",
-                Name_Outer_Erp: i.Name_Outer_Erp || "-",
-                Set_Per_Outer: i.Set_Per_Outer || "-",
-                Set_Per_Outer_1: i.Set_Per_Outer_1 || "-",
-                Outer_Erp_Sticker: i.Outer_Erp_Sticker || "-",
-                Name_Outer_Erp_Sticker: i.Name_Outer_Erp_Sticker || "-",
-                Num_Sticker: i.Num_Sticker || "-",
-                Outer_Per_pallet: i.Outer_Per_pallet || "-",
-                CreateBy: i.CreateBy || "-",
-                CreateAt: i.CreateAt || "-",
-            }));
+            const Data = (await fetchOuters()).data;
+            console.log('Data', Data)
+            // const mappedData = packageData.map((i) => ({
+            //     No: i.id, // Assuming you want to assign a sequential number starting at 1
+            //     Outer_Id: i.Outer_Id || "-",
+            //     Num_Display_Box: i.Num_Display_Box || "-",
+            //     Type_Diecut: i.Type_Diecut || "-",
+            //     Num_Outer: i.Num_Outer || "-",
+            //     Outer_Erp_Id: i.Outer_Erp_Id || "-",
+            //     Name_Outer_Erp: i.Name_Outer_Erp || "-",
+            //     Set_Per_Outer: i.Set_Per_Outer || "-",
+            //     Set_Per_Outer_1: i.Set_Per_Outer_1 || "-",
+            //     Outer_Erp_Sticker: i.Outer_Erp_Sticker || "-",
+            //     Name_Outer_Erp_Sticker: i.Name_Outer_Erp_Sticker || "-",
+            //     Num_Sticker: i.Num_Sticker || "-",
+            //     Outer_Per_pallet: i.Outer_Per_pallet || "-",
+            //     CreateBy: i.CreateBy || "-",
+            //     CreateAt: i.CreateAt || "-",
+            // }));
             
             // console.log('Mapped Data', mappedData)
-            setRowData(mappedData); // Set the users from the API response
+            setRowData(Data); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -120,7 +118,7 @@ const Outer = () =>{
         navigate('/createouter');
     };
     const handleShowEdit = (data) => {
-        navigate(`/outer/${data.No}`);
+        navigate(`/outer/${data.id}`);
     };
     return (
         <>

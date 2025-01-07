@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
 import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
-import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings} from '../../Ultility/Sellectedbom';
+import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
 import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
 
 const { Option } = Select;
@@ -20,6 +20,7 @@ const CreateBom = () => {
     const [productspecOptions, setProductspecoptions] = useState([]);
     const [shimOptions, setShimoptions] = useState([]);
     const [drawingOptions, setDrawingoptions] = useState([]);
+    const [emarkOptions, setEmarkoptions] = useState([]);
     const navigate = useNavigate();
     //Filter
     const [error, setError] = useState('');
@@ -33,6 +34,7 @@ const CreateBom = () => {
     // Fetch display box data on component mount
     const columnNameLabels = {
         Customer_Name: "ชื่อลูกค้า",
+        Customer_Code: "รหัสลูกค้า",
         Type_Customer: "ประเภทลูกค้า",
         Sale_Code_Bom: "Code การขาย",
         Num: "เบอร์",
@@ -50,8 +52,11 @@ const CreateBom = () => {
         Outer_Id: "รหัส Outer",
         Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
         Status: "Status",
+        Start_Sale_Date: "วันเริ่มขาย",
+        End_Sale_Date: "วันยกเลิกขาย",
+        Emark_Id: "Emark Id",
+        Ref_Code: "Ref Code_Fg",
 
-        Start_Sale_Date: "วันเริ่มขาย"
     };
 
     //Dropdown Value
@@ -77,7 +82,10 @@ const CreateBom = () => {
                 const drawingData = await fetchDrawings(); 
                 setDrawingoptions(drawingData.data); 
 
-                console.log('shimOptions', shimOptions)
+                const emarkData = await fetchEmarks(); 
+                setEmarkoptions(emarkData.data); 
+
+                // console.log('shimOptions', shimOptions)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -285,7 +293,8 @@ const CreateBom = () => {
                     Sale_Code_Bom: '',
                     Type_Customer: '',
                     Customer_Name: '',
-                    Start_Sale_Date: '-',
+                    Start_Sale_Date: '',
+                    End_Sale_Date: '',
                     Status: '',
                     Drawing_No: '',
                     Shim_Attach: '',
@@ -298,6 +307,9 @@ const CreateBom = () => {
                     Outer_Id: '',
                     Pcs_Per_Set: '',
                     Additional_Package_Id: '',
+                    Customer_Code: '',
+                    Ref_Code: '',
+                    Emark_Id: '',
                 }}
             >
                 <div className="row">
@@ -470,6 +482,50 @@ const CreateBom = () => {
                                             </Option>
                                         ))}
                                     </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Emark_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {emarkOptions.map((i) => (
+                                            <Option key={i.Emark_Id} value={i.Emark_Id}>
+                                                {i.Emark_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Start_Sale_Date" ?
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input placeholder="DD/MM/YYYY" />
+                                </Form.Item>
+                            )
+                            :
+                            key === "End_Sale_Date" ?
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input placeholder="DD/MM/YYYY" />
                                 </Form.Item>
                             )
                             :

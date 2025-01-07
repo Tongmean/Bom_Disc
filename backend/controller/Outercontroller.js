@@ -4,8 +4,35 @@ const { logUpdate } = require('../utility/updateLog');
 
 //Get all record
 const getOuters = async (req, res) => {
+    const sqlCommand = `
+        SELECT 
+            "Outer"."id", 
+            "Outer"."Outer_Id", 
+            "Outer"."Name_Erp_Outer", 
+            "Outer"."Num_Outer",
+            "Outer"."Erp_Id_Inner", 
+            "Outer"."Name_Erp_Inner", 
+            "Outer"."Die_Cut", 
+            "Outer"."Set_Per_Outer", 
+            "Outer"."Outer_Per_pallet", 
+            "Outer"."Set_Per_Pallet",
+            "Outer"."CreateAt",
+            "Outer"."CreateBy",
+            "Outer_Package"."Erp_Id" AS "Erp_Id_Outer", 
+            "Inner_Package"."Erp_Id" AS "Erp_Id_Inner"
+        FROM 
+            "Outer"
+        LEFT JOIN 
+            "Package" AS "Outer_Package"
+        ON 
+            "Outer"."Erp_Id_Outer" = "Outer_Package"."Rm_Pk_Id"
+        LEFT JOIN 
+            "Package" AS "Inner_Package"
+        ON 
+            "Outer"."Erp_Id_Inner" = "Inner_Package"."Rm_Pk_Id";
+    `
     try {
-        dbconnect.query(`SELECT * FROM "Outer"`, (err, result) => {
+        dbconnect.query(sqlCommand, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,
@@ -63,7 +90,7 @@ const getOuter = async (req,res) =>{
 //post outer
 const postOuter = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Outer_Id, Num_Display_Box, Type_Diecut, Num_Outer, Outer_Erp_Id, Name_Outer_Erp, Set_Per_Outer, Set_Per_Outer_1, Outer_Erp_Sticker, Name_Outer_Erp_Sticker, Num_Sticker, Outer_Per_pallet, CreateBy} = req.body;
+    const { Outer_Id, Erp_Id_Outer, Name_Erp_Outer, Num_Outer, Erp_Id_Inner, Name_Erp_Inner, Die_Cut, Set_Per_Outer, Outer_Per_pallet, Set_Per_Pallet, CreateBy,} = req.body;
     try {
         // Check for duplicate Outer_Id
         const sqlCheck = `SELECT * FROM "Outer" WHERE "Outer_Id" = $1`;
@@ -77,9 +104,11 @@ const postOuter = async (req, res) =>{
             });
         }
         //Insert New Record
-        const sqlCommand = `INSERT INTO "Outer" ("Outer_Id", "Num_Display_Box", "Type_Diecut", "Num_Outer", "Outer_Erp_Id", "Name_Outer_Erp", "Set_Per_Outer", "Set_Per_Outer_1", "Outer_Erp_Sticker", "Name_Outer_Erp_Sticker", "Num_Sticker", "Outer_Per_pallet", "CreateBy")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`;
-        const values = [Outer_Id, Num_Display_Box, Type_Diecut, Num_Outer, Outer_Erp_Id, Name_Outer_Erp, Set_Per_Outer, Set_Per_Outer_1, Outer_Erp_Sticker, Name_Outer_Erp_Sticker, Num_Sticker, Outer_Per_pallet, userEmail];
+        const sqlCommand = `INSERT INTO "Outer" ("Outer_Id", "Erp_Id_Outer", "Name_Erp_Outer", "Num_Outer", "Erp_Id_Inner", "Name_Erp_Inner", "Die_Cut", "Set_Per_Outer", "Outer_Per_pallet", "Set_Per_Pallet", "CreateBy")
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *
+        `;
+        const values = [Outer_Id, Erp_Id_Outer, Name_Erp_Outer, Num_Outer, Erp_Id_Inner, Name_Erp_Inner, Die_Cut ,Set_Per_Outer, Outer_Per_pallet, Set_Per_Pallet, userEmail];
+
         const insertResult = await dbconnect.query(sqlCommand, values);
 
         return res.status(200).json({
@@ -88,6 +117,7 @@ const postOuter = async (req, res) =>{
             msg: `รหัสกล่อง: ${Outer_Id} บันทึกได้สำเร็จ ครับ`
         });
     } catch (error) {
+        console.log('Outer post', error)
         return res.status(500).json({
             success: false,
             data: error,
@@ -101,7 +131,7 @@ const postOuter = async (req, res) =>{
 const updateOuter = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // Authenticated user email
-    const {Outer_Id, Num_Display_Box, Type_Diecut, Num_Outer, Outer_Erp_Id, Name_Outer_Erp, Set_Per_Outer, Set_Per_Outer_1, Outer_Erp_Sticker, Name_Outer_Erp_Sticker, Num_Sticker, Outer_Per_pallet, CreateBy} = req.body;
+    const { Outer_Id, Erp_Id_Outer, Name_Erp_Outer, Num_Outer, Erp_Id_Inner, Name_Erp_Inner, Die_Cut, Set_Per_Outer, Outer_Per_pallet, Set_Per_Pallet, CreateBy,} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Outer" WHERE id = $1`;
@@ -115,13 +145,14 @@ const updateOuter = async (req, res) =>{
             });
         }
         //Update Query
-        const updateSql = `UPDATE "Outer" SET "Outer_Id" = $1 ,"Num_Display_Box" = $2, "Type_Diecut" = $3, "Num_Outer" = $4, "Outer_Erp_Id" = $5, "Name_Outer_Erp" = $6, "Set_Per_Outer" = $7, "Set_Per_Outer_1" = $8, "Outer_Erp_Sticker" = $9, "Name_Outer_Erp_Sticker" = $10, "Num_Sticker" = $11, "Outer_Per_pallet" = $12, "CreateBy" = $13 WHERE "id" = $14 RETURNING *`;
-        const values = [Outer_Id, Num_Display_Box, Type_Diecut, Num_Outer, Outer_Erp_Id, Name_Outer_Erp, Set_Per_Outer, Set_Per_Outer_1, Outer_Erp_Sticker, Name_Outer_Erp_Sticker, Num_Sticker, Outer_Per_pallet, CreateBy, id];
+        const updateSql = `UPDATE "Outer" SET "Outer_Id" = $1, "Erp_Id_Outer" = $2, "Name_Erp_Outer" = $3, "Num_Outer" = $4, "Erp_Id_Inner" = $5, "Name_Erp_Inner" = $6, "Die_Cut" = $7, "Set_Per_Outer" = $8, "Outer_Per_pallet" = $9, "Set_Per_Pallet" = $10, "CreateBy" = $11 WHERE "id" = $12 RETURNING *`;
+        const values = [Outer_Id, Erp_Id_Outer, Name_Erp_Outer, Num_Outer, Erp_Id_Inner, Name_Erp_Inner, Die_Cut, Set_Per_Outer, Outer_Per_pallet, Set_Per_Pallet, CreateBy, id];
+
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
 
         const columns = [
-            "Outer_Id", "Num_Display_Box", "Type_Diecut", "Num_Outer", "Outer_Erp_Id", "Name_Outer_Erp", "Set_Per_Outer", "Set_Per_Outer_1", "Outer_Erp_Sticker", "Name_Outer_Erp_Sticker", "Num_Sticker", "Outer_Per_pallet", "CreateBy"
+            "Outer_Id", "Erp_Id_Outer", "Name_Erp_Outer", "Num_Outer", "Erp_Id_Inner", "Name_Erp_Inner", "Die_Cut", "Set_Per_Outer", "Outer_Per_pallet", "Set_Per_Pallet", "CreateBy"
         ];
         for (const column of columns) {
             const oldValue = currentValue[column];

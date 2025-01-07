@@ -34,9 +34,13 @@ export const fetchPackage = async (id) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const createPackage = async (packageData) => {
+export const createPackage = async (formData) => {
   try {
-    const response = await apiClient.post(`/package/create`, packageData); // Send the GET request to the server
+    const response = await apiClient.post(`/package/create`,formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data',
+      },
+    }); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -51,9 +55,13 @@ export const createPackage = async (packageData) => {
     throw new Error(error.response?.data?.msg);
   }
 };
-export const updatePackage = async (id, updatedBox) => {
+export const updatePackage = async (id, formData) => {
   try {
-    const response = await apiClient.put(`/package/update/${id}`, updatedBox); // Send the GET request to the server
+    const response = await apiClient.put(`/package/update/${id}`, formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data',
+      },
+    }); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {

@@ -19,6 +19,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Type_Customer: "ประเภทลูกค้า",
         Customer_Name: "ชื่อลูกค้า",
         Start_Sale_Date: "วันเริ่มขาย",
+        End_Sale_Date: "วันยกเลิกขาย",
         Status: "Status",
         Drawing_No: "Drawing No.",
         Shim_Attach: "การติด Shim",
@@ -31,6 +32,9 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Outer_Id: "ใส่ Outer",
         Pcs_Per_Set: "จำนวนชิ้น/ชุด",
         Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
+        Customer_Code: "รหัสลูกค้า",
+        Ref_Code: "Ref Code_Fg",
+        Emark_Id: "Emark Id",
     };
 
     return (
@@ -50,6 +54,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: columnNameLabels.Type_Customer, value: data.Type_Customer },
                         { label: columnNameLabels.Customer_Name, value: data.Customer_Name },
                         { label: columnNameLabels.Start_Sale_Date, value: data.Start_Sale_Date },
+                        { label: columnNameLabels.End_Sale_Date, value: data.End_Sale_Date },
                         { label: columnNameLabels.Status, value: data.Status },
                         { label: columnNameLabels.Drawing_No, value: data.Drawing_No },
                         { label: columnNameLabels.Shim_Attach, value: data.Shim_Attach },
@@ -61,6 +66,9 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: columnNameLabels.Outer_Package, value: data.Outer_Package },
                         { label: columnNameLabels.Outer_Id, value: data.Outer_Id },
                         { label: columnNameLabels.Pcs_Per_Set, value: data.Pcs_Per_Set },
+                        { label: columnNameLabels.Ref_Code, value: data.Ref_Code },
+                        { label: columnNameLabels.Customer_Code, value: data.Customer_Code },
+                        { label: columnNameLabels.Emark_Id, value: data.Emark_Id },
                         { label: columnNameLabels.Additional_Package_Id, value: data.Additional_Package_Id },
                         { label: "กรอกโดย", value: data.CreateBy },
                         { label: "กรอกเมื่อ", value: convertToUTCPlus7(data.CreateAt) },

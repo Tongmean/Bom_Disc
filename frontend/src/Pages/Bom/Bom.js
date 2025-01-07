@@ -21,9 +21,12 @@ const Bom = () =>{
         { headerName: 'เบอร์', field: 'Num' },
         { headerName: 'Part No.', field: 'Part_No' },
         { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
+        { headerName: 'รหัสลูกค้า', field: 'Customer_Code' },
+
         { headerName: 'ประเภทลูกค้า', field: 'Type_Customer' },
         { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
         { headerName: 'วันเริ่มขาย', field: 'Start_Sale_Date' },
+        { headerName: 'วันยกเลิกขาย', field: 'End_Sale_Date' },
         { headerName: 'Status', field: 'Status' },
         { headerName: 'Drawing No.', field: 'Drawing_No' },
         { headerName: 'การติด Shim', field: 'Shim_Attach' },
@@ -36,6 +39,8 @@ const Bom = () =>{
         { headerName: 'รหัส Outer', field: 'Outer_Id' },
         { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
         { headerName: 'รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา', field: 'Additional_Package_Id' },
+        { headerName: 'Ref Code_Fg', field: 'Ref_Code' },
+        { headerName: 'Emark Id', field: 'Emark_Id' },
 
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
@@ -94,6 +99,7 @@ const Bom = () =>{
                 Num: i.Num,
                 Part_No: i.Part_No,
                 Sale_Code_Bom: i.Sale_Code_Bom,
+                Customer_Code: i.Customer_Code,
                 Type_Customer: i.Type_Customer,
                 Customer_Name: i.Customer_Name,
                 Start_Sale_Date: i.Start_Sale_Date,
@@ -112,7 +118,10 @@ const Bom = () =>{
 
 
                 CreateBy: i.CreateBy,
-                CreateAt: i.CreateAt
+                CreateAt: i.CreateAt,
+
+                Ref_Code:i.Ref_Code,
+                Emark_Id:i.Emark_Id
 
             }));
             // console.log('Mapped Data', mappedData)
@@ -136,6 +145,10 @@ const Bom = () =>{
         const selectedRows = gridApi.getSelectedRows();
         console.log('Selected rows:', selectedRows);
     };
+    // const onSelectionChanged = (params) => {
+    //     const selectedRows = params.api.getSelectedRows();
+    //     console.log('Selected rows:', selectedRows);
+    // };
 
     const handleOnClick = () => {
         navigate('/createproductregister');

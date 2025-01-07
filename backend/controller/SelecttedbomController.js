@@ -191,6 +191,33 @@ const Selecteddrawing = async (req, res) => {
     }
 };
 
+const Selectedemark = async (req, res) => {
+    try {
+        dbconnect.query(`SELECT DISTINCT "Emark_Id" FROM "Emark" `, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+
 //Sellected Material
 const SelectedmaterialWd = async (req, res) => {
     try {
@@ -271,6 +298,33 @@ const Selectedmaterialsp = async (req, res) => {
     }
 };
 
+const Selectedrmpk = async (req, res) => {
+    try {
+        dbconnect.query(`SELECT "Rm_Pk_Id", "Erp_Id", "Name_Erp", "Dimension", "Group" FROM "Package"`, (err, result) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    msg: "ดึงข้อมูลไม่สำเร็จ",
+                    data: err // 'result' would be undefined in case of error
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    msg: "ดึงข้อมูลทั้งหมดได้สำเร็จ",
+                    data: result.rows // PostgreSQL returns data in 'rows'
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: "มีปัญาเกิดขึ้นระว่างการดึงข้อมูล",
+            data: error
+        });
+    }
+};
+
 
 
 module.exports = {
@@ -281,10 +335,13 @@ module.exports = {
     Selectedadditionalpackages,
     Selectedshims,
     Selecteddrawing,
+    Selectedemark,
 
     SelectedmaterialWd,
     Selectedmaterialbp,
-    Selectedmaterialsp
+    Selectedmaterialsp,
+
+    Selectedrmpk
 
 
 }

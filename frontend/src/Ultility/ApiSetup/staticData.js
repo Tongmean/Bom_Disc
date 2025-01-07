@@ -45,7 +45,7 @@ export const fetchStatuscoatingscorching = [
     { label: 'B', value: 'B' },
     { label: 'O', value: 'O' },
 ]
-//E-mark
+//E-mark & Pk Rm
 export const fetchStatusemark = [
     { label: 'Active', value: 'Active' },
     { label: 'Inactive', value: 'Inactive' },
@@ -159,4 +159,20 @@ export const fetchMaterialtype3 = [
     { label: 'WD-2', value: 'WD-2' },
     { label: 'WD-3', value: 'WD-3' },
     { label: 'WD-4', value: 'WD4' },
+]
+
+export const fetchmatcat = [
+    { label: 'RM', value: 'RM' },
+    { label: 'PK', value: 'PK' },
+]
+
+export const fetchgroupoptions = [
+    { label: 'BP', value: 'BP' },
+    { label: 'Shim', value: 'Shim' },
+    { label: 'กิ๊ฟ', value: 'กิ๊ฟ' },
+    { label: 'กล่องชิ้นใน', value: 'กล่องชิ้นใน' },
+    { label: 'กล่องชั้นนอก', value: 'กล่องชั้นนอก' },
+    { label: 'สติ๊กเกอร์', value: 'สติ๊กเกอร์' },
+    { label: 'พาเลท', value: 'พาเลท' },
+    { label: 'อุปกรณ์เสริม', value: 'อุปกรณ์เสริม' },
 ]

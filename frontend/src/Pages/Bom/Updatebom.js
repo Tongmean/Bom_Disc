@@ -11,6 +11,7 @@ import {
     fetchProductspecs,
     fetchShims,
     fetchDrawings,
+    fetchEmarks
 } from '../../Ultility/Sellectedbom';
 import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
 
@@ -28,11 +29,13 @@ const UpdateBom = () => {
     const [productspecOptions, setProductspecoptions] = useState([]);
     const [shimOptions, setShimoptions] = useState([]);
     const [drawingOptions, setDrawingoptions] = useState([]);
+    const [emarkOptions, setEmarkoptions] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
     const columnNameLabels = {
         Customer_Name: "ชื่อลูกค้า",
+        Customer_Code: "รหัสลูกค้า",
         Type_Customer: "ประเภทลูกค้า",
         Sale_Code_Bom: "Code การขาย",
         Num: "เบอร์",
@@ -51,7 +54,11 @@ const UpdateBom = () => {
         Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา",
         Status: "Status",
 
-        Start_Sale_Date: "วันเริ่มขาย"
+        Start_Sale_Date: "วันเริ่มขาย",
+        End_Sale_Date: "วันยกเลิกขาย",
+        Emark_Id: "Emark Id",
+        Ref_Code: "Ref Code_Fg",
+
     };
 
     
@@ -59,13 +66,14 @@ const UpdateBom = () => {
         const fetchDropdownData = async () => {
             setDropdownLoading(true);
             try {
-                const [packages, outers, datasheets, productspecs, shims, drawings] = await Promise.all([
+                const [packages, outers, datasheets, productspecs, shims, drawings, emarks] = await Promise.all([
                     fetchPackages(),
                     fetchOuters(),
                     fetchDatasheets(),
                     fetchProductspecs(),
                     fetchShims(),
                     fetchDrawings(),
+                    fetchEmarks()
                 ]);
 
                 setPackageoptions(packages.data);
@@ -74,6 +82,7 @@ const UpdateBom = () => {
                 setProductspecoptions(productspecs.data);
                 setShimoptions(shims.data);
                 setDrawingoptions(drawings.data);
+                setEmarkoptions(emarks.data);
 
                 console.log('productspecOptions', productspecOptions)
 
@@ -307,6 +316,51 @@ const UpdateBom = () => {
                                             </Option>
                                         ))}
                                     </Select>
+                                </Form.Item>
+                            )
+                            :
+                            
+                            key === "Emark_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                    >
+                                        <Option value="-">-</Option>
+                                        {emarkOptions.map((i) => (
+                                            <Option key={i.Emark_Id} value={i.Emark_Id}>
+                                                {i.Emark_Id}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Start_Sale_Date" ?
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input placeholder="DD/MM/YYYY" />
+                                </Form.Item>
+                            )
+                            :
+                            key === "End_Sale_Date" ?
+                            (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                >
+                                    <Input placeholder="DD/MM/YYYY" />
                                 </Form.Item>
                             )
                             :

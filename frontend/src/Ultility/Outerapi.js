@@ -34,7 +34,7 @@ export const fetchOuter = async (id) => {
     throw new Error(error.response?.data?.msg);
   }
 }
-export const createOuter = async (outer) => {
+export const createOuterapi = async (outer) => {
   try {
     const response = await apiClient.post(`/outer/create`, outer); // Send the GET request to the server
 

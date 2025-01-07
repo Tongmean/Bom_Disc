@@ -80,13 +80,6 @@ const CreateDrawingFile = () => {
             >
                 <div className="row">
                     <div className="col-xl-6 col-lg-6 col-md-12">
-                        {/* <Form.Item
-                            label="Drawing_No"
-                            name="Drawing_No"
-                            rules={[{ required: true, message: 'กรุณากรอก เลขที่ Drawing' }]}
-                        >
-                            <Input />
-                        </Form.Item> */}
                         <Form.Item label="Drawing No." name="Drawing_No" rules={[{ required: true, message: 'กรุณากรอก Drawing No.' }]}>
                             <Select
                                 placeholder="กรุณาเลือก Drawing No."

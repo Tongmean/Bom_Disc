@@ -4,6 +4,7 @@ export const baseURL = 'http://localhost:3031';
 export const baseURLdrawing = `${baseURL}/Assets/Drawing`;
 export const baseURLproductspec = `${baseURL}/Assets/Productspec`;
 export const baseURLshim = `${baseURL}/Assets/Shim`;
+export const baseURLpackage = `${baseURL}/Assets/Package`;
 // Create a base Axios instance with default configurations
 const apiClient = axios.create({
   baseURL: `${baseURL}/api`, // Replace with your API's base URL

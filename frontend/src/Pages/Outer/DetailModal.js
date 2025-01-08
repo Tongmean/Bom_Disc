@@ -12,19 +12,19 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
 
     // Mapping column_name to labels based on headerName
     const columnNameLabels = {
-        No: "No",
-        Outer_Id: "รหัส Outer",
-        Num_Display_Box: "เบอร์กล่อง",
-        Type_Diecut: "ลักษณะ Die Cut",
-        Num_Outer: "เบอร์ Outer",
-        Outer_Erp_Id: "รหัส ERP",
-        Name_Outer_Erp: "ชื่อ Outer",
+        id : "No",
+        Outer_Id: "รหัสรูปแบบการบรรจุ",
+        Erp_Id_Outer: "รหัส Erp (Outer)",
+        Name_Erp_Outer: "ชื่อ Erp (Outer)",
+        Num_Outer: "เบอร์กล่อง (Outer)",
+        Erp_Id_Inner: "รหัส ERP (Inner)",
+        Name_Erp_Inner: "ชื่อ Erp (Inner)",
+        Die_Cut: "Die Cut",
         Set_Per_Outer: "จำนวน Set/ Outer",
-        Set_Per_Outer_1: "จำนวน Set/ Outer_1",
-        Outer_Erp_Sticker: "รหัส ERP Sticker",
-        Name_Outer_Erp_Sticker: "ชื่อ ERP Sticker",
-        Num_Sticker: "จำนวน Sticker",
         Outer_Per_pallet: "จำนวน Outer/ พาเลท",
+        Set_Per_Pallet: "จำนวน Set/ พาเลท",
+
+       
     };
 
     return (

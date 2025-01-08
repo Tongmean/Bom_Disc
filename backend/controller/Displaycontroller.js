@@ -2,8 +2,8 @@ const dbconnect = require('../middleware/Dbconnect');
 
 
 const Homedisplay = async (req, res) => {
-    const sqlCommand =
-    `   SELECT 
+    const sqlCommand = `
+        SELECT 
             "bom"."Code_Fg", "bom"."Customer_Name", "bom"."Sale_Code_Bom", "bom"."Part_No", "bom"."Num", "bom"."Pcs_Per_Set", "bom"."Status",
             "Data_Sheet"."Formular", "Data_Sheet"."Weight_F1", "Data_Sheet"."Weight_F2", "Data_Sheet"."Underlayer_Grade_Chem", "Data_Sheet"."Weight_U1", "Data_Sheet"."Weight_U2",
             "Drawing"."Erp_Id_BP1", "Drawing"."Name_BP1", "Drawing"."Id_BP1", "Drawing"."Quantity_BP1",
@@ -23,21 +23,25 @@ const Homedisplay = async (req, res) => {
             "Product_Spec"."Attach_Paper_Erp_Id_2", "Product_Spec"."Name_Attach_Paper_2", "Product_Spec"."Num_Attach_2",
             "Product_Spec"."Attach_Paper_Erp_Id_3", "Product_Spec"."Name_Attach_Paper_3", "Product_Spec"."Num_Attach_3",
             "Product_Spec"."Attach_Paper_Erp_Id_4", "Product_Spec"."Name_Attach_Paper_4", "Product_Spec"."Num_Attach_4",
-            "Product_Spec"."Additional_Tool_Erp_Id", "Product_Spec"."Name_Erp_Additional_Tool", "Product_Spec"."Num_Additional_Tool",
+            "Product_Spec"."Additional_Tool_Erp_Id_1", "Product_Spec"."Name_Erp_Additional_Tool_1", "Product_Spec"."Num_Additional_Tool_1",
+            "Product_Spec"."Additional_Tool_Erp_Id_2", "Product_Spec"."Name_Erp_Additional_Tool_2", "Product_Spec"."Num_Additional_Tool_2",
+            "Product_Spec"."Additional_Tool_Erp_Id_3", "Product_Spec"."Name_Erp_Additional_Tool_3", "Product_Spec"."Num_Additional_Tool_3",
             "Product_Spec"."Sticker_Erp_Id_1", "Product_Spec"."Sticker_Name_1", "Product_Spec"."Num_Sticker_1",
             "Product_Spec"."Sticker_Erp_Id_2", "Product_Spec"."Sticker_Name_2", "Product_Spec"."Num_Sticker_2",
             "Product_Spec"."Sticker_Erp_Id_3", "Product_Spec"."Sticker_Name_3", "Product_Spec"."Num_Sticker_3",
             "Additional_Package"."Additional_Tool_Erp_Id_1", "Additional_Package"."Name_Additional_Tool_1","Additional_Package"."Quantity_Additional_Tool_1",
             "Additional_Package"."Additional_Tool_Erp_Id_2", "Additional_Package"."Name_Additional_Tool_2","Additional_Package"."Quantity_Additional_Tool_2",
-            "Package"."Display_Box_id", "Package"."Display_Box_Erp_Id", "Package"."Name_Display_Box_Erp", 
-            "bom"."Quantity_Display_Box", "bom"."Outer_Package", "Outer"."Num_Outer", "Outer"."Outer_Erp_Id", "Outer"."Name_Outer_Erp",
-            "Outer"."Set_Per_Outer", "Outer"."Outer_Erp_Sticker","Outer"."Name_Outer_Erp_Sticker","Outer"."Num_Sticker", "Outer"."Outer_Per_pallet"	
+            "Package"."Rm_Pk_Id", "Package"."Erp_Id", "Package"."Name_Erp", "Package"."Erp_Id",
+            "bom"."Quantity_Display_Box", "bom"."Outer_Package",
+            "Outer"."Num_Outer", "Outer"."Outer_Id", "Outer"."Name_Erp_Outer",
+            "Outer"."Set_Per_Outer", "Outer"."Outer_Per_pallet", "Outer"."Set_Per_Pallet"
+            
         FROM 
             "bom"
         LEFT JOIN 
             "Package" 
         ON 
-            "bom"."Display_Box_Id" = "Package"."Display_Box_id"
+            "bom"."Display_Box_Id" = "Package"."Rm_Pk_Id"
         LEFT JOIN 
             "Outer" 
         ON 
@@ -62,6 +66,8 @@ const Homedisplay = async (req, res) => {
             "Drawing" 
         ON 
             "bom"."Drawing_No" = "Drawing"."Compact_No_Modify_Drawing";
+
+    
     `
     try {
         dbconnect.query(sqlCommand, (err, result) => {

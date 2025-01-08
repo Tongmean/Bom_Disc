@@ -51,14 +51,14 @@ const CreateOuter = () => {
 
     const handleSelectChange = (value, key) => {
         if (key === 'Erp_Id_Outer') {
-            const selected = outerOptions.find(item => item.Rm_Pk_Id === value);
+            const selected = outerOptions.find(item => item.Erp_Id === value);
             console.log('Selected Outer:', selected);  // Add this line to debug
             form.setFieldsValue({
                 Name_Erp_Outer: selected ? selected.Name_Erp : '',
                 Num_Outer: selected ? selected.Dimension : ''
             });
         } else if (key === 'Erp_Id_Inner') {
-            const selected = innerOptions.find(item => item.Rm_Pk_Id === value);
+            const selected = innerOptions.find(item => item.Erp_Id === value);
             form.setFieldsValue({
                 Name_Erp_Inner: selected ? selected.Name_Erp : '',
             });            
@@ -91,7 +91,7 @@ const CreateOuter = () => {
     return (
         <>
             <div className="container-fluid">
-                <h2>แบบฟอร์มลงทะเบียนการบรรจุ (Outer Packaging Register)</h2>
+                <h2>แบบฟอร์มลงทะเบียนการบรรจุ Outer / Palete</h2>
                 <Form
                     form={form}
                     layout="vertical"
@@ -123,7 +123,7 @@ const CreateOuter = () => {
                                             onChange={(value) => handleSelectChange(value, key)}
                                         >
                                             {(key === "Erp_Id_Outer" ? outerOptions : innerOptions).map((item) => (
-                                                <Option key={item.Rm_Pk_Id} value={item.Rm_Pk_Id}>
+                                                <Option key={item.Rm_Pk_Id} value={item.Erp_Id}>
                                                     {item.Erp_Id}
                                                 </Option>
                                             ))}

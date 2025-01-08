@@ -31,7 +31,7 @@ const uploadPackageMiddleware = upload.single('file');
 //Get all record
 const getPackages = (req, res) =>{
     try {
-        dbconnect.query(`SELECT * FROM "Package" `, (err, result) => {
+        dbconnect.query(`SELECT * FROM "Package" ORDER BY id ASC `, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

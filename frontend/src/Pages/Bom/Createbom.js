@@ -455,8 +455,8 @@ const CreateBom = () => {
                                     >
                                         <Option value="-">-</Option>
                                         {packageOptions.map((i) => (
-                                            <Option key={i.Display_Box_id} value={i.Display_Box_id}>
-                                                {i.Display_Box_id}
+                                            <Option key={i.Rm_Pk_Id} value={i.Rm_Pk_Id}>
+                                                {i.Rm_Pk_Id}
                                             </Option>
                                         ))}
                                     </Select>

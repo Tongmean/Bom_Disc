@@ -124,7 +124,7 @@ const Outer = () =>{
         <>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
-                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Outer"/>
+                <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "การบรรจุ-Outer"/>
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
@@ -144,7 +144,7 @@ const Outer = () =>{
                 onHide={handleCloseModal}
                 data={selectedData}
                 historyLog={historyLog}
-                Tablename = 'Outer'
+                Tablename = 'การบรรจุ-Outer'
             />
         </>
     )

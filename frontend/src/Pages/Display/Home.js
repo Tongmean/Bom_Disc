@@ -110,9 +110,17 @@ const Homepage = () => {
     { headerName: 'ชื่อใบแนบ 4', field: 'Name_Attach_Paper_4' },
     { headerName: 'จำนวนใบแนบ 4', field: 'Num_Attach_4' },
 
-    { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ', field: 'Additional_Tool_Erp_Id' },
-    { headerName: 'ชื่อ ERP อุปกรณ์เสริมอื่น ๆ', field: 'Name_Erp_Additional_Tool' },
-    { headerName: 'จำนวน อุปกรณ์เสริมอื่น ๆ', field: 'Num_Additional_Tool' },
+    { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ 1', field: 'Additional_Tool_Erp_Id_1' },
+    { headerName: 'ชื่อ ERP อุปกรณ์เสริมอื่น ๆ 1', field: 'Name_Erp_Additional_Tool_1' },
+    { headerName: 'จำนวน อุปกรณ์เสริมอื่น ๆ 1', field: 'Num_Additional_Tool_1' },
+
+    { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ 2', field: 'Additional_Tool_Erp_Id_2' },
+    { headerName: 'ชื่อ ERP อุปกรณ์เสริมอื่น ๆ 2', field: 'Name_Erp_Additional_Tool_2' },
+    { headerName: 'จำนวน อุปกรณ์เสริมอื่น ๆ 2', field: 'Num_Additional_Tool_2' },
+
+    { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น ๆ 3', field: 'Additional_Tool_Erp_Id_3' },
+    { headerName: 'ชื่อ ERP อุปกรณ์เสริมอื่น ๆ 3', field: 'Name_Erp_Additional_Tool_3' },
+    { headerName: 'จำนวน อุปกรณ์เสริมอื่น ๆ 3', field: 'Num_Additional_Tool_3' },
 
     { headerName: 'รหัส ERP สติกเกอร์ 1', field: 'Sticker_Erp_Id_1' },
     { headerName: 'ชื่อสติกเกอร์ 1', field: 'Sticker_Name_1' },
@@ -129,23 +137,24 @@ const Homepage = () => {
     { headerName: 'รหัส ERP โฟมและอุปกรณ์เสริม 1', field: 'Additional_Tool_Erp_Id_1' },
     { headerName: 'ชื่อ ERP โฟมและอุปกรณ์เสริม 1', field: 'Name_Additional_Tool_1' },
     { headerName: 'จำนวนโฟมและอุปกรณ์เสริม 1', field: 'Quantity_Additional_Tool_1' },
+
     { headerName: 'รหัส ERP โฟมและอุปกรณ์เสริม 2', field: 'Additional_Tool_Erp_Id_2' },
     { headerName: 'ชื่อ ERP โฟมและอุปกรณ์เสริม 2', field: 'Name_Additional_Tool_2' },
     { headerName: 'จำนวนโฟมและอุปกรณ์เสริม 2', field: 'Quantity_Additional_Tool_2' },
-    { headerName: 'รหัสกล่อง', field: 'Display_Box_id' },
-    { headerName: 'รหัส ERP กล่อง', field: 'Display_Box_Erp_Id' },
-    { headerName: 'ชื่อ ERP กล่อง', field: 'Name_Display_Box_Erp' },
+
+    { headerName: 'รหัสกล่อง (Inner)', field: 'Rm_Pk_Id' },
+    { headerName: 'รหัส ERP กล่อง (Inner)', field: 'Erp_Id' },
+    { headerName: 'ชื่อ ERP กล่อง (Inner)', field: 'Name_Erp' },
     { headerName: 'จำนวนกล่อง', field: 'Quantity_Display_Box' },
     { headerName: 'ใส่ Outer', field: 'Outer_Package' },
     { headerName: 'เบอร์ Outer', field: 'Num_Outer' },
 
-    { headerName: 'รหัส ERP', field: 'Outer_Erp_Id' },
-    { headerName: 'ชื่อ Outer', field: 'Name_Outer_Erp' },
+    { headerName: 'รหัส ERP (Outer)', field: 'Outer_Erp_Id' },
+    { headerName: 'ชื่อ Outer (Outer)', field: 'Name_Erp_Outer' },
     { headerName: 'จำนวน Set/ Outer', field: 'Set_Per_Outer' },
-    { headerName: 'รหัส ERP Sticker', field: 'Outer_Erp_Sticker' },
-    { headerName: 'ชื่อ ERP Sticker', field: 'Name_Outer_Erp_Sticker' },
-    { headerName: 'จำนวน Sticker', field: 'Num_Sticker' },
     { headerName: 'จำนวน Outer/ พาเลท', field: 'Outer_Per_pallet' },
+    { headerName: 'จำนวน Set/ พาเลท', field: 'Set_Per_Outer' },
+
     { headerName: 'รหัส Product spec', field: 'Product_Spec_Id' },
 
 

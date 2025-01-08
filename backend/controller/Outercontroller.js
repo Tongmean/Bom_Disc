@@ -4,35 +4,35 @@ const { logUpdate } = require('../utility/updateLog');
 
 //Get all record
 const getOuters = async (req, res) => {
-    const sqlCommand = `
-        SELECT 
-            "Outer"."id", 
-            "Outer"."Outer_Id", 
-            "Outer"."Name_Erp_Outer", 
-            "Outer"."Num_Outer",
-            "Outer"."Erp_Id_Inner", 
-            "Outer"."Name_Erp_Inner", 
-            "Outer"."Die_Cut", 
-            "Outer"."Set_Per_Outer", 
-            "Outer"."Outer_Per_pallet", 
-            "Outer"."Set_Per_Pallet",
-            "Outer"."CreateAt",
-            "Outer"."CreateBy",
-            "Outer_Package"."Erp_Id" AS "Erp_Id_Outer", 
-            "Inner_Package"."Erp_Id" AS "Erp_Id_Inner"
-        FROM 
-            "Outer"
-        LEFT JOIN 
-            "Package" AS "Outer_Package"
-        ON 
-            "Outer"."Erp_Id_Outer" = "Outer_Package"."Rm_Pk_Id"
-        LEFT JOIN 
-            "Package" AS "Inner_Package"
-        ON 
-            "Outer"."Erp_Id_Inner" = "Inner_Package"."Rm_Pk_Id";
-    `
+    // const sqlCommand = `
+    //     SELECT 
+    //         "Outer"."id", 
+    //         "Outer"."Outer_Id", 
+    //         "Outer"."Name_Erp_Outer", 
+    //         "Outer"."Num_Outer",
+    //         "Outer"."Erp_Id_Inner", 
+    //         "Outer"."Name_Erp_Inner", 
+    //         "Outer"."Die_Cut", 
+    //         "Outer"."Set_Per_Outer", 
+    //         "Outer"."Outer_Per_pallet", 
+    //         "Outer"."Set_Per_Pallet",
+    //         "Outer"."CreateAt",
+    //         "Outer"."CreateBy",
+    //         "Outer_Package"."Erp_Id" AS "Erp_Id_Outer", 
+    //         "Inner_Package"."Erp_Id" AS "Erp_Id_Inner"
+    //     FROM 
+    //         "Outer"
+    //     LEFT JOIN 
+    //         "Package" AS "Outer_Package"
+    //     ON 
+    //         "Outer"."Erp_Id_Outer" = "Outer_Package"."Rm_Pk_Id"
+    //     LEFT JOIN 
+    //         "Package" AS "Inner_Package"
+    //     ON 
+    //         "Outer"."Erp_Id_Inner" = "Inner_Package"."Rm_Pk_Id";
+    // `
     try {
-        dbconnect.query(sqlCommand, (err, result) => {
+        dbconnect.query(`SELECT * FROM "Outer" ORDER BY id ASC`, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

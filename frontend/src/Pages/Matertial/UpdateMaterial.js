@@ -73,7 +73,7 @@ const UpdateMaterial = () => {
             console.log('Updated Material Data:', updatedMaterial);
             console.log('API Result:', result);
 
-            navigate('/material');
+            navigate('/componentpart');
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {
@@ -92,7 +92,7 @@ const UpdateMaterial = () => {
 
     return (
         <div className="container-fluid">
-            <h2>แก้ไขข้อมูลวัสดุ (Material)</h2>
+            <h2>แก้ไขข้อมูลส่วนประกอบ (Component Part)</h2>
             <Form
                 form={form}
                 layout="vertical"
@@ -160,7 +160,7 @@ const UpdateMaterial = () => {
 
                     <div className="col-12">
                         <Form.Item>
-                            <Button type="default" className="me-2" onClick={() => navigate('/material')}>
+                            <Button type="default" className="me-2" onClick={() => navigate('/componentpart')}>
                                 Back
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>

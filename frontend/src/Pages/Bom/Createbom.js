@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
 import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
-import {fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
+import {fetchAdditionalpackages, fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
 import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
 
 const { Option } = Select;
@@ -19,6 +19,7 @@ const CreateBom = () => {
     const [datasheetOptions, setDatasheetoptions] = useState([]);
     const [productspecOptions, setProductspecoptions] = useState([]);
     const [shimOptions, setShimoptions] = useState([]);
+    const [additionalpackgeOptions, setAdditionalpackgeoptions] = useState([]);
     const [drawingOptions, setDrawingoptions] = useState([]);
     const [emarkOptions, setEmarkoptions] = useState([]);
     const navigate = useNavigate();
@@ -84,6 +85,9 @@ const CreateBom = () => {
 
                 const emarkData = await fetchEmarks(); 
                 setEmarkoptions(emarkData.data); 
+
+                const additionalpackageData = await fetchAdditionalpackages(); 
+                setAdditionalpackgeoptions(additionalpackageData.data); 
 
                 // console.log('shimOptions', shimOptions)
 
@@ -334,7 +338,46 @@ const CreateBom = () => {
                                 </Form.Item>
                             )
                             :
+                            key === "Additional_Package_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    <Option value="-">-</Option>
+                                    {additionalpackgeOptions.map((status) => (
+                                        <Option key={status.Additional_Package_Id} value={status.Additional_Package_Id}>
+                                            {status.Additional_Package_Id}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
                             key === "Outer_Package" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchOuterproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Shim_Attach" ? (
                                 <Form.Item
                                     label={label}
                                     name={key}

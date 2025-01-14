@@ -2,6 +2,7 @@
 const express = require('express');
 //Create app
 const app = express();
+const compression = require('compression');
 //Call Cors
 const cors = require('cors');
 //Body Parser
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 const path = require('path');
 // Serve static files from the 'Assets' folder
 app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
+app.use(compression());
 
 // const fs = require('fs'); // Import fs module
 // // Load SSL certificate files

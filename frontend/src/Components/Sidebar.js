@@ -55,7 +55,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
     { key: 'E-mark', icon: <FileExcelOutlined />, label: <Link to="/emark">E-mark</Link>},
-    { key: 'Material', icon: <FileExcelOutlined />, label: <Link to="/material">Material</Link>},
+    { key: 'Component-Part', icon: <FileExcelOutlined />, label: <Link to="/componentpart">Component Part</Link>},
 
 
     

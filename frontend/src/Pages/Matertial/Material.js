@@ -127,10 +127,10 @@ const Material = () =>{
     };
 
     const handleOnClick = () => {
-        navigate('/creatematerial');
+        navigate('/createcomponentpart');
     };
     const handleShowEdit = (data) => {
-        navigate(`/material/${data.id}`);
+        navigate(`/componentpart/${data.id}`);
     };
     return (
         <>

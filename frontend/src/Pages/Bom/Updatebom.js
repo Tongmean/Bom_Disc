@@ -11,7 +11,8 @@ import {
     fetchProductspecs,
     fetchShims,
     fetchDrawings,
-    fetchEmarks
+    fetchEmarks,
+    fetchAdditionalpackages
 } from '../../Ultility/Sellectedbom';
 import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
 
@@ -30,6 +31,8 @@ const UpdateBom = () => {
     const [shimOptions, setShimoptions] = useState([]);
     const [drawingOptions, setDrawingoptions] = useState([]);
     const [emarkOptions, setEmarkoptions] = useState([]);
+    const [additionalpackgeOptions, setAdditionalpackgeoptions] = useState([]);
+
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -66,14 +69,16 @@ const UpdateBom = () => {
         const fetchDropdownData = async () => {
             setDropdownLoading(true);
             try {
-                const [packages, outers, datasheets, productspecs, shims, drawings, emarks] = await Promise.all([
+                const [packages, outers, datasheets, productspecs, shims, drawings, emarks, additionalpackageData] = await Promise.all([
                     fetchPackages(),
                     fetchOuters(),
                     fetchDatasheets(),
                     fetchProductspecs(),
                     fetchShims(),
                     fetchDrawings(),
-                    fetchEmarks()
+                    fetchEmarks(),
+
+                    fetchAdditionalpackages()
                 ]);
 
                 setPackageoptions(packages.data);
@@ -83,7 +88,7 @@ const UpdateBom = () => {
                 setShimoptions(shims.data);
                 setDrawingoptions(drawings.data);
                 setEmarkoptions(emarks.data);
-
+                setAdditionalpackgeoptions(additionalpackageData.data); 
                 console.log('productspecOptions', productspecOptions)
 
             } catch (error) {
@@ -121,7 +126,7 @@ const UpdateBom = () => {
             const updatedBom = { ...values, UpdateBy: '-' };
             const result = await updateBom(id, updatedBom);
             showNotification(result.msg, 'success');
-            setTimeout(() => navigate('/bom'), 2000);
+            setTimeout(() => navigate('/productregister'), 2000);
         } catch (error) {
             showNotification(error.message, 'fail');
         } finally {
@@ -168,7 +173,46 @@ const UpdateBom = () => {
                                 </Form.Item>
                             )
                             :
+                            key === "Additional_Package_Id" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    <Option value="-">-</Option>
+                                    {additionalpackgeOptions.map((status) => (
+                                        <Option key={status.Additional_Package_Id} value={status.Additional_Package_Id}>
+                                            {status.Additional_Package_Id}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
                             key === "Outer_Package" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    {fetchOuterproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Shim_Attach" ? (
                                 <Form.Item
                                     label={label}
                                     name={key}

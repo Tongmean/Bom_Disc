@@ -188,10 +188,10 @@ const App = () => {
                 <Route path="/shimfile/:id" element={<UpdateShimFile />} />
               </Route>
 
-              <Route path="/material" element={isAuthenticated ? <Material /> : <Navigate to='/login' />} />
+              <Route path="/componentpart" element={isAuthenticated ? <Material /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                <Route path="/creatematerial" element={<CreateMaterial />} />
-                <Route path="/material/:id" element={<UpdateMaterial />} />
+                <Route path="/createcomponentpart" element={<CreateMaterial />} />
+                <Route path="/componentpart/:id" element={<UpdateMaterial />} />
               </Route>
 
 

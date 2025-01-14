@@ -90,7 +90,7 @@ const CreateMaterial = () => {
 
     return (
         <div className="container-fluid">
-            <h2>แบบฟอร์มบันทึกวัสดุ (Material)</h2>
+            <h2>แบบฟอร์มบันทึกส่วนประกอบ (Component Part)</h2>
             <Form
                 form={form}
                 layout="vertical"
@@ -185,7 +185,7 @@ const CreateMaterial = () => {
 
                     <div className="col-12">
                         <Form.Item>
-                            <Button type="default" className="me-2" onClick={() => navigate('/material')}>
+                            <Button type="default" className="me-2" onClick={() => navigate('/componentpart')}>
                                 Back
                             </Button>
                             <Button type="primary" htmlType="submit" disabled={isPending}>

@@ -149,11 +149,11 @@ const Homepage = () => {
     { headerName: 'ใส่ Outer', field: 'Outer_Package' },
     { headerName: 'เบอร์ Outer', field: 'Num_Outer' },
 
-    { headerName: 'รหัส ERP (Outer)', field: 'Outer_Erp_Id' },
+    { headerName: 'รหัส ERP (Outer)', field: 'Erp_Id_Outer' },
     { headerName: 'ชื่อ Outer (Outer)', field: 'Name_Erp_Outer' },
     { headerName: 'จำนวน Set/ Outer', field: 'Set_Per_Outer' },
     { headerName: 'จำนวน Outer/ พาเลท', field: 'Outer_Per_pallet' },
-    { headerName: 'จำนวน Set/ พาเลท', field: 'Set_Per_Outer' },
+    { headerName: 'จำนวน Set/ พาเลท', field: 'Set_Per_Pallet' },
 
     { headerName: 'รหัส Product spec', field: 'Product_Spec_Id' },
 
@@ -164,7 +164,7 @@ const Homepage = () => {
     const load = async () => {
       try {
         const packageData = (await fetchDisplayhome()).data;
-        // console.log('packageData',packageData)
+        console.log('packageData',packageData)
 
         setRowData(packageData);
 

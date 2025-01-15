@@ -135,6 +135,7 @@ const postBom = async (req, res) => {
             msg: `รหัสสินค้าสำเร็จรูป: ${Code_Fg} บันทึกได้สำเร็จ ครับ`
         });
     } catch (error) {
+        console.log('bom error',error )
         return res.status(500).json({
             success: false,
             data: error,

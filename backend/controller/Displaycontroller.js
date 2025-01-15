@@ -33,7 +33,7 @@ const Homedisplay = async (req, res) => {
             "Additional_Package"."Additional_Tool_Erp_Id_2", "Additional_Package"."Name_Additional_Tool_2","Additional_Package"."Quantity_Additional_Tool_2",
             "Package"."Rm_Pk_Id", "Package"."Erp_Id", "Package"."Name_Erp", "Package"."Erp_Id",
             "bom"."Quantity_Display_Box", "bom"."Outer_Package",
-            "Outer"."Num_Outer", "Outer"."Outer_Id", "Outer"."Name_Erp_Outer",
+            "Outer"."Num_Outer", "Outer"."Outer_Id", "Outer"."Name_Erp_Outer","Outer"."Erp_Id_Outer",
             "Outer"."Set_Per_Outer", "Outer"."Outer_Per_pallet", "Outer"."Set_Per_Pallet"
             
         FROM 

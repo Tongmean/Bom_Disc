@@ -185,7 +185,7 @@ export const fetchunitoptions = [
     { label: '-', value: '-' },
     { label: 'ชิ้น', value: 'ชิ้น' },
     { label: 'ใบ', value: 'ใบ' },
-    { label: 'แผ่น', value: 'WD' },
+    { label: 'แผ่น', value: 'แผ่น' },
     { label: 'ดวง', value: 'ดวง' },
     { label: 'ตัว', value: 'ตัว' },
 ]

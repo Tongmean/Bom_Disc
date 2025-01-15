@@ -7,6 +7,7 @@ import { createShim } from '../../Ultility/Shimapi'; // Assuming you have a simi
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialsp } from '../../Ultility/Sellectedbom';
 import { fetchmaterialfilterbycompactnoshim, fetchmaterialfiltershim } from '../../Ultility/Bomfilterapi';
+import { fetchrmpk } from '../../Ultility/Sellectedbom';
 
 const { Option } = Select;
 
@@ -23,6 +24,8 @@ const CreateShim = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [numFilter, setNumFilter] = useState([]);
     const [compactnoFilter, setCompactnoFilter] = useState([]);
+    //Filter Shim
+    const [shimOptionsrm, setShimrmoption] = useState([]);
     //Loading Sp Dropdown
     useEffect(() => {
         const load = async () => {
@@ -43,16 +46,16 @@ const CreateShim = () => {
     const columnNameLabels = {
         Compact_No_Modify: "Compact No (ปรับ)",
         Part_No: "Part No",
-        Name_SP1: "ชื่อ SP1",
-        Erp_Id_SP1: "รหัส SP1",
+        Erp_Id_SP1: "รหัส Erp SP1",
+        Name_SP1: "ชื่อ Erp SP1",
         Id_SP1: "ID SP1",
         Quantity_SP1: "จำนวน SP1",
-        Name_SP2: "ชื่อ SP2",
-        Erp_Id_SP2: "รหัส SP2",
+        Erp_Id_SP2: "รหัส Erp SP2",
+        Name_SP2: "ชื่อ Erp SP2",
         Id_SP2: "ID SP2",
         Quantity_SP2: "จำนวน SP2",
-        Name_SP3: "ชื่อ SP3",
-        Erp_Id_SP3: "รหัส SP3",
+        Erp_Id_SP3: "รหัส Erp SP3",
+        Name_SP3: "ชื่อ Erp SP3",
         Id_SP3: "ID SP3",
         Quantity_SP3: "จำนวน SP3",
         Status: "Status",
@@ -86,7 +89,11 @@ const CreateShim = () => {
         const load = async () => {
             try {
             const Data = (await fetchmaterialfiltershim()).data;
-            console.log('FilterData', Data)
+            // console.log('FilterData', Data)
+            const Datashim = (await fetchrmpk()).data;
+            const additiondata = Datashim.filter(item => item.Group === "Shim");
+            setShimrmoption(additiondata)
+            // console.log('Datashim', Datashim , additiondata)
             setRowData(Data);
             setFilteredData(Data);
             } catch (err) {
@@ -97,6 +104,25 @@ const CreateShim = () => {
         };
         load();
     }, []);
+    // useEffect(() => {
+    //     const load = async () => {
+    //         setIsPending(true);
+    //         try {
+    //             const Data = (await fetchrmpk()).data;
+    //             const additiondata = Data.filter(item => item.Group === "อุปกรณ์เสริม");
+    //             setAdditionoptions(additiondata);
+    //             const stickerdata = Data.filter(item => item.Group === "สติ๊กเกอร์");
+    //             setStickeroptions(stickerdata);
+    //             console.log('additiondata', additiondata);
+    //             console.log('stickerdata', stickerdata);
+    //         } catch (error) {
+    //             showNotification('Failed to fetch data', 'warning');
+    //         } finally {
+    //             setIsPending(false);
+    //         }
+    //     };
+    //     load();
+    // }, []);
     const handleFilterChange = () => {
         const filtered = rowData.filter((item) =>
           (!numFilter.length || numFilter.includes(item.Part_No)) &&
@@ -146,6 +172,29 @@ const CreateShim = () => {
     const handleClearForm = () => {
         form.resetFields(); // Clears all the form fields
         showNotification('Form values cleared', 'success');
+    };
+    const handleSelectChange = (value, key) => {
+        if (key === 'Erp_Id_SP1') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 1:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_SP2') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 2:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_SP3') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP3: selected ? selected.Name_Erp : ''
+            });
+        }
     };
     return (
         <div className="container-fluid">
@@ -222,7 +271,7 @@ const CreateShim = () => {
             >
                 <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
-                        <div className="col-xl-4 col-lg-4 col-md-6" key={index}>
+                        <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6" key={index}>
                             <Form.Item
                                 label={label}
                                 name={key}
@@ -286,16 +335,64 @@ const CreateShim = () => {
                                     </Select>
                                 ) 
                                 : 
+                                key === "Erp_Id_SP1" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Erp_Id_SP2" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Erp_Id_SP3" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+ 
+                                : 
                                 (
                                     <Input />
                                 )}
                             </Form.Item>
                         </div>
                     ))}
-
-
-
-        
 
                     <div className="col-12">
                         <Form.Item>

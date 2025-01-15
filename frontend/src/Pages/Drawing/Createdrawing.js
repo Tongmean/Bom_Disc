@@ -7,6 +7,7 @@ import { CreateDrawingapi } from '../../Ultility/Drawingapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialbp, fetchmaterialwd } from '../../Ultility/Sellectedbom';
 import { fetchmaterialfilterbycompactno, fetchmaterialfilterdrawing } from '../../Ultility/Bomfilterapi';
+import { fetchrmpk } from '../../Ultility/Sellectedbom';
 
 const { Option } = Select;
 const CreateDrawing = () => {
@@ -23,6 +24,8 @@ const CreateDrawing = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [numFilter, setNumFilter] = useState([]);
     const [compactnoFilter, setCompactnoFilter] = useState([]);
+    const [bperpoptions, setBperpoption] = useState([])
+    const [wderpoptions, setwderpoption] = useState([])
     //Loading Bp & Wd Dropdown
     useEffect(() => {
         const load = async () => {
@@ -32,7 +35,14 @@ const CreateDrawing = () => {
                 setBpoption(Databp.data); 
                 const Datawd = await fetchmaterialwd(); 
                 setWdoption(Datawd.data); 
-                console.log('Datawd', Datawd)
+                // console.log('Datawd', Datawd)
+                //Filter BP & WD ERP
+                const Data = (await fetchrmpk()).data;
+                const Databperp = Data.filter(item => item.Group === "BP");
+                const Datawderp = Data.filter(item => item.Group === "WD");
+                setBperpoption(Databperp)
+                setwderpoption(Datawderp)
+                // console.log('Databperp',Databperp ,'Datawderp',Datawderp)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -205,7 +215,55 @@ const CreateDrawing = () => {
         form.resetFields(); // Clears all the form fields
         showNotification('Form values cleared', 'success');
     };
-    // console.log('codeFgFilter', codeFgFilter)
+    const handleSelectChange = (value, key) => {
+        if (key === 'Erp_Id_BP1') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 1:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP2') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 2:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP3') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP3: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP4') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP4: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD1') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD2') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD3') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD3: selected ? selected.Name_Erp : ''
+            });
+        }
+    };
+    
     return (
         <div className="container-fluid">
             <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
@@ -293,6 +351,98 @@ const CreateDrawing = () => {
                                             {bpoptions.map((i) => (
                                             <Option key={i.ID} value={i.ID}>
                                                 {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP4" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
                                         </Option>
                                         ))}
                                     </Select>
@@ -425,6 +575,75 @@ const CreateDrawing = () => {
                                             {wdoptions.map((i) => (
                                             <Option key={i.ID} value={i.ID}>
                                                 {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_WD1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_WD2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_WD3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
                                         </Option>
                                         ))}
                                     </Select>

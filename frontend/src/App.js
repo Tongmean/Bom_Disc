@@ -111,19 +111,19 @@ const App = () => {
 
               <Route path="/Package" element={isAuthenticated ? <Package /> : <Navigate to='/login' />} />
 
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['Rm&Pk']}/>}>
                 <Route path="/createPackage" element={<CreateDisplayBox />} />
                 <Route path="/Package/:id" element={<UpdateDisplayBox />} />
               </Route>
 
               <Route path="/outer" element={isAuthenticated ? <Outer /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['Outer']}/>} >
                 <Route path="/createouter" element={<CreateOuter />} />
                 <Route path="/outer/:id" element={<UpdateOuter />} />
               </Route>
 
               <Route path="/dataSheet" element={isAuthenticated ? <DataSheet /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
                 <Route path="/createdatasheet" element={<CreateDatasheet />} />
                 <Route path="/datasheet/:id" element={<UpdateDatasheet />} />
               </Route>
@@ -134,15 +134,15 @@ const App = () => {
                 <Route path="/productspec/:id" element={<UpdateProductSpec />} />
               </Route>
 
-              <Route path="/Additionalpackage" element={isAuthenticated ? <Additionalpackage /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route path="/additionalpackage" element={isAuthenticated ? <Additionalpackage /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['additionalpackage']}/>}>
                 <Route path="/createadditionalpackage" element={<CreateAdditionalPackage />} />
-                <Route path="/additionalpackage" element={<UpdateAdditionPackage />} />
+                <Route path="/additionalpackage/:id" element={<UpdateAdditionPackage />} />
               </Route>
 
 
               <Route path="/shim" element={isAuthenticated ? <Shim /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['shim']}/>}>
                 <Route path="/createshim" element={<CreateShim />} />
                 <Route path="/shim/:id" element={<UpdateShim />} />
               </Route>
@@ -166,30 +166,30 @@ const App = () => {
               </Route>
 
               <Route path="/drawingfile" element={isAuthenticated ? <Drawingfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['drawingfile']}/>}>
                 <Route path="/createdrawingfile" element={<CreateDrawingFile />} />
                 <Route path="/drawingfile/:id" element={<UpdateDrawingFile />} />
               </Route>
 
               <Route path="/productspecfile" element={isAuthenticated ? <Productspecfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productspecfile']}/>}>
                 <Route path="/createproductspecfile" element={<CreateProductspecFile />} />
                 <Route path="/productspecfile/:id" element={<UpdateProductspecFile />} />
               </Route>
               <Route path="/emark" element={isAuthenticated ? <Emark /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['emark']}/>}>
                 <Route path="/createemark" element={<CreateEmark />} />
                 <Route path="/emark/:id" element={<UpdateEmark />} />
               </Route>
 
               <Route path="/shimfile" element={isAuthenticated ? <Shimfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['shimfile']}/>}>
                 <Route path="/createshimfile" element={<CreateShimFile />} />
                 <Route path="/shimfile/:id" element={<UpdateShimFile />} />
               </Route>
 
               <Route path="/componentpart" element={isAuthenticated ? <Material /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['componentpart']}/>}>
                 <Route path="/createcomponentpart" element={<CreateMaterial />} />
                 <Route path="/componentpart/:id" element={<UpdateMaterial />} />
               </Route>

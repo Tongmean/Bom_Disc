@@ -6,6 +6,7 @@ import Notification from '../../Components/Notification';
 import { fetchShim, updateShim } from '../../Ultility/Shimapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialsp } from '../../Ultility/Sellectedbom';
+import { fetchrmpk } from '../../Ultility/Sellectedbom';
 const { Option } = Select;
 
 
@@ -17,6 +18,9 @@ const UpdateShim = () => {
     const { id } = useParams(); // Extract ID from route params
     const navigate = useNavigate();
     const [spoptions, setShimoption] = useState([]);
+    //Filter Shim
+    const [shimOptionsrm, setShimrmoption] = useState([]);
+
     // const [loading, setLoading] = useState(false);
 
     //Loading Sp Dropdown
@@ -26,6 +30,9 @@ const UpdateShim = () => {
             try {
                 const Data = await fetchmaterialsp(); 
                 setShimoption(Data.data); 
+                const Datashim = (await fetchrmpk()).data;
+                const additiondata = Datashim.filter(item => item.Group === "Shim");
+                setShimrmoption(additiondata)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -36,22 +43,23 @@ const UpdateShim = () => {
         load();
     }, []);
     // Mapping the new attributes to their labels
-    const fieldLabels = {
+
+    const columnNameLabels = {
         Compact_No_Modify: "Compact No (ปรับ)",
         Part_No: "Part No",
-        Name_SP1: "ชื่อ SP1",
-        Erp_Id_SP1: "รหัส SP1",
+        Erp_Id_SP1: "รหัส Erp SP1",
+        Name_SP1: "ชื่อ Erp SP1",
         Id_SP1: "ID SP1",
         Quantity_SP1: "จำนวน SP1",
-        Name_SP2: "ชื่อ SP2",
-        Erp_Id_SP2: "รหัส SP2",
+        Erp_Id_SP2: "รหัส Erp SP2",
+        Name_SP2: "ชื่อ Erp SP2",
         Id_SP2: "ID SP2",
         Quantity_SP2: "จำนวน SP2",
-        Name_SP3: "ชื่อ SP3",
-        Erp_Id_SP3: "รหัส SP3",
+        Erp_Id_SP3: "รหัส Erp SP3",
+        Name_SP3: "ชื่อ Erp SP3",
         Id_SP3: "ID SP3",
         Quantity_SP3: "จำนวน SP3",
-        Status: "Status" // Add label for the Status field
+        Status: "Status",
     };
 
     // Fetch shim data on component mount
@@ -59,10 +67,11 @@ const UpdateShim = () => {
         const load = async (id) => {
             try {
                 const data = (await fetchShim(id)).data[0]; // Fetch data by ID
+                
 
                 if (data) {
                     const formData = {};
-                    for (let key in fieldLabels) {
+                    for (let key in columnNameLabels) {
                         formData[key] = data[key];
                     }
 
@@ -114,6 +123,29 @@ const UpdateShim = () => {
             </div>
         );
     }
+    const handleSelectChange = (value, key) => {
+        if (key === 'Erp_Id_SP1') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 1:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_SP2') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 2:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_SP3') {
+            const selected = shimOptionsrm.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_SP3: selected ? selected.Name_Erp : ''
+            });
+        }
+    };
 
     return (
         <div className="container-fluid">
@@ -124,8 +156,8 @@ const UpdateShim = () => {
                 onFinish={handleSubmit}
             >
                 <div className="row">
-                    {Object.entries(fieldLabels).map(([key, label], index) => (
-                        <div className="col-xl-4 col-lg-4 col-md-6" key={index}>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6" key={index}>
                             <Form.Item
                                 label={label}
                                 name={key}
@@ -189,15 +221,64 @@ const UpdateShim = () => {
                                     </Select>
                                 ) 
                                 : 
+                                key === "Erp_Id_SP1" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Erp_Id_SP2" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+                                : 
+                                key === "Erp_Id_SP3" ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {shimOptionsrm.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+ 
+                                : 
                                 (
                                     <Input />
                                 )}
                             </Form.Item>
                         </div>
                     ))}
-
-
-
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/shim')}>

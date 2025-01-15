@@ -149,7 +149,7 @@ const UpdateBom = () => {
 
     return (
         <div className="container-fluid">
-            <h2>แก้ไข Bill of Material (Update BOM)</h2>
+            <h2>แบบฟอร์มแก้ไขทะเบียนผลิตภัณฑ์ (Product Register)</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (

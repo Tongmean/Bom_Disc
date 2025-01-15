@@ -68,9 +68,14 @@ export const fetchUserpermission = [
     { label: 'Data Sheet', value: 'datasheet' },
     { label: 'Shim', value: 'shim' },
     { label: 'Drawing', value: 'drawing' },
+    { label: 'Drawing File', value: 'drawingfile' },
     { label: 'Product Spec.', value: 'productspec' },
-    { label: 'Prackage', value: 'prackage' },
+    { label: 'Product Spec.', value: 'productspecfile' },
+    { label: 'Rm&Pk', value: 'prackage' },
     { label: 'E-mark', value: 'emark' },
+    { label: 'Component Part', value: 'componentpart' },
+    { label: 'Rm&Pk', value: 'Rm&Pk' },
+    { label: 'Outer', value: 'Outer' },
 ]
 //Material
 export const fetchMaterialtypedrawing = [
@@ -169,10 +174,18 @@ export const fetchmatcat = [
 export const fetchgroupoptions = [
     { label: 'BP', value: 'BP' },
     { label: 'Shim', value: 'Shim' },
-    { label: 'กิ๊ฟ', value: 'กิ๊ฟ' },
+    { label: 'WD', value: 'WD' },
     { label: 'กล่องชิ้นใน', value: 'กล่องชิ้นใน' },
     { label: 'กล่องชั้นนอก', value: 'กล่องชั้นนอก' },
     { label: 'สติ๊กเกอร์', value: 'สติ๊กเกอร์' },
     { label: 'พาเลท', value: 'พาเลท' },
     { label: 'อุปกรณ์เสริม', value: 'อุปกรณ์เสริม' },
+]
+export const fetchunitoptions = [
+    { label: '-', value: '-' },
+    { label: 'ชิ้น', value: 'ชิ้น' },
+    { label: 'ใบ', value: 'ใบ' },
+    { label: 'แผ่น', value: 'WD' },
+    { label: 'ดวง', value: 'ดวง' },
+    { label: 'ตัว', value: 'ตัว' },
 ]

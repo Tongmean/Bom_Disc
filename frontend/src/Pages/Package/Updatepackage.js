@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { baseURLpackage} from '../../Ultility/ApiSetup/api';
 import Notification from '../../Components/Notification';
 import { updatePackage, fetchPackage } from '../../Ultility/Packageapi';
-import { fetchStatusemark, fetchmatcat, fetchgroupoptions } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusemark, fetchmatcat, fetchgroupoptions, fetchunitoptions } from '../../Ultility/ApiSetup/staticData';
 import { UploadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -174,6 +174,23 @@ const UpdatePackage = () => {
                                     >
                                         <Select placeholder={`เลือก ${headerName}`}>
                                             {fetchmatcat.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Unit' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchunitoptions.map((status) => (
                                                 <Option key={status.value} value={status.value}>
                                                     {status.label}
                                                 </Option>

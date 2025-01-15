@@ -100,7 +100,7 @@ const Wipdisplay = async (req, res) => {
     const sqlCommand = 
     `
         SELECT 
-            "bom"."Code_Fg",
+            "bom"."Code_Fg", "bom"."Num","bom"."Part_No",
             "Data_Sheet"."Formular",
             "Drawing"."Id_BP1", "Drawing"."Quantity_BP1", "Drawing"."Thickness_Pad1",
             "Drawing"."Id_BP2", "Drawing"."Quantity_BP2", "Drawing"."Thickness_Pad2",

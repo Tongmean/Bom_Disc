@@ -6,6 +6,7 @@ import Notification from '../../Components/Notification';
 import { fetchDrawing, updateDrawingapi } from '../../Ultility/Drawingapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialbp, fetchmaterialwd } from '../../Ultility/Sellectedbom';
+import { fetchrmpk } from '../../Ultility/Sellectedbom';
 const { Option } = Select;
 
 
@@ -18,6 +19,9 @@ const UpdateDrawing = () => {
     const navigate = useNavigate();
     const [wdoptions, setWdoption] = useState([]);
     const [bpoptions, setBpoption] = useState([]);
+    //erp filter
+    const [bperpoptions, setBperpoption] = useState([])
+    const [wderpoptions, setwderpoption] = useState([])
     const columnNameLabels = {
         Compact_No_Modify_Drawing: "Compact No (ปรับ)",
         Part_No: "Part No.",
@@ -65,6 +69,11 @@ const UpdateDrawing = () => {
                 const Datawd = await fetchmaterialwd(); 
                 setWdoption(Datawd.data); 
                 console.log('Datawd', Datawd)
+                const Data = (await fetchrmpk()).data;
+                const Databperp = Data.filter(item => item.Group === "BP");
+                const Datawderp = Data.filter(item => item.Group === "WD");
+                setBperpoption(Databperp)
+                setwderpoption(Datawderp)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -130,7 +139,54 @@ const UpdateDrawing = () => {
             </div>
         );
     }
-
+    const handleSelectChange = (value, key) => {
+        if (key === 'Erp_Id_BP1') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 1:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP2') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 2:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP3') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP3: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_BP4') {
+            const selected = bperpoptions.find(item => item.Erp_Id === value);
+            console.log('Selected 3:', selected); // Debug
+            form.setFieldsValue({
+                Name_BP4: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD1') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD2') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD2: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Erp_Id_WD3') {
+            const selected = wderpoptions.find(item => item.Erp_Id === value);
+            form.setFieldsValue({
+                Name_WD3: selected ? selected.Name_Erp : ''
+            });
+        }
+    };
     return (
         <div className="container-fluid">
             <h2>แก้ไข Drawing (Update Drawing)</h2>
@@ -140,19 +196,18 @@ const UpdateDrawing = () => {
                 onFinish={handleSubmit}
             >
                 <div className="row">
-                    {Object.entries(columnNameLabels).map(([key, label]) => (
-                        <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6" key={key}>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
                             {key === "Status" ? (
                                 <Form.Item
                                     label={label}
                                     name={key}
                                     rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
                                 >
-                                    <Select placeholder={`เลือก ${label}`}>
-                                        <Select options={fetchStatus} /></Select>
-                                        
+                                    <Select placeholder={`เลือก ${label}`} >
+                                    <Select options={fetchStatus} /></Select>
                                 </Form.Item>
-                            ) 
+                            )
                             :
                             key === "Id_BP1" ? (
                                 <Form.Item
@@ -170,6 +225,98 @@ const UpdateDrawing = () => {
                                             {bpoptions.map((i) => (
                                             <Option key={i.ID} value={i.ID}>
                                                 {i.ID}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_BP4" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {bperpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
                                         </Option>
                                         ))}
                                     </Select>
@@ -308,6 +455,75 @@ const UpdateDrawing = () => {
                                 </Form.Item>
                             )
                             :
+                            key === "Erp_Id_WD1" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_WD2" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Erp_Id_WD3" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={loading}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {wderpoptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            )
+                            :
                             (
                                 <Form.Item
                                     label={label}
@@ -319,6 +535,7 @@ const UpdateDrawing = () => {
                             )}
                         </div>
                     ))}
+
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/drawing')}>

@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createAdditionalpackage } from '../../Ultility/Additionalpackageapi';
+import { fetchrmpk } from '../../Ultility/Sellectedbom';
+
+const { Option } = Select;
 
 const CreateAdditionalPackage = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
     const navigate = useNavigate();
+    const [additionOptions, setAdditionoptions] = useState([]);
 
+    //Filter Component
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const Data = (await fetchrmpk()).data;
+                const additiondata = Data.filter(item => item.Group === "อุปกรณ์เสริม");
+                setAdditionoptions(additiondata)
+            // console.log('Datashim', Datashim , additiondata)
+            } catch (err) {
+                console.log(err.message);
+            } finally {
+                setIsPending(false);
+            }
+        };
+        load();
+    }, []);
     const handleSubmit = async (values) => {
         setIsPending(true);
 
@@ -32,9 +52,36 @@ const CreateAdditionalPackage = () => {
         }
     };
 
+    const columnNameLabels = {
+        Additional_Package_Id: "รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มมา",
+        Additional_Tool_Erp_Id_1: "รหัส ERP โฟมและอุปกรณ์เสริม 1",
+        Name_Additional_Tool_1: "ชื่อ ERP โฟมและอุปกรณ์เสริม 1",
+        Quantity_Additional_Tool_1: "จำนวนโฟมและอุปกรณ์เสริม 1",
+        Additional_Tool_Erp_Id_2: "รหัส ERP โฟมและอุปกรณ์เสริม 2",
+        Name_Additional_Tool_2: "ชื่อ ERP โฟมและอุปกรณ์เสริม 2",
+        Quantity_Additional_Tool_2: "จำนวนโฟมและอุปกรณ์เสริม 2",
+    };
+    
+
     const showNotification = (message, type) => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
+    };
+    const handleSelectChange = (value, key) => {
+        if (key === 'Additional_Tool_Erp_Id_1') {
+            const selected = additionOptions.find(item => item.Erp_Id === value);
+            console.log('Selected 1:', selected); // Debug
+            form.setFieldsValue({
+                Name_Additional_Tool_1: selected ? selected.Name_Erp : ''
+            });
+        }
+        else if (key === 'Additional_Tool_Erp_Id_2') {
+            const selected = additionOptions.find(item => item.Erp_Id === value);
+            console.log('Selected 2:', selected); // Debug
+            form.setFieldsValue({
+                Name_Additional_Tool_2: selected ? selected.Name_Erp : ''
+            });
+        }
     };
 
     return (
@@ -55,59 +102,38 @@ const CreateAdditionalPackage = () => {
                 }}
             >
                 <div className="row">
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มมา"
-                            name="Additional_Package_Id"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มมา' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="รหัส ERP โฟมและอุปกรณ์เสริม 1"
-                            name="Additional_Tool_Erp_Id_1"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัส ERP โฟมและอุปกรณ์เสริม 1' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="ชื่อ ERP โฟมและอุปกรณ์เสริม 1"
-                            name="Name_Additional_Tool_1"
-                            rules={[{ required: true, message: 'กรุณากรอก ชื่อ ERP โฟมและอุปกรณ์เสริม 1' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="จำนวนโฟมและอุปกรณ์เสริม 1"
-                            name="Quantity_Additional_Tool_1"
-                            rules={[{ required: true, message: 'กรุณากรอก จำนวนโฟมและอุปกรณ์เสริม 1' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </div>
-                    <div className="col-xl-6 col-lg-6 col-md-12">
-                        <Form.Item
-                            label="รหัส ERP โฟมและอุปกรณ์เสริม 2"
-                            name="Additional_Tool_Erp_Id_2"
-                            rules={[{ required: true, message: 'กรุณากรอก รหัส ERP โฟมและอุปกรณ์เสริม 2' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="ชื่อ ERP โฟมและอุปกรณ์เสริม 2"
-                            name="Name_Additional_Tool_2"
-                            rules={[{ required: true, message: 'กรุณากรอก ชื่อ ERP โฟมและอุปกรณ์เสริม 2' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="จำนวนโฟมและอุปกรณ์เสริม 2"
-                            name="Quantity_Additional_Tool_2"
-                            rules={[{ required: true, message: 'กรุณากรอก จำนวนโฟมและอุปกรณ์เสริม 2' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </div>
+                    {Object.entries(columnNameLabels).map(([key, label], index) => (
+                        <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6" key={index}>
+                            <Form.Item
+                                label={label}
+                                name={key}
+                                rules={[{ required: true, message: `กรุณากรอก ${label}` }]}
+                                
+                            >
+                                {key === 'Additional_Tool_Erp_Id_1' || key === 'Additional_Tool_Erp_Id_2' ? (
+                                    <Select 
+                                        placeholder={`เลือก ${label}`} 
+                                        loading={isPending}
+                                        allowClear
+                                        showSearch
+                                        onChange={(value) => handleSelectChange(value, key)}
+                                    >
+                                        <Option value="-">-</Option>
+                                            {additionOptions.map((i) => (
+                                            <Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                {i.Erp_Id}
+                                        </Option>
+                                        ))}
+                                    </Select>
+                                ) 
+ 
+                                : 
+                                (
+                                    <Input />
+                                )}
+                            </Form.Item>
+                        </div>
+                    ))}
                     <div className="col-12">
                         <Form.Item>
                             <Button type="default" className="me-2" onClick={() => navigate('/additionalpackage')}>

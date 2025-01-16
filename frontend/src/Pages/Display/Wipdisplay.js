@@ -82,7 +82,7 @@ const Wipdisplay = () =>{
         const loadpackages = async () => {
           try {
             const Data = (await fetchDisplaywip()).data;
-
+            console.log('Data', Data)
             const WipmappedReult = mapToWIPs(Data);
             console.log('WipmappedReult', WipmappedReult)
 

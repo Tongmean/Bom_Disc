@@ -144,7 +144,7 @@ const Qcdisplay = () => {
                 value={codeFgFilter}
                 onChange={(value) => setCodeFgFilter(value)}
                 >
-                {[...new Set(rowData.map((item) => item.Code_Fg))].map((code) => (
+                {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
                     <Option key={code} value={code}>
                     {code}
                     </Option>
@@ -161,7 +161,7 @@ const Qcdisplay = () => {
                 value={partNoFilter}
                 onChange={(value) => setPartNoFilter(value)}
                 >
-                {[...new Set(rowData.map((item) => item.Part_No))].map((partNo) => (
+                {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
                     <Option key={partNo} value={partNo}>
                     {partNo}
                     </Option>
@@ -178,7 +178,7 @@ const Qcdisplay = () => {
                 value={productspecFilter}
                 onChange={(value) => setProductspecFilter(value)}
                 >
-                {[...new Set(rowData.map((item) => item.Product_Spec_No))].map((productspec) => (
+                {[...new Set(filteredData.map((item) => item.Product_Spec_No))].map((productspec) => (
                     <Option key={productspec} value={productspec}>
                     {productspec}
                     </Option>
@@ -195,7 +195,7 @@ const Qcdisplay = () => {
                 value={customerNameFilter}
                 onChange={(value) => setCustomerNameFilter(value)}
                 >
-                {[...new Set(rowData.map((item) => item.Customer_Name))].map((Customer_Name) => (
+                {[...new Set(filteredData.map((item) => item.Customer_Name))].map((Customer_Name) => (
                     <Option key={Customer_Name} value={Customer_Name}>
                     {Customer_Name}
                     </Option>

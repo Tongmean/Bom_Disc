@@ -4,15 +4,22 @@ import {fetchShims, fetchHistoryLog} from '../../Ultility/Shimapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Shim/DetailModal'
+import { Select, Button } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+const { Option } = Select;
+
 const Shim = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
     const [selectedData, setSelectedData] = useState(null);
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    // Individual filters
+    const [filteredData, setFilteredData] = useState([]);
+    const [partNoFilter, setPartNoFilter] = useState([]);
+    const [numberFilter, setNumberFilter] = useState([]);
     const navigate = useNavigate();
 
     const columnDefs = [
@@ -136,8 +143,68 @@ const Shim = () =>{
     const handleShowEdit = (data) => {
         navigate(`/shim/${data.No}`);
     };
+
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+          (!numberFilter.length || numberFilter.includes(item.Compact_No_Modify))
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [  partNoFilter, numberFilter, rowData]);
+
+    const clearFilters = () => {
+        setPartNoFilter([]);
+        setNumberFilter([])
+    };
     return (
         <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by Part No.:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select Part No."
+                    style={{ width: '100%' }}
+                    value={partNoFilter}
+                    onChange={(value) => setPartNoFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+                        <Option key={partNo} value={partNo}>
+                        {partNo}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by Compact No:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select Compact No"
+                    style={{ width: '100%' }}
+                    value={numberFilter}
+                    onChange={(value) => setNumberFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Compact_No_Modify))].map((Num) => (
+                        <Option key={Num} value={Num}>
+                        {Num}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                
+                </div>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                Clear Filters
+                </Button>
+            </div>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Shim"/>
@@ -150,7 +217,7 @@ const Shim = () =>{
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}
-                    rowData={rowData}
+                    rowData={filteredData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
                 />

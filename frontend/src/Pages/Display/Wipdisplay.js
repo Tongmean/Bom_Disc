@@ -132,13 +132,14 @@ const Wipdisplay = () =>{
                 <div style={{ flex: '1 1 30%' }}>
                     <label>Filter by Code_Fg (ERP):</label>
                     <Select
+                    mode='multiple'
                     showSearch
                     placeholder="Select Code_Fg"
                     style={{ width: '100%' }}
                     value={codeFgFilter}
                     onChange={(value) => setCodeFgFilter(value)}
                     >
-                    {[...new Set(rowData.map((item) => item.Code_Fg))].map((code) => (
+                    {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
                         <Option key={code} value={code}>
                         {code}
                         </Option>
@@ -148,13 +149,14 @@ const Wipdisplay = () =>{
                 <div style={{ flex: '1 1 30%' }}>
                     <label>Filter by Part No.:</label>
                     <Select
+                    mode='multiple'
                     showSearch
                     placeholder="Select Part No."
                     style={{ width: '100%' }}
                     value={partNoFilter}
                     onChange={(value) => setPartNoFilter(value)}
                     >
-                    {[...new Set(rowData.map((item) => item.Part_No))].map((partNo) => (
+                    {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
                         <Option key={partNo} value={partNo}>
                         {partNo}
                         </Option>
@@ -165,13 +167,14 @@ const Wipdisplay = () =>{
                 <div style={{ flex: '1 1 30%' }}>
                     <label>Filter by รหัส เบอร์:</label>
                     <Select
+                    mode='multiple'
                     showSearch
                     placeholder="Select เบอร์"
                     style={{ width: '100%' }}
                     value={numberFilter}
                     onChange={(value) => setNumberFilter(value)}
                     >
-                    {[...new Set(rowData.map((item) => item.Num))].map((Num) => (
+                    {[...new Set(filteredData.map((item) => item.Num))].map((Num) => (
                         <Option key={Num} value={Num}>
                         {Num}
                         </Option>
@@ -181,7 +184,7 @@ const Wipdisplay = () =>{
                 
                 </div>
                 <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
-                Clear Filters
+                    Clear Filters
                 </Button>
             </div>
             

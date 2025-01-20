@@ -221,7 +221,7 @@ const Selectedemark = async (req, res) => {
 //Sellected Material
 const SelectedmaterialWd = async (req, res) => {
     try {
-        dbconnect.query(`Select DISTINCT id, "Type1", "Type2", "Type3", "ID" FROM "Material" WHERE "Type2" = 'WD' `, (err, result) => {
+        dbconnect.query(`Select DISTINCT id, "Type1", "Type2", "Type3", "ID" FROM "Material" WHERE "Type2" = 'WD' AND "Type2" = 'FP'`, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

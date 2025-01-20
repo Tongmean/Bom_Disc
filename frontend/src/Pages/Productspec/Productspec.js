@@ -4,16 +4,25 @@ import {fetchProductspecs, fetchHistoryLog} from '../../Ultility/Productspecapi'
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Productspec/DetailModal'
+import { Select, Button } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+const { Option } = Select;
+
 const Productspec = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
     const [selectedData, setSelectedData] = useState(null);
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    // Individual filters
+    const [filteredData, setFilteredData] = useState([]);
+    const [codeFilter, setCodeFilter] = useState([]);
+    const [gradingFilter, setGradingFilter] = useState([]);
+    const [productspecFilter, setProductspecFilter] = useState([]);
+    const [customerNameFilter, setCustomerNameFilter] = useState([]);
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
@@ -190,8 +199,107 @@ const Productspec = () =>{
     const handleShowEdit = (data) => {
         navigate(`/productspec/${data.id}`);
     };
+
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!codeFilter.length || codeFilter.includes(item.Sale_Code)) &&
+          (!gradingFilter.length || gradingFilter.includes(item.Chem_Formular)) &&
+          (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id)) &&
+          (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name_Product_Spec)) 
+        );
+        setFilteredData(filtered);
+      };
+    
+    useEffect(handleFilterChange, [codeFilter,  gradingFilter, productspecFilter, customerNameFilter, rowData]);
+
+    const clearFilters = () => {
+        setCodeFilter([]);
+        setGradingFilter([]);
+        setProductspecFilter([]);
+        setCustomerNameFilter([])
+    };
     return (
+
         <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Code การขาย:</label>
+                        <Select
+                        mode="multiple"
+                        showSearch
+                        placeholder="Select Code การขาย"
+                        style={{ width: '100%' }}
+                        value={codeFilter}
+                        onChange={(value) => setCodeFilter(value)}
+                        >
+                        {[...new Set(rowData.map((item) => item.Sale_Code))].map((Sale_Code) => (
+                            <Option key={Sale_Code} value={Sale_Code}>
+                                {Sale_Code}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by เกรดเคมี:</label>
+                        <Select
+                        mode="multiple"
+                        showSearch
+                        placeholder="Select เกรดเคมี"
+                        style={{ width: '100%' }}
+                        value={gradingFilter}
+                        onChange={(value) => setGradingFilter(value)}
+                        >
+                        {[...new Set(rowData.map((item) => item.Chem_Formular))].map((Chem_Formular) => (
+                            <Option key={Chem_Formular} value={Chem_Formular}>
+                            {Chem_Formular}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by รหัส Product Spec:</label>
+                        <Select
+                        mode="multiple"                        
+                        showSearch
+                        placeholder="Select Product Spec"
+                        style={{ width: '100%' }}
+                        value={productspecFilter}
+                        onChange={(value) => setProductspecFilter(value)}
+                        >
+                        {[...new Set(rowData.map((item) => item.Product_Spec_Id))].map((productspec) => (
+                            <Option key={productspec} value={productspec}>
+                            {productspec}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by ชื่อลูกค้า:</label>
+                        <Select
+                        mode="multiple"
+                        showSearch
+                        placeholder="Select Customer Name."
+                        style={{ width: '100%' }}
+                        value={customerNameFilter}
+                        onChange={(value) => setCustomerNameFilter(value)}
+                        >
+                        {[...new Set(rowData.map((item) => item.Customer_Name_Product_Spec))].map((Customer_Name_Product_Spec) => (
+                            <Option key={Customer_Name_Product_Spec} value={Customer_Name_Product_Spec}>
+                                {Customer_Name_Product_Spec}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+                </div>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                        Clear Filters
+                </Button>
+            </div>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Product-spec"/>
@@ -204,7 +312,7 @@ const Productspec = () =>{
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}
-                    rowData={rowData}
+                    rowData={filteredData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
                 />

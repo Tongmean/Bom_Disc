@@ -4,16 +4,23 @@ import {fetchMaterials, fetchHistoryLog} from '../../Ultility/Materialapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from './DetailModal';
+import { Select, Button } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+const { Option } = Select;
 const Material = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
     const [selectedData, setSelectedData] = useState(null);
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    // Individual filters
+    const [filteredData, setFilteredData] = useState([]);
+    const [type2Filter, setType2Filter] = useState([]);
+    const [idFilter, setIdFilter] = useState([]);
+    const [numberFilter, setNumberFilter] = useState([]);
 
     const columnDefs = [
         { headerName: 'ที่', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
@@ -93,18 +100,6 @@ const Material = () =>{
         const load = async () => {
           try {
             const Data = (await fetchMaterials()).data;
-            
-            // const mappedData = packageData.map(i => ({
-            //     No: i.id,
-            //     Display_Box_id: i.Display_Box_id,
-            //     Display_Box_Erp_Id: i.Display_Box_Erp_Id,
-            //     Name_Display_Box_Erp: i.Name_Display_Box_Erp,
-            //     Num_Display_Box: i.Num_Display_Box,
-            //     Display_Box_Group: i.Display_Box_Group,
-            //     CreateBy: i.CreateBy,
-            //     CreateAt: i.CreateAt
-
-            // }));
             console.log('Mapped Data', Data)
             setRowData(Data); // Set the users from the API response
           } catch (err) {
@@ -132,8 +127,88 @@ const Material = () =>{
     const handleShowEdit = (data) => {
         navigate(`/componentpart/${data.id}`);
     };
+
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!idFilter.length || idFilter.includes(item.ID)) &&
+          (!type2Filter.length || type2Filter.includes(item.Type2)) &&
+          (!numberFilter.length || numberFilter.includes(item.Num))
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [idFilter, type2Filter, numberFilter, rowData]);
+
+    const clearFilters = () => {
+        setIdFilter([]);
+        setType2Filter([]);
+        setNumberFilter([])
+    };
     return (
         <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by เบอร์.:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select เบอร์."
+                    style={{ width: '100%' }}
+                    value={numberFilter}
+                    onChange={(value) => setNumberFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Num))].map((Num) => (
+                        <Option key={Num} value={Num}>
+                            {Num}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by Type 2:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select Type 2"
+                    style={{ width: '100%' }}
+                    value={type2Filter}
+                    onChange={(value) => setType2Filter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Type2))].map((Type2) => (
+                        <Option key={Type2} value={Type2}>
+                            {Type2}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by ID:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select ID"
+                    style={{ width: '100%' }}
+                    value={idFilter}
+                    onChange={(value) => setIdFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Id))].map((Id) => (
+                        <Option key={Id} value={Id}>
+                            {Id}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                
+                </div>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                Clear Filters
+                </Button>
+            </div>
+
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Material"/>
@@ -146,7 +221,7 @@ const Material = () =>{
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}
-                    rowData={rowData}
+                    rowData={filteredData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
                 />

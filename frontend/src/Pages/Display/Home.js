@@ -220,7 +220,7 @@ const Homepage = () => {
               value={codeFgFilter}
               onChange={(value) => setCodeFgFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Code_Fg))].map((code) => (
+              {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
                 <Option key={code} value={code}>
                   {code}
                 </Option>
@@ -237,7 +237,7 @@ const Homepage = () => {
               value={saleCodeBomFilter}
               onChange={(value) => setSaleCodeBomFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Sale_Code_Bom))].map((code) => (
+              {[...new Set(filteredData.map((item) => item.Sale_Code_Bom))].map((code) => (
                 <Option key={code} value={code}>
                   {code}
                 </Option>
@@ -254,7 +254,7 @@ const Homepage = () => {
               value={partNoFilter}
               onChange={(value) => setPartNoFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Part_No))].map((partNo) => (
+              {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
                 <Option key={partNo} value={partNo}>
                   {partNo}
                 </Option>
@@ -271,7 +271,7 @@ const Homepage = () => {
               value={customerNameFilter}
               onChange={(value) => setCustomerNameFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Customer_Name))].map((customerName) => (
+              {[...new Set(filteredData.map((item) => item.Customer_Name))].map((customerName) => (
                 <Option key={customerName} value={customerName}>
                   {customerName}
                 </Option>
@@ -288,7 +288,7 @@ const Homepage = () => {
               value={statusFilter}
               onChange={(value) => setStatusFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Status))].map((status) => (
+              {[...new Set(filteredData.map((item) => item.Status))].map((status) => (
                 <Option key={status} value={status}>
                   {status}
                 </Option>
@@ -304,7 +304,7 @@ const Homepage = () => {
               value={productspecFilter}
               onChange={(value) => setProductspecFilter(value)}
             >
-              {[...new Set(rowData.map((item) => item.Product_Spec_Id))].map((productspec) => (
+              {[...new Set(filteredData.map((item) => item.Product_Spec_Id))].map((productspec) => (
                 <Option key={productspec} value={productspec}>
                   {productspec}
                 </Option>

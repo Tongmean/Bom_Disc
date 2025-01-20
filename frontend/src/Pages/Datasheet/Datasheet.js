@@ -4,15 +4,21 @@ import {fetchdDatasheets, fetchHistoryLog} from '../../Ultility/Datasheet';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Datasheet/DetailModal'
+import { Select, Button } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+const { Option } = Select;
 const DataSheet = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
     const [selectedData, setSelectedData] = useState(null);
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    // Individual filters
+    const [filteredData, setFilteredData] = useState([]);
+    const [partNoFilter, setPartNoFilter] = useState([]);
+    const [gradingFilter, setGradingFilter] = useState([]);
     const navigate = useNavigate();
 
     const columnDefs = [
@@ -120,8 +126,67 @@ const DataSheet = () =>{
     const handleShowEdit = (data) => {
         navigate(`/datasheet/${data.No}`);
     };
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!partNoFilter.length || partNoFilter.includes(item.Compact_No)) &&
+          (!gradingFilter.length || gradingFilter.includes(item.Grade_Chem))
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [ partNoFilter, gradingFilter, rowData]);
+
+    const clearFilters = () => {
+        setPartNoFilter([]);
+        setGradingFilter([])
+    };
     return (
         <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by Compact No.:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select Compact No"
+                    style={{ width: '100%' }}
+                    value={partNoFilter}
+                    onChange={(value) => setPartNoFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Compact_No))].map((partNo) => (
+                        <Option key={partNo} value={partNo}>
+                        {partNo}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by เกรดเคมี:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select เกรดเคมี"
+                    style={{ width: '100%' }}
+                    value={gradingFilter}
+                    onChange={(value) => setGradingFilter(value)}
+                    >
+                    {[...new Set(filteredData.map((item) => item.Grade_Chem))].map((Num) => (
+                        <Option key={Num} value={Num}>
+                        {Num}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                
+                </div>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                Clear Filters
+                </Button>
+            </div>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Data-Sheet"/>
@@ -134,7 +199,7 @@ const DataSheet = () =>{
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}
-                    rowData={rowData}
+                    rowData={filteredData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
                 />

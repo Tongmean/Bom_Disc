@@ -291,7 +291,7 @@ const CreateDrawing = () => {
                     <div style={{ flex: '1 1 45%' }}>
                         <label>Filter by compact no.</label>
                         <Select
-                        
+                        // allowClear
                         showSearch
                         placeholder="Select compact no."
                         style={{ width: '100%' }}

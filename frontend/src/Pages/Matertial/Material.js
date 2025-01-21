@@ -195,7 +195,7 @@ const Material = () =>{
                     value={idFilter}
                     onChange={(value) => setIdFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Id))].map((Id) => (
+                    {[...new Set(filteredData.map((item) => item.ID))].map((Id) => (
                         <Option key={Id} value={Id}>
                             {Id}
                         </Option>

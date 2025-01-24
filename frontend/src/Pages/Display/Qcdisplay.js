@@ -138,13 +138,21 @@ const Qcdisplay = () => {
             <div style={{ flex: '1 1 45%' }}>
                 <label>Filter by Code_Fg (ERP):</label>
                 <Select
+                mode='multiple'
                 showSearch
                 placeholder="Select Code_Fg"
                 style={{ width: '100%' }}
                 value={codeFgFilter}
                 onChange={(value) => setCodeFgFilter(value)}
                 >
-                {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
+                {[...new Set(
+                  rowData.filter((item) =>
+                  // (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                  (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                  (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_No)) &&
+                  (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) 
+                )
+                  .map((item) => item.Code_Fg))].map((code) => (
                     <Option key={code} value={code}>
                     {code}
                     </Option>
@@ -155,6 +163,7 @@ const Qcdisplay = () => {
             <div style={{ flex: '1 1 45%' }}>
                 <label>Filter by Part No.:</label>
                 <Select
+                mode='multiple'
                 showSearch
                 placeholder="Select Part No."
                 style={{ width: '100%' }}
@@ -172,6 +181,7 @@ const Qcdisplay = () => {
             <div style={{ flex: '1 1 45%' }}>
                 <label>Filter by รหัส Product Spec:</label>
                 <Select
+                mode='multiple'
                 showSearch
                 placeholder="Select Product Spec"
                 style={{ width: '100%' }}
@@ -189,6 +199,7 @@ const Qcdisplay = () => {
             <div style={{ flex: '1 1 45%' }}>
                 <label>Filter by ชื่อลูกค้า:</label>
                 <Select
+                mode='multiple'
                 showSearch
                 placeholder="Select Customer Name."
                 style={{ width: '100%' }}

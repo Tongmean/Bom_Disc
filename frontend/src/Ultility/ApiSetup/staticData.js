@@ -11,6 +11,12 @@ export const fetchStatusproduct = [
     { label: 'ทดลองผลิต APQP', value: 'ทดลองผลิต APQP' },
     { label: 'Obsolete', value: 'Obsolete' },
 ]
+//Product Register
+export const fetchtypecustomerproduct = [
+    { label: 'After-Market', value: 'After-Market' },
+    { label: 'Customer-Specific-Requirement', value: 'Customer-Specific-Requirement' },
+    { label: 'APQP', value: 'APQP' },
+]
 export const fetchOuterproduct = [
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
@@ -105,7 +111,6 @@ export const fetchMaterialdocumentid = [
     { label: 'PDS', value: 'PDS' },
     { label: 'PSD', value: 'PSD' },
     { label: 'TE', value: 'TE' },
-    { label: 'TE', value: 'TE' },
     { label: 'ลืมใส่', value: 'ลืมใส่' },
 ]
 export const fetchMaterialtype1 = [
@@ -175,10 +180,14 @@ export const fetchgroupoptions = [
     { label: 'BP', value: 'BP' },
     { label: 'Shim', value: 'Shim' },
     { label: 'WD', value: 'WD' },
-    { label: 'กล่องชิ้นใน', value: 'กล่องชิ้นใน' },
-    { label: 'กล่องชั้นนอก', value: 'กล่องชั้นนอก' },
-    { label: 'สติ๊กเกอร์', value: 'สติ๊กเกอร์' },
-    { label: 'พาเลท', value: 'พาเลท' },
+    { label: 'Inner_Box', value: 'Inner_Box' },
+    { label: 'Outer_Box', value: 'Outer_Box' },
+    { label: 'Sticker', value: 'Sticker' },
+    { label: 'Palete', value: 'Palete' },
+    { label: 'ลังไม้', value: 'ลังไม้' },
+    { label: 'Slip-Sheet', value: 'Slip-Sheet' },
+    { label: 'ฟิล์มยืด', value: 'ฟิล์มยืด' },
+    { label: 'ถุง', value: 'ถุง' },
     { label: 'อุปกรณ์เสริม', value: 'อุปกรณ์เสริม' },
 ]
 export const fetchunitoptions = [

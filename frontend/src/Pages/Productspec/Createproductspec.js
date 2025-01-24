@@ -108,7 +108,7 @@ const CreateProductSpec = () => {
                 const Data = (await fetchrmpk()).data;
                 const additiondata = Data.filter(item => item.Group === "อุปกรณ์เสริม");
                 setAdditionoptions(additiondata);
-                const stickerdata = Data.filter(item => item.Group === "สติ๊กเกอร์");
+                const stickerdata = Data.filter(item => item.Group === "Sticker");
                 setStickeroptions(stickerdata);
                 console.log('additiondata', additiondata);
                 console.log('stickerdata', stickerdata);

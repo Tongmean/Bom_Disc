@@ -65,9 +65,10 @@ app.use('/api/material', requireAuth, materialRouter);
 
 require('dotenv').config();
 const port = process.env.PORT || 8001;
+const host = "0.0.0.0";
 //Listen require
-app.listen(port, (req, res)=>{
+app.listen(port, host,  (req, res)=>{
 
-
+    console.log(`Backend running at http://${host}:${port}`);
     console.log("Server run on port:", port);
 })

@@ -21,7 +21,7 @@ const Material = () =>{
     const [type2Filter, setType2Filter] = useState([]);
     const [idFilter, setIdFilter] = useState([]);
     const [numberFilter, setNumberFilter] = useState([]);
-
+    const [filterwithoutid, setFilterwithoutid] = useState([]);
     const columnDefs = [
         { headerName: 'ที่', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
         { headerName: 'Compact_No (ปรับ)', field: 'Compact_No_Modify' },
@@ -134,8 +134,17 @@ const Material = () =>{
           (!type2Filter.length || type2Filter.includes(item.Type2)) &&
           (!numberFilter.length || numberFilter.includes(item.Num))
         );
+        const filteredwithoutiddata = rowData.filter((item) =>
+          (!type2Filter.length || type2Filter.includes(item.Type2)) &&
+          (!numberFilter.length || numberFilter.includes(item.Num))
+        );
         setFilteredData(filtered);
+        setFilterwithoutid(filteredwithoutiddata)
+        console.log('filteredwithoutiddata', filteredwithoutiddata)
     };
+ 
+    
+    
     
     useEffect(handleFilterChange, [idFilter, type2Filter, numberFilter, rowData]);
 
@@ -160,7 +169,7 @@ const Material = () =>{
                     value={numberFilter}
                     onChange={(value) => setNumberFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Num))].map((Num) => (
+                    {[...new Set(rowData.map((item) => item.Num))].map((Num) => (
                         <Option key={Num} value={Num}>
                             {Num}
                         </Option>
@@ -178,7 +187,7 @@ const Material = () =>{
                     value={type2Filter}
                     onChange={(value) => setType2Filter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Type2))].map((Type2) => (
+                    {[...new Set(rowData.map((item) => item.Type2))].map((Type2) => (
                         <Option key={Type2} value={Type2}>
                             {Type2}
                         </Option>
@@ -195,7 +204,8 @@ const Material = () =>{
                     value={idFilter}
                     onChange={(value) => setIdFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.ID))].map((Id) => (
+                    {[...new Set(
+                        filterwithoutid.map((item) => item.ID))].map((Id) => (
                         <Option key={Id} value={Id}>
                             {Id}
                         </Option>

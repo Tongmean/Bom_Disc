@@ -124,56 +124,58 @@ const Productspec = () =>{
     useEffect(() => {
         const load = async () => {
           try {
-            const Data = (await fetchProductspecs()).data;
-            
-            // const mappedData = packageData.map(i => ({
-            //     No: i.id,
-            //     Product_Spec_Id: i.Product_Spec_Id,
-            //     Sale_Code: i.Sale_Code,
-            //     Coating: i.Coating,
-            //     Scoarching: i.Scoarching,
-            //     Scoarching_Coating_Id: i.Scoarching_Coating_Id,
-            //     Shim: i.Shim,
-            //     Slot: i.Slot,
-            //     Chamfer: i.Chamfer,
-            //     Color: i.Color,
-            //     Color_Id: i.Color_Id,
-            //     Customer_Name_Product_Spec: i.Customer_Name_Product_Spec,
-            //     Chem_Formular: i.Chem_Formular,
-            //     Formula_Under_Layer: i.Formula_Under_Layer,
-            //     Sticker_Name_1: i.Sticker_Name_1,
-            //     Sticker_Erp_Id_1: i.Sticker_Erp_Id_1,
-            //     Num_Sticker_1: i.Num_Sticker_1,
-            //     Sticker_Name_2: i.Sticker_Name_2,
-            //     Sticker_Erp_Id_2: i.Sticker_Erp_Id_2,
-            //     Num_Sticker_2: i.Num_Sticker_2,
-            //     Sticker_Name_3: i.Sticker_Name_3,
-            //     Sticker_Erp_Id_3: i.Sticker_Erp_Id_3,
-            //     Num_Sticker_3: i.Num_Sticker_3,
-            //     Name_Attach_Paper_1: i.Name_Attach_Paper_1,
-            //     Attach_Paper_Erp_Id_1: i.Attach_Paper_Erp_Id_1,
-            //     Num_Attach_1: i.Num_Attach_2,
-            //     Name_Attach_Paper_2: i.Name_Attach_Paper_2,
-            //     Attach_Paper_Erp_Id_2: i.Attach_Paper_Erp_Id_2,
-            //     Num_Attach_2: i.Num_Attach_2,
-            //     Name_Attach_Paper_3: i.Name_Attach_Paper_3,
-            //     Attach_Paper_Erp_Id_3: i.Attach_Paper_Erp_Id_3,
-            //     Num_Attach_3: i.Num_Attach_3,
-            //     Name_Attach_Paper_4: i.Name_Attach_Paper_4,
-            //     Attach_Paper_Erp_Id_4: i.Attach_Paper_Erp_Id_4,
-            //     Num_Attach_4: i.Num_Attach_4,
-            //     Name_Erp_Additional_Tool: i.Name_Erp_Additional_Tool,
-            //     Additional_Tool_Erp_Id: i.Additional_Tool_Erp_Id,
-            //     Num_Additional_Tool: i.Num_Additional_Tool,
-            //     Column_36: i.Column_36,
-            //     Status: i.Status,
+            const Data = (await fetchProductspecs()).data;          
+            const mappedData = Data.map(i => ({
+                id: i.id,
+                Product_Spec_Id: i.Product_Spec_Id,
+                Sale_Code: i.Sale_Code,
+                Coating: i.Coating,
+                Scoarching: i.Scoarching,
+                Scoarching_Coating_Id: i.Scoarching_Coating_Id,
+                Shim: i.Shim,
+                Slot: i.Slot,
+                Chamfer: i.Chamfer,
+                Color: i.Color,
+                Color_Id: i.Color_Id,
+                Customer_Name_Product_Spec: i.Customer_Name_Product_Spec,
+                Customer_Code: i.Customer_Code,
+                Chem_Formular: i.Chem_Formular,
+                Formula_Under_Layer: i.Formula_Under_Layer,
+                Sticker_Name_1: i.Sticker_Name_1,
+                Sticker_Erp_Id_1: i.Sticker_Erp_Id_1,
+                Num_Sticker_1: i.Num_Sticker_1,
+                Sticker_Name_2: i.Sticker_Name_2,
+                Sticker_Erp_Id_2: i.Sticker_Erp_Id_2,
+                Num_Sticker_2: i.Num_Sticker_2,
+                Sticker_Name_3: i.Sticker_Name_3,
+                Sticker_Erp_Id_3: i.Sticker_Erp_Id_3,
+                Num_Sticker_3: i.Num_Sticker_3,
+                Name_Attach_Paper_1: i.Name_Attach_Paper_1,
+                Attach_Paper_Erp_Id_1: i.Attach_Paper_Erp_Id_1,
+                Num_Attach_1: i.Num_Attach_2,
+                Name_Attach_Paper_2: i.Name_Attach_Paper_2,
+                Attach_Paper_Erp_Id_2: i.Attach_Paper_Erp_Id_2,
+                Num_Attach_2: i.Num_Attach_2,
+                Name_Attach_Paper_3: i.Name_Attach_Paper_3,
+                Attach_Paper_Erp_Id_3: i.Attach_Paper_Erp_Id_3,
+                Num_Attach_3: i.Num_Attach_3,
+                Name_Attach_Paper_4: i.Name_Attach_Paper_4,
+                Attach_Paper_Erp_Id_4: i.Attach_Paper_Erp_Id_4,
+                Num_Attach_4: i.Num_Attach_4,
+                Name_Erp_Additional_Tool_1: i.Name_Erp_Additional_Tool_1,
+                Additional_Tool_Erp_Id_1: i.Additional_Tool_Erp_Id_1,
+                Num_Additional_Tool_1: i.Num_Additional_Tool_1,
+                Name_Erp_Additional_Tool_2: i.Name_Erp_Additional_Tool_2,
+                Additional_Tool_Erp_Id_2: i.Additional_Tool_Erp_Id_2,
+                Num_Additional_Tool_2: i.Num_Additional_Tool_2,
+                Name_Erp_Additional_Tool_3: i.Name_Erp_Additional_Tool_3,
+                Additional_Tool_Erp_Id_3: i.Additional_Tool_Erp_Id_3,
+                Num_Additional_Tool_3: i.Num_Additional_Tool_3,
+                Status: i.Status,
 
-            //     CreateBy: i.CreateBy,
-            //     CreateAt: i.CreateAt
-
-            // }));
+            }));
             // console.log('Mapped Data', mappedData)
-            setRowData(Data); // Set the users from the API response
+            setRowData(mappedData); // Set the users from the API response
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -234,7 +236,7 @@ const Productspec = () =>{
                         value={codeFilter}
                         onChange={(value) => setCodeFilter(value)}
                         >
-                        {[...new Set(rowData.map((item) => item.Sale_Code))].map((Sale_Code) => (
+                        {[...new Set(filteredData.map((item) => item.Sale_Code))].map((Sale_Code) => (
                             <Option key={Sale_Code} value={Sale_Code}>
                                 {Sale_Code}
                             </Option>
@@ -252,7 +254,7 @@ const Productspec = () =>{
                         value={gradingFilter}
                         onChange={(value) => setGradingFilter(value)}
                         >
-                        {[...new Set(rowData.map((item) => item.Chem_Formular))].map((Chem_Formular) => (
+                        {[...new Set(filteredData.map((item) => item.Chem_Formular))].map((Chem_Formular) => (
                             <Option key={Chem_Formular} value={Chem_Formular}>
                             {Chem_Formular}
                             </Option>
@@ -270,7 +272,14 @@ const Productspec = () =>{
                         value={productspecFilter}
                         onChange={(value) => setProductspecFilter(value)}
                         >
-                        {[...new Set(rowData.map((item) => item.Product_Spec_Id))].map((productspec) => (
+                        {[...new Set(
+                            rowData.filter((item) =>
+                            (!codeFilter.length || codeFilter.includes(item.Sale_Code)) &&
+                            (!gradingFilter.length || gradingFilter.includes(item.Chem_Formular)) &&
+                            // (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id)) &&
+                            (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name_Product_Spec)) 
+                          )
+                            .map((item) => item.Product_Spec_Id))].map((productspec) => (
                             <Option key={productspec} value={productspec}>
                             {productspec}
                             </Option>
@@ -288,7 +297,7 @@ const Productspec = () =>{
                         value={customerNameFilter}
                         onChange={(value) => setCustomerNameFilter(value)}
                         >
-                        {[...new Set(rowData.map((item) => item.Customer_Name_Product_Spec))].map((Customer_Name_Product_Spec) => (
+                        {[...new Set(filteredData.map((item) => item.Customer_Name_Product_Spec))].map((Customer_Name_Product_Spec) => (
                             <Option key={Customer_Name_Product_Spec} value={Customer_Name_Product_Spec}>
                                 {Customer_Name_Product_Spec}
                             </Option>

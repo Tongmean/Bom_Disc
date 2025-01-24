@@ -76,7 +76,7 @@ const postBom = async (req, res) => {
         Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
         Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
         Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
-        Pcs_Per_Set, Additional_Package_Id
+        Pcs_Per_Set, Additional_Package_Id, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
     } = req.body;
 
     try {
@@ -98,17 +98,18 @@ const postBom = async (req, res) => {
                 "Code_Fg", "Num", "Part_No", "Sale_Code_Bom", "Type_Customer", "Customer_Name",
                 "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", 
                 "Product_Spec_No", "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box",
-                "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy"
+                "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy", 
+                "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight"
             ) 
             VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25
             ) RETURNING *`;
 
         const values = [
             Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
             Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
             Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
-            Pcs_Per_Set, Additional_Package_Id, userEmail
+            Pcs_Per_Set, Additional_Package_Id, userEmail, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
         ];
 
         const insertResult = await dbconnect.query(sqlCommand, values);
@@ -151,8 +152,9 @@ const updateBom = async (req, res) => {
     const {
         Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
         Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
-        Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package,
-        Pcs_Per_Set, Additional_Package_Id, CreateBy
+        Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
+        Pcs_Per_Set, Additional_Package_Id, CreateBy, 
+        Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
     } = req.body;
 
     try {
@@ -174,15 +176,16 @@ const updateBom = async (req, res) => {
             SET "Code_Fg" = $1, "Num" = $2, "Part_No" = $3, "Sale_Code_Bom" = $4, "Type_Customer" = $5, 
                 "Customer_Name" = $6, "Start_Sale_Date" = $7, "Status" = $8, "Drawing_No" = $9, 
                 "Shim_Attach" = $10, "Shim_No" = $11, "Product_Spec_No" = $12, "Data_Sheet_No" = $13, 
-                "Display_Box_Id" = $14, "Quantity_Display_Box" = $15, "Outer_Package" = $16, 
-                "Pcs_Per_Set" = $17, "Additional_Package_Id" = $18, "CreateBy" = $19 
-            WHERE "id" = $20 RETURNING *`;
+                "Display_Box_Id" = $14, "Quantity_Display_Box" = $15, "Outer_Package" = $16, "Outer_Id" = $17,
+                "Pcs_Per_Set" = $18, "Additional_Package_Id" = $19, "CreateBy" = $20,
+                "Customer_Code" = $21, "Ref_Code" = $22, "Emark_Id" = $23, "End_Sale_Date" = $24, "Weight" = $25
+            WHERE "id" = $26 RETURNING *`;
 
         const values = [
             Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
             Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
-            Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package,
-            Pcs_Per_Set, Additional_Package_Id, CreateBy, id
+            Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
+            Pcs_Per_Set, Additional_Package_Id, CreateBy,Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight, id
         ];
 
         const updateResult = await dbconnect.query(updateSql, values);
@@ -191,9 +194,10 @@ const updateBom = async (req, res) => {
         // Log changes
         const columns = [
             "Code_Fg", "Num", "Part_No", "Sale_Code_Bom", "Type_Customer", "Customer_Name",
-            "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", "Product_Spec_No",
-            "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box", "Outer_Package",
-            "Pcs_Per_Set", "Additional_Package_Id", "CreateBy"
+            "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", 
+            "Product_Spec_No", "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box",
+            "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy", 
+            "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight"
         ];
 
         // const action = updated;

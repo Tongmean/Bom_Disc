@@ -14,7 +14,7 @@ import {
     fetchEmarks,
     fetchAdditionalpackages
 } from '../../Ultility/Sellectedbom';
-import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct } from '../../Ultility/ApiSetup/staticData';
 
 const { Option } = Select;
 
@@ -61,6 +61,7 @@ const UpdateBom = () => {
         End_Sale_Date: "วันยกเลิกขาย",
         Emark_Id: "Emark Id",
         Ref_Code: "Ref Code_Fg",
+        Weight: "น้ำหนัก",
 
     };
 
@@ -152,6 +153,7 @@ const UpdateBom = () => {
             <h2>แบบฟอร์มแก้ไขทะเบียนผลิตภัณฑ์ (Product Register)</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <div className="row">
+
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
                         <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
                             {key === "Status" ? (
@@ -186,6 +188,26 @@ const UpdateBom = () => {
                                     {additionalpackgeOptions.map((status) => (
                                         <Option key={status.Additional_Package_Id} value={status.Additional_Package_Id}>
                                             {status.Additional_Package_Id}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Type_Customer" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    <Option value="-">-</Option>
+                                    {fetchtypecustomerproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
                                         </Option>
                                     ))}
                         
@@ -333,8 +355,8 @@ const UpdateBom = () => {
                                     >
                                         <Option value="-">-</Option>
                                         {packageOptions.map((i) => (
-                                            <Option key={i.Display_Box_id} value={i.Display_Box_id}>
-                                                {i.Display_Box_id}
+                                            <Option key={i.Rm_Pk_Id} value={i.Rm_Pk_Id}>
+                                                {i.Rm_Pk_Id}
                                             </Option>
                                         ))}
                                     </Select>
@@ -363,7 +385,6 @@ const UpdateBom = () => {
                                 </Form.Item>
                             )
                             :
-                            
                             key === "Emark_Id" ? (
                                 <Form.Item
                                     label={label}
@@ -419,9 +440,6 @@ const UpdateBom = () => {
                             )}
                         </div>
                     ))}
-
-
-
 
                     <div className="col-12">
                         <Form.Item>

@@ -3,7 +3,7 @@ const dbconnect = require('../middleware/Dbconnect');
 
 const Homedisplay = async (req, res) => {
     const sqlCommand = `
-        SELECT 
+        SELECT DISTINCT 
             "bom"."Code_Fg", "bom"."Customer_Name", "bom"."Sale_Code_Bom", "bom"."Part_No", "bom"."Num", "bom"."Pcs_Per_Set", "bom"."Status",
             "Data_Sheet"."Formular", "Data_Sheet"."Weight_F1", "Data_Sheet"."Weight_F2", "Data_Sheet"."Underlayer_Grade_Chem", "Data_Sheet"."Weight_U1", "Data_Sheet"."Weight_U2",
             "Drawing"."Erp_Id_BP1", "Drawing"."Name_BP1", "Drawing"."Id_BP1", "Drawing"."Quantity_BP1",

@@ -224,7 +224,12 @@ const Drawing = () =>{
                     value={partNoFilter}
                     onChange={(value) => setPartNoFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        // (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                        (!numberFilter.length || numberFilter.includes(item.Compact_No_Modify_Drawing))
+                      )
+                        .map((item) => item.Part_No))].map((partNo) => (
                         <Option key={partNo} value={partNo}>
                         {partNo}
                         </Option>
@@ -242,7 +247,12 @@ const Drawing = () =>{
                     value={numberFilter}
                     onChange={(value) => setNumberFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Compact_No_Modify_Drawing))].map((Num) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        (!partNoFilter.length || partNoFilter.includes(item.Part_No)) 
+                        // (!numberFilter.length || numberFilter.includes(item.Compact_No_Modify_Drawing))
+                        )
+                        .map((item) => item.Compact_No_Modify_Drawing))].map((Num) => (
                         <Option key={Num} value={Num}>
                         {Num}
                         </Option>

@@ -5,16 +5,24 @@ import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Bom/DetailModal'
 import { useNavigate } from 'react-router-dom';
+import {Button, Select } from 'antd';
+const { Option } = Select;
+
 const Bom = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
     const [selectedData, setSelectedData] = useState(null);
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
-
+    //Filter
+    const [filteredData, setFilteredData] = useState([]);
+    const [codeFgFilter, setCodeFgFilter] = useState([]);
+    const [partNoFilter, setPartNoFilter] = useState([]);
+    const [statusFilter, setStatusFilter] = useState([]);
+    const [customerNameFilter, setCustomerNameFilter] = useState([]);
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
         { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' },
@@ -41,6 +49,7 @@ const Bom = () =>{
         { headerName: 'รหัสการบรรจุที่ใส่อุปกรณ์เสริมเพิ่มเติมมา', field: 'Additional_Package_Id' },
         { headerName: 'Ref Code_Fg', field: 'Ref_Code' },
         { headerName: 'Emark Id', field: 'Emark_Id' },
+        { headerName: 'น้ำหนัก', field: 'Weight' },
 
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
@@ -121,7 +130,8 @@ const Bom = () =>{
                 CreateAt: i.CreateAt,
 
                 Ref_Code:i.Ref_Code,
-                Emark_Id:i.Emark_Id
+                Emark_Id:i.Emark_Id,
+                Weight:i.Weight
 
             }));
             // console.log('Mapped Data', mappedData)
@@ -145,10 +155,6 @@ const Bom = () =>{
         const selectedRows = gridApi.getSelectedRows();
         console.log('Selected rows:', selectedRows);
     };
-    // const onSelectionChanged = (params) => {
-    //     const selectedRows = params.api.getSelectedRows();
-    //     console.log('Selected rows:', selectedRows);
-    // };
 
     const handleOnClick = () => {
         navigate('/createproductregister');
@@ -156,8 +162,116 @@ const Bom = () =>{
     const handleShowEdit = (data) => {
         navigate(`/productregister/${data.No}`);
     };
+    const handleFilterChange = () => {
+        const filtered = rowData.filter((item) =>
+          (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+          (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+          (!statusFilter.length || statusFilter.includes(item.Status)) &&
+          (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) 
+        );
+        setFilteredData(filtered);
+    };
+    
+    useEffect(handleFilterChange, [codeFgFilter,  partNoFilter, statusFilter, customerNameFilter, rowData]);
+    
+    const clearFilters = () => {
+        setCodeFgFilter([]);
+        setPartNoFilter([]);
+        setStatusFilter([]);
+        setCustomerNameFilter([])
+    };
     return (
         <>
+            <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by รหัส Status:</label>
+                        <Select
+                        mode='multiple'
+                        showSearch
+                        placeholder="Select Status"
+                        style={{ width: '100%' }}
+                        value={statusFilter}
+                        onChange={(value) => setStatusFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Status))].map((Status) => (
+                            <Option key={Status} value={Status}>
+                            {Status}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Part No.:</label>
+                        <Select
+                        mode='multiple'
+                        showSearch
+                        placeholder="Select Part No."
+                        style={{ width: '100%' }}
+                        value={partNoFilter}
+                        onChange={(value) => setPartNoFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+                            <Option key={partNo} value={partNo}>
+                            {partNo}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by ชื่อลูกค้า:</label>
+                        <Select
+                        mode='multiple'
+                        showSearch
+                        placeholder="Select Customer Name."
+                        style={{ width: '100%' }}
+                        value={customerNameFilter}
+                        onChange={(value) => setCustomerNameFilter(value)}
+                        >
+                        {[...new Set(filteredData.map((item) => item.Customer_Name))].map((Customer_Name) => (
+                            <Option key={Customer_Name} value={Customer_Name}>
+                            {Customer_Name}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+
+                    <div style={{ flex: '1 1 45%' }}>
+                        <label>Filter by Code_Fg (ERP):</label>
+                        <Select
+                        showSearch
+                        mode='multiple'
+                        placeholder="Select Code_Fg"
+                        style={{ width: '100%' }}
+                        value={codeFgFilter}
+                        onChange={(value) => setCodeFgFilter(value)}
+                        >
+                        {[...new Set(
+                                rowData.filter((item) =>
+                                // (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                                (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) 
+                            )
+                            .map((item) => item.Code_Fg))].map((code) => (
+                            <Option key={code} value={code}>
+                                {code}
+                            </Option>
+                        ))}
+                        </Select>
+                    </div>
+                </div>
+
+                
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                    Clear Filters
+                </Button>
+            </div>
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "Bom"/>
@@ -170,7 +284,7 @@ const Bom = () =>{
             ) : (
                 <Tablecomponent
                     columnDefs={columnDefs}
-                    rowData={rowData}
+                    rowData={filteredData}
                     onGridReady={onGridReady}
                     onSelectionChanged={onSelectionChanged}
                 />

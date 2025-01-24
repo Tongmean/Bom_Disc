@@ -174,9 +174,9 @@ const DataSheet = () =>{
                     value={gradingFilter}
                     onChange={(value) => setGradingFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Grade_Chem))].map((Num) => (
-                        <Option key={Num} value={Num}>
-                        {Num}
+                    {[...new Set(filteredData.map((item) => item.Grade_Chem))].map((Grade_Chem) => (
+                        <Option key={filteredData} value={Grade_Chem}>
+                            {Grade_Chem}
                         </Option>
                     ))}
                     </Select>

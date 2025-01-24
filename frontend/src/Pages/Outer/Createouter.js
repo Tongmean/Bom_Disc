@@ -35,11 +35,13 @@ const CreateOuter = () => {
             setLoading(true);
             try {
                 const Data = (await fetchrmpk()).data;
-                const outerdata = Data.filter(item => item.Group === "กล่องชั้นนอก");
+                const outerdata = Data.filter(item => item.Group === "Outer_Box");
                 setOuteroptions(outerdata);
-                const innerdata = Data.filter(item => item.Group === "กล่องชิ้นใน");
+                const innerdata = Data.filter(item => item.Group === "Inner_Box");
                 setInneroptions(innerdata);
-                console.log('Data', Data, outerdata);
+                // console.log('Data', Data);
+                // console.log('outerdata',outerdata)
+                // console.log('innerdata',innerdata)
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
             } finally {

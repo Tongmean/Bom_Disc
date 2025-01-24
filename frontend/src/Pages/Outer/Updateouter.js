@@ -36,16 +36,13 @@ const UpdateOuter = () => {
             setLoading(true);
             try {
                 const Data = (await fetchrmpk()).data;
-                const outerdata = Data.filter(item => item.Group === "กล่องชั้นนอก");
+                const outerdata = Data.filter(item => item.Group === "Outer_Box");
                 setOuteroptions(outerdata);
-                const innerdata = Data.filter(item => item.Group === "กล่องชิ้นใน");
+                const innerdata = Data.filter(item => item.Group === "Inner_Box");
                 setInneroptions(innerdata);
-
-                const fetchouterbyid = (await fetchOuter(id)).data[0];
-                if(fetchouterbyid){
-                    form.setFieldsValue(fetchouterbyid); 
-                }
-                console.log('fetchouterbyid', fetchouterbyid)
+                // console.log('Data', Data);
+                // console.log('outerdata',outerdata)
+                // console.log('innerdata',innerdata)
 
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');

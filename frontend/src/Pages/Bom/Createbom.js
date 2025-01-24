@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
-import { fetchStatusproduct, fetchOuterproduct } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct } from '../../Ultility/ApiSetup/staticData';
 import {fetchAdditionalpackages, fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
 import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
 
@@ -57,6 +57,7 @@ const CreateBom = () => {
         End_Sale_Date: "วันยกเลิกขาย",
         Emark_Id: "Emark Id",
         Ref_Code: "Ref Code_Fg",
+        Weight: "น้ำหนัก",
 
     };
 
@@ -314,6 +315,8 @@ const CreateBom = () => {
                     Customer_Code: '',
                     Ref_Code: '',
                     Emark_Id: '',
+                    Weight: "",
+
                 }}
             >
                 <div className="row">
@@ -351,6 +354,26 @@ const CreateBom = () => {
                                     {additionalpackgeOptions.map((status) => (
                                         <Option key={status.Additional_Package_Id} value={status.Additional_Package_Id}>
                                             {status.Additional_Package_Id}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Type_Customer" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    <Option value="-">-</Option>
+                                    {fetchtypecustomerproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
                                         </Option>
                                     ))}
                         

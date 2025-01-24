@@ -3,7 +3,7 @@ const dbconnect = require('../middleware/Dbconnect');
 
 const SelectedPackages = async (req, res) => {
     try {
-        dbconnect.query(`SELECT DISTINCT "Rm_Pk_Id" FROM "Package" WHERE "Group" = 'กล่องชิ้นใน'`, (err, result) => {
+        dbconnect.query(`SELECT DISTINCT "Rm_Pk_Id" FROM "Package" WHERE "Group" = 'Inner_Box'`, (err, result) => {
             if (err) {
                 res.status(500).json({
                     success: false,

@@ -139,7 +139,13 @@ const Wipdisplay = () =>{
                     value={codeFgFilter}
                     onChange={(value) => setCodeFgFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        // (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                        (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                        (!numberFilter.length || numberFilter.includes(item.Num))
+                      )
+                        .map((item) => item.Code_Fg))].map((code) => (
                         <Option key={code} value={code}>
                         {code}
                         </Option>

@@ -220,7 +220,16 @@ const Homepage = () => {
               value={codeFgFilter}
               onChange={(value) => setCodeFgFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Code_Fg))].map((code) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                // (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Code_Fg))].map((code) => (
                 <Option key={code} value={code}>
                   {code}
                 </Option>

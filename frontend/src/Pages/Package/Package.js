@@ -167,7 +167,7 @@ const Package = () =>{
                     value={matcatFilter}
                     onChange={(value) => setMatcatFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Mat_Cat))].map((Mat_Cat) => (
+                    {[...new Set(rowData.map((item) => item.Mat_Cat))].map((Mat_Cat) => (
                         <Option key={Mat_Cat} value={Mat_Cat}>
                             {Mat_Cat}
                         </Option>
@@ -184,7 +184,14 @@ const Package = () =>{
                     value={groupFilter}
                     onChange={(value) => setGroupFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Group))].map((group) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        (!pkFilter.length || pkFilter.includes(item.Rm_Pk_Id)) &&
+                        // (!groupFilter.length || groupFilter.includes(item.Group)) &&
+                        (!matcatFilter.length || matcatFilter.includes(item.Mat_Cat)) &&
+                        (!submatcatFilter.length || submatcatFilter.includes(item.Sub_Mat_Cat))
+                        )
+                        .map((item) => item.Group))].map((group) => (
                         <Option key={group} value={group}>
                             {group}
                         </Option>
@@ -201,7 +208,15 @@ const Package = () =>{
                     value={submatcatFilter}
                     onChange={(value) => setSubmatcatFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Sub_Mat_Cat))].map((Sub_Mat_Cat) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        (!pkFilter.length || pkFilter.includes(item.Rm_Pk_Id)) &&
+                        (!groupFilter.length || groupFilter.includes(item.Group)) &&
+                        // (!matcatFilter.length || matcatFilter.includes(item.Mat_Cat)) &&
+                        (!submatcatFilter.length || submatcatFilter.includes(item.Sub_Mat_Cat))
+                    )
+                        
+                        .map((item) => item.Sub_Mat_Cat))].map((Sub_Mat_Cat) => (
                         <Option key={Sub_Mat_Cat} value={Sub_Mat_Cat}>
                             {Sub_Mat_Cat}
                         </Option>
@@ -218,7 +233,15 @@ const Package = () =>{
                     value={pkFilter}
                     onChange={(value) => setPkFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Rm_Pk_Id))].map((Rm_Pk_Id) => (
+                    {[...new Set(
+                        rowData.filter((item) =>
+                        // (!pkFilter.length || pkFilter.includes(item.Rm_Pk_Id)) &&
+                        (!groupFilter.length || groupFilter.includes(item.Group)) &&
+                        (!matcatFilter.length || matcatFilter.includes(item.Mat_Cat)) &&
+                        (!submatcatFilter.length || submatcatFilter.includes(item.Sub_Mat_Cat))
+                      )
+                        
+                        .map((item) => item.Rm_Pk_Id))].map((Rm_Pk_Id) => (
                         <Option key={Rm_Pk_Id} value={Rm_Pk_Id}>
                             {Rm_Pk_Id}
                         </Option>

@@ -5,6 +5,7 @@ const Homedisplay = async (req, res) => {
     const sqlCommand = `
         SELECT DISTINCT 
             "bom"."Code_Fg", "bom"."Customer_Name", "bom"."Sale_Code_Bom", "bom"."Part_No", "bom"."Num", "bom"."Pcs_Per_Set", "bom"."Status",
+            "bom"."Weight","bom"."Emark_Id",
             "Data_Sheet"."Formular", "Data_Sheet"."Weight_F1", "Data_Sheet"."Weight_F2", "Data_Sheet"."Underlayer_Grade_Chem", "Data_Sheet"."Weight_U1", "Data_Sheet"."Weight_U2",
             "Drawing"."Erp_Id_BP1", "Drawing"."Name_BP1", "Drawing"."Id_BP1", "Drawing"."Quantity_BP1",
             "Drawing"."Erp_Id_BP2", "Drawing"."Name_BP2", "Drawing"."Id_BP2", "Drawing"."Quantity_BP2",
@@ -101,7 +102,7 @@ const Wipdisplay = async (req, res) => {
     `
         SELECT 
             "bom"."Code_Fg", "bom"."Num","bom"."Part_No",
-            "Data_Sheet"."Formular",
+            "Data_Sheet"."Formular", "Data_Sheet"."Grade_Chem",
             "Drawing"."Id_BP1", "Drawing"."Quantity_BP1", "Drawing"."Thickness_Pad1",
             "Drawing"."Id_BP2", "Drawing"."Quantity_BP2", "Drawing"."Thickness_Pad2",
             "Drawing"."Id_BP3", "Drawing"."Quantity_BP3", "Drawing"."Thickness_Pad3",
@@ -156,7 +157,7 @@ const Qcdisplay = async (req, res) => {
     SELECT 
 	"bom"."Code_Fg", "bom"."Part_No", "bom"."Drawing_No", "bom"."Product_Spec_No", "bom"."Num",
 	"drawingfile"."unqiuename" AS "drawingfile", "productspecfile"."unqiuename" AS "productspecfile",
-	"bom"."Customer_Name",
+	"bom"."Customer_Name","bom"."Weight","bom"."Emark_Id",
 	"Product_Spec"."Slot", "Product_Spec"."Chamfer", "Product_Spec"."Color", "Product_Spec"."Coating", "Product_Spec"."Scoarching",
 	"Product_Spec"."Scoarching","Product_Spec"."Scoarching_Coating_Id", "Product_Spec"."Color_Id", "Product_Spec"."Shim" 
     FROM 
@@ -206,10 +207,10 @@ const Saledisplay = async (req, res) => {
     const sqlCommand = 
     `
     SELECT 
-  	 "bom"."Code_Fg", "bom"."Part_No", "bom"."Drawing_No", "bom"."Product_Spec_No", "bom"."Num",
+  	   "bom"."Code_Fg", "bom"."Part_No", "bom"."Drawing_No", "bom"."Product_Spec_No", "bom"."Num",
 	   "bom"."Sale_Code_Bom", "bom"."Shim_Attach", "bom"."Data_Sheet_No", "bom"."Display_Box_Id", "bom"."Pcs_Per_Set", "bom"."Outer_Package",
-	   "bom"."Customer_Name",
-	  "drawingfile"."unqiuename" AS "drawingfile", "productspecfile"."unqiuename" AS "productspecfile"
+	   "bom"."Customer_Name","bom"."Weight","bom"."Emark_Id",
+	   "drawingfile"."unqiuename" AS "drawingfile", "productspecfile"."unqiuename" AS "productspecfile"
         
     FROM 
         "bom"

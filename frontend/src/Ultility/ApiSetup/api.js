@@ -1,6 +1,6 @@
 import axios from 'axios';
-export const baseURLclient = 'http://localhost:3001';
-export const baseURL = 'http://localhost:3031';
+export const baseURLclient = 'http://localhost:3001' || 'http://192.168.4.242:3001' || 'http://192.168.5.92:3001';
+export const baseURL = 'http://localhost:3031' || 'http://192.168.4.242:3031' || 'http://192.168.5.92:3031';
 //VM
 // export const baseURLclient = 'http://192.168.4.242:3001';
 // export const baseURL = 'http://192.168.4.242:3031';

@@ -50,17 +50,17 @@ const Wipdisplay = () =>{
                 ) {
                     acc[padKey] =
                         pad.Thickness === "-" && pad.Id_BP?.includes("BP")
-                            ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+                            ? `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
                             : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
                                 ? "-"
-                                : `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+                                : `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
                 } else {
                     acc[padKey] =
                         pad.Thickness === "-" && pad.Id_BP?.includes("BP")
-                            ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+                            ? `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
                             : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
                                 ? "-"
-                                : `${pad.Id_BP}(${pad.Thickness})-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+                                : `${pad.Id_BP}(${pad.Thickness})-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
                 }
                 // Add Quantity for each pad
                 acc[`Quantity_BP${index + 1}`] = pad.Quantity || "-";

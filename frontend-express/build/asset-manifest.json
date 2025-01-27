@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.efa1acbb.css",
+    "main.js": "/static/js/main.ac7d7950.js",
+    "static/media/Lining-logo.png": "/static/media/Lining-logo.5e307cc00a62aabeadb4.png",
+    "static/media/Disc-logo.png": "/static/media/Disc-logo.a08e57726e1071da7593.png",
+    "index.html": "/index.html",
+    "main.efa1acbb.css.map": "/static/css/main.efa1acbb.css.map",
+    "main.ac7d7950.js.map": "/static/js/main.ac7d7950.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.efa1acbb.css",
+    "static/js/main.ac7d7950.js"
+  ]
+}

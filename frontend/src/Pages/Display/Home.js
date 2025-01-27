@@ -156,6 +156,8 @@ const Homepage = () => {
     { headerName: 'จำนวน Set/ พาเลท', field: 'Set_Per_Pallet' },
 
     { headerName: 'รหัส Product spec', field: 'Product_Spec_Id' },
+    { headerName: 'น้ำหนักรวม', field: 'Weight' },
+    { headerName: 'Emark Id', field: 'Emark_Id' },
 
 
   ];

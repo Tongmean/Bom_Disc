@@ -34,6 +34,8 @@ const Saledisplay = () => {
     { headerName: 'เบอร์กล่อง', field: 'Display_Box_Id' },
     { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
     { headerName: 'ใส่ Outer', field: 'Outer_Package' },
+    { headerName: 'น้ำหนักรวม', field: 'Weight' },
+    { headerName: 'Emark Id', field: 'Emark_Id' },
     {
         headerName: 'Actions',
         field: 'actions',

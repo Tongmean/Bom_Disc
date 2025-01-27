@@ -29,6 +29,8 @@ const Qcdisplay = () => {
     { headerName: 'เบอร์', field: 'Num' },
     { headerName: 'รหัส Product Spec', field: 'Product_Spec_No' },
     { headerName: 'Drawing No.', field: 'Drawing_No' },
+    { headerName: 'น้ำหนักรวม', field: 'Weight' },
+    { headerName: 'Emark Id', field: 'Emark_Id' },
     {
         headerName: 'Actions',
         field: 'actions',

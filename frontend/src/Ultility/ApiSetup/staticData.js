@@ -70,6 +70,7 @@ export const fetchUserrole = [
 ]
 export const fetchUserpermission = [
     { label: '-', value: '-' },
+    { label: 'additionalpackage', value: 'additionalpackage' },
     { label: 'Product Register', value: 'productregister' },
     { label: 'Data Sheet', value: 'datasheet' },
     { label: 'Shim', value: 'shim' },

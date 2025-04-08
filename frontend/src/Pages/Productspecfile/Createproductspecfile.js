@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { Form, Button, Upload, Select } from 'antd';
+import { Form, Button, Upload, Select,Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';  // Ensure Notification component is working as expected
@@ -66,6 +66,13 @@ const CreateProductspecFile = () => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000); // Clear notification after 3 seconds
     };
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     return (
         <div className="container-fluid">

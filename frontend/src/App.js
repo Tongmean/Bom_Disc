@@ -12,6 +12,8 @@ import Homepage from './Pages/Display/Home';
 import Wipdisplay from './Pages/Display/Wipdisplay';
 import Qcdisplay from './Pages/Display/Qcdisplay';
 import Saledisplay from './Pages/Display/Saledisplay';
+import Componentdisplay from './Pages/Display/Componentdisplay';
+import Wipprocessdisplay from './Pages/Display/Wipprocessdisplay';
 //Protect Route
 import ProtectedRoute from './Components/ProtectedRoute';
 //package
@@ -70,6 +72,14 @@ import UpdateShimFile from './Pages/Shimfile/Updateshimfile';
 import Material from './Pages/Matertial/Material';
 import CreateMaterial from './Pages/Matertial/CreateMaterial';
 import UpdateMaterial from './Pages/Matertial/UpdateMaterial';
+//kit
+import Kit from './Pages/Kit/Kit';
+
+//Datasheet file
+import Datasheetfile from './Pages/Datasheetfile/Datasheetfile';
+import CreateDatasheetFile from './Pages/Datasheetfile/Createdtasheetfile';
+import UpdateDatasheetFile from './Pages/Datasheetfile/Updatedatasheet';
+
 
 const { Content } = Layout;
 
@@ -78,7 +88,7 @@ const App = () => {
   const { user } = useAuthContext();
   // const isAuthenticated = Boolean(user && user.token);
   const isAuthenticated = Boolean(user && user.token && window.location.pathname !== '/');
-  // console.log('user', user, isAuthenticated)
+  console.log('user', user, isAuthenticated)
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
@@ -106,8 +116,10 @@ const App = () => {
               <Route path='/login' element={isAuthenticated ? <Navigate to='/Home' /> : <Loginpage />} />
               <Route path='/Home' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
               <Route path='/wipdisplay' element={isAuthenticated ? <Wipdisplay /> : <Navigate to='/login' />} />
+              <Route path='/wipprocessdisplay' element={isAuthenticated ? <Wipprocessdisplay /> : <Navigate to='/login' />} />
               <Route path='/Qcdisplay' element={isAuthenticated ? <Qcdisplay /> : <Navigate to='/login' />} />
               <Route path='/saledisplay' element={isAuthenticated ? <Saledisplay /> : <Navigate to='/login' />} />
+              <Route path='/componentdisplay' element={isAuthenticated ? <Componentdisplay /> : <Navigate to='/login' />} />
 
               <Route path="/Package" element={isAuthenticated ? <Package /> : <Navigate to='/login' />} />
 
@@ -126,6 +138,12 @@ const App = () => {
               <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
                 <Route path="/createdatasheet" element={<CreateDatasheet />} />
                 <Route path="/datasheet/:id" element={<UpdateDatasheet />} />
+              </Route>
+
+              <Route path="/dataSheetfile" element={isAuthenticated ? <Datasheetfile /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createdatasheetfile" element={<CreateDatasheetFile />} />
+                <Route path="/datasheetfile/:id" element={<UpdateDatasheetFile />} />
               </Route>
 
               <Route path="/productspec" element={isAuthenticated ? <Productspec /> : <Navigate to='/login' />} />
@@ -166,13 +184,13 @@ const App = () => {
               </Route>
 
               <Route path="/drawingfile" element={isAuthenticated ? <Drawingfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['drawingfile']}/>}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['drawing']}/>}>
                 <Route path="/createdrawingfile" element={<CreateDrawingFile />} />
                 <Route path="/drawingfile/:id" element={<UpdateDrawingFile />} />
               </Route>
 
               <Route path="/productspecfile" element={isAuthenticated ? <Productspecfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productspecfile']}/>}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['productspec']}/>}>
                 <Route path="/createproductspecfile" element={<CreateProductspecFile />} />
                 <Route path="/productspecfile/:id" element={<UpdateProductspecFile />} />
               </Route>
@@ -183,7 +201,7 @@ const App = () => {
               </Route>
 
               <Route path="/shimfile" element={isAuthenticated ? <Shimfile /> : <Navigate to='/login' />} />
-              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['shimfile']}/>}>
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['shim']}/>}>
                 <Route path="/createshimfile" element={<CreateShimFile />} />
                 <Route path="/shimfile/:id" element={<UpdateShimFile />} />
               </Route>
@@ -193,6 +211,11 @@ const App = () => {
                 <Route path="/createcomponentpart" element={<CreateMaterial />} />
                 <Route path="/componentpart/:id" element={<UpdateMaterial />} />
               </Route>
+              <Route path="/kit" element={isAuthenticated ? <Kit /> : <Navigate to='/login' />} />
+              {/* <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['componentpart']}/>}>
+                <Route path="/createcomponentpart" element={<CreateMaterial />} />
+                <Route path="/componentpart/:id" element={<UpdateMaterial />} />
+              </Route> */}
 
 
             </Routes>

@@ -4,6 +4,7 @@ import {fetchOuters, fetchHistoryLog} from '../../Ultility/Outerapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Outer/DetailModal'
+import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 const Outer = () =>{
     const [loading, setLoading] = useState(true); 
@@ -17,7 +18,7 @@ const Outer = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'แบบการบรรจุ', field: 'Outer_Id' },
+        { headerName: 'แบบการบรรจุ', field: 'Outer_Id', pinned: 'left'  },
         { headerName: 'รหัส Erp (Outer)', field: 'Erp_Id_Outer' },
         { headerName: 'ชื่อ Erp (Outer)', field: 'Name_Erp_Outer' },
         { headerName: 'เบอร์กล่อง (Outer)', field: 'Num_Outer' },
@@ -128,7 +129,10 @@ const Outer = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+               
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

@@ -32,7 +32,7 @@ const CreatePackage = () => {
 
     const handleSubmit = async (values) => {
         setIsPending(true);
-        const packageData = { ...values, CreateBy: '-' }; // Add CreateBy field
+        const packageData = { ...values, CreateBy: '-' }; 
     
         // Create FormData to send as multipart form data
         const formData = new FormData();
@@ -52,8 +52,8 @@ const CreatePackage = () => {
             const result = await createPackage(formData); // Make sure your API accepts FormData
             showNotification(result.msg, 'success');
             form.resetFields(); // Clear form fields after success
-            console.log('Package Data:', packageData);
-            console.log('API Result:', result);
+            // console.log('Package Data:', packageData);
+            // console.log('API Result:', result);
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {

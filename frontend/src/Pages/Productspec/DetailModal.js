@@ -57,6 +57,13 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Name_Erp_Additional_Tool_3: 'ชื่อ ERP อุปกรณ์เสริมอื่น 3',
         Num_Additional_Tool_3: 'จำนวน อุปกรณ์เสริมอื่น 3',
         Status: 'Status',
+        CreateBy: "กรอกโดย",
+        CreateAt: "กรอกเมื่อ",
+        Check_Status: "Check Status",
+        Remark: "Remark",
+        Check_By: "ตรวจสอบโดย",
+        Check_At: "ตรวจสอบเมื่อ"
+
     };
     
     return (
@@ -74,7 +81,10 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                                 <h6 className="text-secondary mb-1">
                                     {columnNameLabels[key]}:
                                 </h6>
-                                <p className="m-0">{data[key]}</p>
+                                {/* <p className="m-0">{data[key]}</p> */}
+                                <p className="m-0">
+                                    {["Check_At", "CreateAt"].includes(key) ? convertToUTCPlus7(data[key]) : data[key]}
+                                </p>
                             </div>
                         </div>
                     ))}

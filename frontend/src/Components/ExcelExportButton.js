@@ -18,38 +18,35 @@ const ExcelExportButton = ({ gridApi, columnDefs, Tablename }) => {
                 return;
             }
 
-            const excludeFields = ['Actions']; // Fields to exclude
-            const headers = columnDefs.reduce((acc, col) => {
-                // Only add fields that are not in the exclude list
-                if (!excludeFields.includes(col.field)) {
-                    acc[col.field] = col.headerName;
-                }
-                return acc;
-            }, {});
+            const excludeFields = ['actions']; // Fields to exclude
 
-            // Filter out the excluded fields from data rows
-            const mappedData = selectedRows.map(row => {
-                const mappedRow = {};
-                for (const key in row) {
-                    if (headers[key]) {  // Only include keys that are in the headers
-                        mappedRow[headers[key]] = row[key] || ''; // Map data only to included columns
-                    }
-                }
-                return mappedRow;
-            });
+            // Get ordered column headers and filter out excluded fields
+            const headers = columnDefs
+                .filter(col => !excludeFields.includes(col.field))
+                .map(col => ({ field: col.field, headerName: col.headerName }));
 
+            // Map selected data based on columnDefs order
+            const mappedData = selectedRows.map(row =>
+                headers.reduce((acc, { field, headerName }) => {
+                    acc[headerName] = row[field] || ''; // Assign values by header name
+                    return acc;
+                }, {})
+            );
+
+            // Generate Excel file
             const worksheet = XLSX.utils.json_to_sheet(mappedData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Selected Data');
-            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-            const blob = new Blob([excelBuffer], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            });
 
+            // Save file with timestamp
             const currentDate = new Date().toISOString().split('T')[0];
-            saveAs(blob, `${currentDate}_Selected_${Tablename}.xlsx`);
+            const fileName = `${currentDate}_Selected_${Tablename}.xlsx`;
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            saveAs(new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), fileName);
+
             showNotification('Export successful!', 'success');
         } catch (error) {
+            console.error('Export Error:', error);
             showNotification('Error exporting data to Excel.', 'fail');
         }
     };
@@ -61,18 +58,8 @@ const ExcelExportButton = ({ gridApi, columnDefs, Tablename }) => {
 
     return (
         <>
-            {notification && (
-                <Notification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => setNotification(null)}
-                />
-            )}
-            <button
-                onClick={exportToExcel}
-                className="btn btn-primary btn-sm"
-                style={{ marginLeft: '10px', marginBottom: '10px' }}
-            >
+            {notification && <Notification message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
+            <button onClick={exportToExcel} className="btn btn-primary btn-sm" style={{ marginLeft: '10px', marginBottom: '10px' }}>
                 Export
             </button>
         </>

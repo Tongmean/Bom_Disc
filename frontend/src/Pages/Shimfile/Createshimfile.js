@@ -39,8 +39,8 @@ const CreateShimFile = () => {
         formData.append('Compact_No_Modify', values.Compact_No_Modify);
         formData.append('file', values.file.file); // Extract file from the upload object
 
-        console.log('file:', values.file);
-        console.log('Submitted Data:', formData);
+        // console.log('file:', values.file);
+        // console.log('Submitted Data:', formData);
 
         try {
             const result = await createShimfile(formData);

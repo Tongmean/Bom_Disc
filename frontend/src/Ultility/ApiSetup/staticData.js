@@ -75,9 +75,7 @@ export const fetchUserpermission = [
     { label: 'Data Sheet', value: 'datasheet' },
     { label: 'Shim', value: 'shim' },
     { label: 'Drawing', value: 'drawing' },
-    { label: 'Drawing File', value: 'drawingfile' },
     { label: 'Product Spec.', value: 'productspec' },
-    { label: 'Product Spec.', value: 'productspecfile' },
     { label: 'Rm&Pk', value: 'prackage' },
     { label: 'E-mark', value: 'emark' },
     { label: 'Component Part', value: 'componentpart' },
@@ -199,4 +197,10 @@ export const fetchunitoptions = [
     { label: 'ดวง', value: 'ดวง' },
     { label: 'ตัว', value: 'ตัว' },
     { label: 'ม้วน', value: 'ม้วน' },
+]
+export const fetchcheckstatus = [
+    { label: 'Approve', value: 'Approve' },
+    { label: 'Review', value: 'Review' },
+    { label: 'Reject', value: 'Reject' },
+    { label: 'Wait', value: 'Wait' }
 ]

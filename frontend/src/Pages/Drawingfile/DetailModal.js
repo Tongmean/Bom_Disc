@@ -9,7 +9,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
     const [showHistoryLog, setShowHistoryLog] = useState(false); // State for toggling history log visibility
 
     if (!data) return null;
-    console.log('data',data)
+    // console.log('data',data)
         // Mapping column_name to labels
         const columnNameLabels = {
             drawing_no: "Compact No (ปรับ)",

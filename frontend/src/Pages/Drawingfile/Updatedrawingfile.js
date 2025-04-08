@@ -26,7 +26,7 @@ const UpdateDrawingFile = () => {
             try {
                 const response = await fetchDrawingfile(id);
                 const drawingFile = response.data[0];
-                console.log('drawingFile',drawingFile)
+                // console.log('drawingFile',drawingFile)
                 form.setFieldsValue({
                     Drawing_No: drawingFile.drawing_no || null,
                 });
@@ -43,8 +43,8 @@ const UpdateDrawingFile = () => {
                 } else {
                     setFileList([]);
 
-                    console.log('Fetched Drawing File:', drawingFile);
-                    console.log('File List:', drawingFile.drawing_no);
+                    // console.log('Fetched Drawing File:', drawingFile);
+                    // console.log('File List:', drawingFile.drawing_no);
 
                 }
             } catch (error) {

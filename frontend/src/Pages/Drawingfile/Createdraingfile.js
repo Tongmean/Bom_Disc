@@ -39,8 +39,8 @@ const CreateDrawingFile = () => {
         formData.append('Drawing_No', values.Drawing_No);
         formData.append('file', values.file.file); // Extract file from the upload object
 
-        console.log('file:', values.file);
-        console.log('Submitted Data:', formData);
+        // console.log('file:', values.file);
+        // console.log('Submitted Data:', formData);
 
         try {
             const result = await createDrawingfile(formData);

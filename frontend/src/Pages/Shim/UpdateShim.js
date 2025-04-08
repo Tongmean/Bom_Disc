@@ -7,7 +7,7 @@ import { fetchShim, updateShim } from '../../Ultility/Shimapi';
 import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialsp } from '../../Ultility/Sellectedbom';
 import { fetchrmpk } from '../../Ultility/Sellectedbom';
-const { Option } = Select;
+// const { Option } = Select;
 
 
 const UpdateShim = () => {
@@ -146,7 +146,10 @@ const UpdateShim = () => {
             });
         }
     };
-
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
     return (
         <div className="container-fluid">
             <h2>แก้ไข Shim (Update Shim)</h2>
@@ -155,7 +158,7 @@ const UpdateShim = () => {
                 layout="vertical"
                 onFinish={handleSubmit}
             >
-                <div className="row">
+                {/* <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
                         <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6" key={index}>
                             <Form.Item
@@ -289,7 +292,80 @@ const UpdateShim = () => {
                             </Button>
                         </Form.Item>
                     </div>
+                </div> */}
+
+                <div className="row">
+                    {['Compact_No_Modify', 'Part_No', 'Status'].map((key) => (
+                        <div className="col-md-4" key={key}>
+                            <Form.Item
+                                label={columnNameLabels[key]}
+                                name={key}
+                                rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels[key]}` }]}
+                            >
+                                {key === "Status" ? (
+                                    <Select options={fetchStatus} placeholder={`เลือก ${columnNameLabels[key]}`} />
+                                ) : (
+                                    <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                                )}
+                            </Form.Item>
+                        </div>
+                    ))}
                 </div>
+                {/* SP1 to SP3 Rows */}
+                {[1, 2, 3].map((num) => (
+                    <div className="row" key={num}>
+                        {['Erp_Id_SP', 'Name_SP', 'Id_SP', 'Quantity_SP'].map((prefix) => {
+                            const key = `${prefix}${num}`;
+                            return (
+                                <div className="col-md-3" key={key}>
+                                    <Form.Item
+                                        label={columnNameLabels[key]}
+                                        name={key}
+                                        rules={[{ required: true, message: `กรุณาเลือก ${columnNameLabels[key]}` }]}
+                                    >
+                                        {key.includes('Name_SP') || key.includes('Quantity_SP')? (
+                                            <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                                        ) : (
+                                            <Select
+                                                placeholder={`เลือก ${columnNameLabels[key]}`}
+                                                loading={loading}
+                                                allowClear
+                                                showSearch
+                                                onChange={(value) => handleSelectChange(value, key)}
+                                            >
+                                                <Select.Option value="-">-</Select.Option>
+                                                {(key.includes('Erp_Id_SP') ? shimOptionsrm : spoptions).map((i) => (
+                                                    <Select.Option key={i.ID || i.Erp_Id} value={i.ID || i.Erp_Id}>
+                                                        {i.ID || i.Erp_Id}
+                                                    </Select.Option>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                </div>
+                            );
+                        })}
+                    </div>
+                ))}
+
+                {/* Action Buttons */}
+                <div className="col-12">
+                    <Form.Item>
+                        <Button type="default" className="me-2" onClick={() => navigate('/drawing')}>
+                            Back
+                        </Button>
+                        <Button type="primary" htmlType="submit" disabled={isPending}>
+                            {isPending ? 'Saving...' : 'Save Data'}
+                        </Button>
+                        <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                            Clear
+                        </Button>
+                    </Form.Item>
+                </div>
+
+
+
+
             </Form>
 
             {notification && (

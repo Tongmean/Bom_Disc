@@ -23,8 +23,8 @@ const Shim = () =>{
     const navigate = useNavigate();
 
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Compact No (ปรับ)', field: 'Compact_No_Modify' },
+        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'Compact No (ปรับ)', field: 'Compact_No_Modify' , pinned: 'left'},
         { headerName: 'Part No', field: 'Part_No' },
 
         { headerName: 'ชื่อ SP1', field: 'Name_SP1' },
@@ -48,6 +48,7 @@ const Shim = () =>{
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right',
             cellRenderer: (params) => (
                 <div>
                     <button

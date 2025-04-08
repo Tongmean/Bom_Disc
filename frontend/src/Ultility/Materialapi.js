@@ -36,7 +36,11 @@ export const fetchMaterial = async (id) => {
 };
 export const createMaterial = async (MaterialData) => {
   try {
-    const response = await apiClient.post(`/material/create`, MaterialData); // Send the GET request to the server
+    const response = await apiClient.post(`/material/create`, MaterialData,{
+      headers: {
+          'Content-Type': 'multipart/form-data',
+      },
+    }); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {
@@ -54,7 +58,11 @@ export const createMaterial = async (MaterialData) => {
 
 export const updateMaterial = async (id, updatedMaterial) => {
   try {
-    const response = await apiClient.put(`/material/update/${id}`, updatedMaterial); // Send the GET request to the server
+    const response = await apiClient.put(`/material/update/${id}`, updatedMaterial,{
+      headers: {
+          'Content-Type': 'multipart/form-data',
+      },
+    }); // Send the GET request to the server
 
     // Check the response's 'success' field to determine if the request was successful
     if (response.data.success) {

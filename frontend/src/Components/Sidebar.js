@@ -27,8 +27,10 @@ const Sidebar = ({ collapsed, onCollapse }) => {
 
     { key: 'Display', icon: <ExceptionOutlined />, label: 'Display', children: [
       { key: '11', label: <Link to="/wipdisplay">WIP Code</Link> },
+      { key: '15', label: <Link to="/wipprocessdisplay">WIP Process</Link> },
       { key: '12', label: <Link to="/Qcdisplay">Quality Control</Link> },
       { key: '13', label: <Link to="/saledisplay">Sale</Link> },
+      { key: '14', label: <Link to="/componentdisplay">Component</Link> },
     ]},
     { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/productregister">Product Register</Link>},
     { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
@@ -37,15 +39,18 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     ]},
 
     { key: 'Drawing', icon: <FileExcelOutlined />, label: 'Drawing', children: [
-      { key: '80', label: <Link to="/drawing">Report</Link> },
-      { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
+      { key: '80', label: <Link to="/drawing">Part No Register</Link> },
+      // { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
     ]},
-    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: <Link to="/dataSheet">Data Sheet</Link>},
+    { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: 'Data Sheet', children: [
+      { key: '90', label: <Link to="/dataSheet">Data sheet</Link> },
+      { key: '91', label: <Link to="/datasheetfile">Data sheet File</Link> },
+    ]},
 
     // { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
     { key: 'Shim', icon: <FileExcelOutlined />,  label: 'Shim', children: [
       { key: '111', label: <Link to="/shim">Shim</Link> },
-      { key: '112', label: <Link to="/shimfile">Shim File</Link> },
+      // { key: '112', label: <Link to="/shimfile">Shim File</Link> },
      
     ]},
 
@@ -54,8 +59,16 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     { key: 'Outer', icon: <FileExclamationOutlined />, label: <Link to="/Outer">รูปแบบ Outer</Link>},
 
     { key: 'โฟมสำเร็จรูปอุปกรณ์เสริม', icon: <FileExcelOutlined />, label: <Link to="/additionalpackage">โฟมสำเร็จรูปอุปกรณ์เสริม</Link>},
+    // { key: 'kit', icon: <FileExcelOutlined />, label: <Link to="/kit">Kits</Link>},
+
     { key: 'E-mark', icon: <FileExcelOutlined />, label: <Link to="/emark">E-mark</Link>},
-    { key: 'Component-Part', icon: <FileExcelOutlined />, label: <Link to="/componentpart">Component Part</Link>},
+    // { key: 'Component-Part', icon: <FileExcelOutlined />, label: <Link to="/componentpart">Component Part</Link>},
+    { key: 'Component-Part', icon: <FileExcelOutlined />, label: 'Component Part', children: [
+      { key: '801', label: <Link to="/componentpart">Component Part</Link> },
+      { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
+      { key: '1120', label: <Link to="/shimfile">Shim File</Link> },
+
+    ]},
 
 
     

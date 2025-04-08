@@ -71,8 +71,9 @@ const storage = multer.diskStorage({
         cb(null, uploadDir); // Save files to 'Assets/Drawing' folder
     },
     filename: (req, file, cb) => {
-        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');        const uniqueSuffix = `${Date.now()}`;
-        cb(null, `${uniqueSuffix}-${sanitizedFilename}`);
+        const sanitizedFilename = Buffer.from(file.originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');        
+        // const uniqueSuffix = `${Date.now()}`;
+        cb(null, `${sanitizedFilename}`);
     }
 });
 
@@ -80,11 +81,23 @@ const storage = multer.diskStorage({
 // Multer configuration
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 } // Limit file size to 5MB
-});
+    limits: { fileSize: 10 * 1024 * 1024 } // Limit file size to 10MB
+}).single('file');
 
 // Middleware for handling single file upload
-const uploadDrawingMiddleware = upload.single('file');
+// const uploadDrawingMiddleware = upload.single('file');
+const uploadDrawingMiddleware = (req, res, next) => {
+    upload(req, res, (err) => {
+        if (err) {
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                return res.status(400).json({ msg: 'File size exceeds 10MB limit.' });
+            }
+            return res.status(400).json({ msg: 'File upload failed.', error: err.message });
+        }
+        next(); // Proceed to the next middleware or route handler
+    });
+};
+
 // Controller for creating a drawing file
 const createDrawingFile = async (req, res) => {
     const { Drawing_No } = req.body;
@@ -101,11 +114,29 @@ const createDrawingFile = async (req, res) => {
     //Check if exit Drawing_No 
     const sqlCheck = `SELECT * FROM "drawingfile" WHERE "drawing_no" = $1`;
     const checkResult = await dbconnect.query(sqlCheck, [Drawing_No]);
-
+    const relativeFilePath = `Drawing/${filename}`;
+    //Check if file exist
+    // Fetch the old file details
+    const fetchOldFileQuery = `SELECT path, unqiuename FROM "drawingfile" WHERE unqiuename = $1`;
+    const oldFileResult = await dbconnect.query(fetchOldFileQuery, [filename]);
+    if (oldFileResult.rows.length > 0){
+        return res.status(400).json({
+            success: false,
+            msg: `กรุณาลองใหม่ไฟล์ที่คุณ Submit มี ${filename} อยู่ในฐานข้อมูลอยู่แล้ว ... ครับ`
+        })
+    }
+    //Check if database exist
     if (checkResult.rows.length > 0) {
-        fs.unlinkSync(filePath);
-        // console.log('checkResult.rows.length',checkResult.rows.length)
-        // console.log('checkResult', checkResult)
+        const FilePath = path.join(__dirname, '../Assets', relativeFilePath);
+        // **Check if file exists before deleting**
+        if (fs.existsSync(FilePath)) {
+            try {
+                fs.unlinkSync(FilePath);
+                console.log('✅ Deleted old file:', FilePath);
+            } catch (err) {
+                console.log(`❌ Error deleting old file: ${FilePath}`, err);
+            }
+        }
         return res.status(400).json({
             success: false,
             data: checkResult.rows,
@@ -119,7 +150,7 @@ const createDrawingFile = async (req, res) => {
             (drawing_no, unqiuename, originalname, path, create_by) 
             VALUES ($1, $2, $3, $4, $5) 
             RETURNING *`;
-        const values = [Drawing_No, filename, encodedOriginalName, filePath, userEmail];
+        const values = [Drawing_No, filename, encodedOriginalName, relativeFilePath, userEmail];
 
         const result = await dbconnect.query(sqlCommand, values);
         res.status(200).json({ msg: `บันทึกไฟล์เขียนแบบ Drawing: ${Drawing_No} สำเร็จแล้ว `, data: result.rows[0] , success: true});
@@ -146,32 +177,55 @@ const updateDrawingFile = async (req, res) => {
     }
 
     const { filename, originalname, path: filePath } = file;
-
+    const encodedOriginalName = Buffer.from(originalname, 'latin1').toString('utf8').replace(/\s+/g, '_').replace(/[^\w\-_.ก-๙]/g, '');
+    //Relative path
+    const relativeFilePath = `Drawing/${filename}`;
     try {
         // Fetch the old file details
-        const fetchOldFileQuery = `SELECT path FROM "drawingfile" WHERE id = $1`;
+        const fetchOldFileQuery = `SELECT path, unqiuename FROM "drawingfile" WHERE id = $1`;
         const oldFileResult = await dbconnect.query(fetchOldFileQuery, [id]);
 
         if (oldFileResult.rows.length === 0) {
             return res.status(404).json({ msg: 'Record not found.', success: false });
         }
+        if (oldFileResult.rows[0].unqiuename === filename){
 
-        const oldFilePath = oldFileResult.rows[0].path;
-        const currentValueResult = await dbconnect.query(`SELECT * FROM "drawingfile" WHERE id = $1`, [id]);
-        // Delete the old file
-        if (fs.existsSync(oldFilePath)) {
-            fs.unlinkSync(oldFilePath);
-        } else {
-            console.warn(`Old file not found at path: ${oldFilePath}`);
+            return res.status(400).json({
+                success: false,
+                msg: 'กรุณาระบุ Version ของการแก้ไขโดยการเพิ่ม Version ไปกับชื่อไฟล์ Ex: _V1, _V2, ... ครับ'
+            })
         }
-
+        //Relative path
+        const oldFilePathquery = oldFileResult.rows[0].path;
+        const currentValueResult = await dbconnect.query(`SELECT * FROM "drawingfile" WHERE id = $1`, [id]);
+        // //full path
+        // const oldFilePath = path.join(__dirname, '../Assets', oldFilePathquery);
+        // //Delete the old file
+        // if (fs.existsSync(oldFilePath)) {
+        //     await fs.promises.unlink(oldFilePath);
+        // } else {
+        //     console.log(`Old file not found at path: ${oldFilePath}`);
+        // }
+        // **✅ FIX: Ensure currentValue.path is a string before using path.join()**
+        if (oldFilePathquery && typeof oldFilePathquery === 'string' && file) {
+            const oldFilePath = path.join(__dirname, '../Assets', oldFilePathquery);
+            // **Check if file exists before deleting**
+            if (fs.existsSync(oldFilePath)) {
+                try {
+                    fs.unlinkSync(oldFilePath);
+                    console.log('✅ Deleted old file:', oldFilePath);
+                } catch (err) {
+                    console.log(`❌ Error deleting old file: ${oldFilePath}`, err);
+                }
+            }
+        }
         // Update the database with the new file details
         const updateQuery = `
             UPDATE "drawingfile" 
             SET drawing_no = $1, unqiuename = $2, originalname = $3, path = $4, create_by = $5 
             WHERE id = $6 
             RETURNING *`;
-        const values = [Drawing_No, filename, originalname, filePath, userEmail, id];
+        const values = [Drawing_No, filename, encodedOriginalName, relativeFilePath , userEmail, id];
 
         const updateResult = await dbconnect.query(updateQuery, values);
 
@@ -200,7 +254,7 @@ const updateDrawingFile = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Database or file operation error:', error.message);
+        console.log('Database or file operation error:', error);
         res.status(500).json({
             msg: `อัปเดตไฟล์เขียนแบบ Drawing: ${Drawing_No} ไม่สำเร็จ กรุณาตรวจสอบอีกรอบ !!`,
             success: false

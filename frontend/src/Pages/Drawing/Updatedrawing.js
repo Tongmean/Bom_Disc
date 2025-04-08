@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { fetchDrawing, updateDrawingapi } from '../../Ultility/Drawingapi';
-import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatus, fetchcheckstatus } from '../../Ultility/ApiSetup/staticData';
 import { fetchmaterialbp, fetchmaterialwd } from '../../Ultility/Sellectedbom';
 import { fetchrmpk } from '../../Ultility/Sellectedbom';
 const { Option } = Select;
@@ -58,6 +58,8 @@ const UpdateDrawing = () => {
         Id_WD3: "ID WD3",
         Quantity_WD3: "จำนวน WD3",
         Status: "Status", // Add Status field
+        Check_Status: "Check Status", // Add Status field
+        Remark: "Remark", // Add Status field
     };
     //Loading Bp & Wd Dropdown
     useEffect(() => {
@@ -187,6 +189,10 @@ const UpdateDrawing = () => {
             });
         }
     };
+    const handleClearForm = () => {
+        form.resetFields(); // Clears all the form fields
+        showNotification('Form values cleared', 'success');
+    };
     return (
         <div className="container-fluid">
             <h2>แก้ไข Drawing (Update Drawing)</h2>
@@ -195,7 +201,7 @@ const UpdateDrawing = () => {
                 layout="vertical"
                 onFinish={handleSubmit}
             >
-                <div className="row">
+                {/* <div className="row">
                     {Object.entries(columnNameLabels).map(([key, label], index) => (
                         <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
                             {key === "Status" ? (
@@ -546,7 +552,120 @@ const UpdateDrawing = () => {
                             </Button>
                         </Form.Item>
                     </div>
+                </div> */}
+
+            <div className="row">
+                {['Compact_No_Modify_Drawing', 'Part_No', 'Status', 'Check_Status', 'Remark'].map((key) => (
+                    <div className="col-md-4" key={key}>
+                        <Form.Item
+                            label={columnNameLabels[key]}
+                            name={key}
+                            rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels[key]}` }]}
+                        >
+                            {key === "Status" ? (
+                                <Select options={fetchStatus} placeholder={`เลือก ${columnNameLabels[key]}`} />
+                            ) 
+                            : 
+                            key === "Check_Status" ? (
+                                <Select options={fetchcheckstatus} placeholder={`เลือก ${columnNameLabels[key]}`} />
+                            ) : (
+                                <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                            )}
+                        </Form.Item>
+                    </div>
+                ))}
+            </div>
+
+            {/* BP1 to BP4 Rows */}
+            {[1, 2, 3, 4].map((num) => (
+                <div className="row" key={num}>
+                    {['Erp_Id_BP', 'Name_BP', 'Id_BP', 'Quantity_BP', 'Thickness_Pad'].map((prefix) => {
+                        const key = `${prefix}${num}`;
+                        return (
+                            <div className={key.includes('Erp_Id_BP') || key.includes('Name_BP') ? "col-md-3" : "col-md-2"} key={key}>
+                                <Form.Item
+                                    label={columnNameLabels[key]}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${columnNameLabels[key]}` }]}
+                                >
+                                    {key.includes('Name_BP') || key.includes('Thickness_Pad') || key.includes('Quantity_BP') ? (
+                                        <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                                    ) : (
+                                        <Select
+                                            placeholder={`เลือก ${columnNameLabels[key]}`}
+                                            loading={loading}
+                                            allowClear
+                                            showSearch
+                                            onChange={(value) => handleSelectChange(value, key)}
+                                        >
+                                            <Select.Option value="-">-</Select.Option>
+                                            {(key.includes('Erp_Id_BP') ? bperpoptions : bpoptions).map((i) => (
+                                                <Select.Option key={i.ID || i.Erp_Id} value={i.ID || i.Erp_Id}>
+                                                    {i.ID || i.Erp_Id}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </div>
+                        );
+                    })}
                 </div>
+            ))}
+
+            {/* WD1 to WD3 Rows */}
+            {[1, 2, 3].map((num) => (
+                <div className="row" key={num}>
+                    {['Erp_Id_WD', 'Name_WD', 'Id_WD', 'Quantity_WD'].map((prefix) => {
+                        const key = `${prefix}${num}`;
+                        return (
+                            <div className="col-md-3" key={key}>
+                                <Form.Item
+                                    label={columnNameLabels[key]}
+                                    name={key}
+                                    rules={[{ required: true, message: `กรุณาเลือก ${columnNameLabels[key]}` }]}
+                                >
+                                    {key.includes('Name_WD') || key.includes('Quantity_WD')? (
+                                        <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                                    ) : (
+                                        <Select
+                                            placeholder={`เลือก ${columnNameLabels[key]}`}
+                                            loading={loading}
+                                            allowClear
+                                            showSearch
+                                            onChange={(value) => handleSelectChange(value, key)}
+                                        >
+                                            <Select.Option value="-">-</Select.Option>
+                                            {(key.includes('Erp_Id_WD') ? wderpoptions : wdoptions).map((i) => (
+                                                <Select.Option key={i.ID || i.Erp_Id} value={i.ID || i.Erp_Id}>
+                                                    {i.ID || i.Erp_Id}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            </div>
+                        );
+                    })}
+                </div>
+            ))}
+
+            {/* Action Buttons */}
+            <div className="col-12">
+                <Form.Item>
+                    <Button type="default" className="me-2" onClick={() => navigate('/drawing')}>
+                        Back
+                    </Button>
+                    <Button type="primary" htmlType="submit" disabled={isPending}>
+                        {isPending ? 'Saving...' : 'Save Data'}
+                    </Button>
+                    <Button type="default" onClick={handleClearForm} style={{ marginLeft: '10px' }}>
+                        Clear
+                    </Button>
+                </Form.Item>
+            </div>
+
+
             </Form>
 
             {/* Display notification if available */}

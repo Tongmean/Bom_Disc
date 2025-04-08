@@ -60,6 +60,8 @@ const CreateAdditionalPackage = () => {
         Additional_Tool_Erp_Id_2: "รหัส ERP โฟมและอุปกรณ์เสริม 2",
         Name_Additional_Tool_2: "ชื่อ ERP โฟมและอุปกรณ์เสริม 2",
         Quantity_Additional_Tool_2: "จำนวนโฟมและอุปกรณ์เสริม 2",
+        Weight: "น้ำหนัก",
+
     };
     
 

@@ -123,14 +123,14 @@ const postProductspec = async (req, res) =>{
 const updateProductspec = async (req, res) => {
     const id = req.params.id;
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Product_Spec_Id, Sale_Code, Coating, Scoarching, Scoarching_Coating_Id, Shim, Slot, Chamfer, Color, Color_Id, Customer_Name_Product_Spec, Chem_Formular, Formula_Under_Layer, Sticker_Name_1, Sticker_Erp_Id_1, Num_Sticker_1, Sticker_Name_2, Sticker_Erp_Id_2, Num_Sticker_2, Sticker_Name_3, Sticker_Erp_Id_3, Num_Sticker_3, Name_Attach_Paper_1, Attach_Paper_Erp_Id_1, Num_Attach_1, Name_Attach_Paper_2, Attach_Paper_Erp_Id_2, Num_Attach_2, Name_Attach_Paper_3, Attach_Paper_Erp_Id_3, Num_Attach_3, Name_Attach_Paper_4, Attach_Paper_Erp_Id_4, Num_Attach_4, Name_Erp_Additional_Tool_1, Additional_Tool_Erp_Id_1, Num_Additional_Tool_1, CreateBy, Status, Customer_Code, Additional_Tool_Erp_Id_2, Name_Erp_Additional_Tool_2, Num_Additional_Tool_2, Additional_Tool_Erp_Id_3, Name_Erp_Additional_Tool_3, Num_Additional_Tool_3} = req.body;
+    const {Product_Spec_Id, Sale_Code, Coating, Scoarching, Scoarching_Coating_Id, Shim, Slot, Chamfer, Color, Color_Id, Customer_Name_Product_Spec, Chem_Formular, Formula_Under_Layer, Sticker_Name_1, Sticker_Erp_Id_1, Num_Sticker_1, Sticker_Name_2, Sticker_Erp_Id_2, Num_Sticker_2, Sticker_Name_3, Sticker_Erp_Id_3, Num_Sticker_3, Name_Attach_Paper_1, Attach_Paper_Erp_Id_1, Num_Attach_1, Name_Attach_Paper_2, Attach_Paper_Erp_Id_2, Num_Attach_2, Name_Attach_Paper_3, Attach_Paper_Erp_Id_3, Num_Attach_3, Name_Attach_Paper_4, Attach_Paper_Erp_Id_4, Num_Attach_4, Name_Erp_Additional_Tool_1, Additional_Tool_Erp_Id_1, Num_Additional_Tool_1, CreateBy, Status, Customer_Code, Additional_Tool_Erp_Id_2, Name_Erp_Additional_Tool_2, Num_Additional_Tool_2, Additional_Tool_Erp_Id_3, Name_Erp_Additional_Tool_3, Num_Additional_Tool_3, Check_Status, Remark} = req.body;
 
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Product_Spec" WHERE id = $1`;
         const currentValueResult = await dbconnect.query(currentValueSql, [id]);
         const currentValue = currentValueResult.rows[0];
-
+        const currentValueCreateBy = currentValueResult.rows[0].CreateBy;
         if (!currentValue) {
             return res.status(404).json({
                 success: false,
@@ -184,9 +184,10 @@ const updateProductspec = async (req, res) => {
             "Num_Additional_Tool_1" = $37, "CreateBy" = $38, "Status" = $39, 
             "Customer_Code" = $40, "Additional_Tool_Erp_Id_2" = $41, "Name_Erp_Additional_Tool_2" = $42, 
             "Num_Additional_Tool_2" = $43, "Additional_Tool_Erp_Id_3" = $44, 
-            "Name_Erp_Additional_Tool_3" = $45, "Num_Additional_Tool_3" = $46
+            "Name_Erp_Additional_Tool_3" = $45, "Num_Additional_Tool_3" = $46,
+            "Check_Status" =$47, "Remark" = $48, "Check_By" =$49
         WHERE 
-            "id" = $47
+            "id" = $50
         RETURNING *;
         `;
         const values = [
@@ -199,9 +200,9 @@ const updateProductspec = async (req, res) => {
             Num_Attach_2, Name_Attach_Paper_3, Attach_Paper_Erp_Id_3, Num_Attach_3, 
             Name_Attach_Paper_4, Attach_Paper_Erp_Id_4, Num_Attach_4, 
             Name_Erp_Additional_Tool_1, Additional_Tool_Erp_Id_1, Num_Additional_Tool_1, 
-            userEmail, Status, Customer_Code, Additional_Tool_Erp_Id_2, 
+            currentValueCreateBy, Status, Customer_Code, Additional_Tool_Erp_Id_2, 
             Name_Erp_Additional_Tool_2, Num_Additional_Tool_2, Additional_Tool_Erp_Id_3, 
-            Name_Erp_Additional_Tool_3, Num_Additional_Tool_3, id
+            Name_Erp_Additional_Tool_3, Num_Additional_Tool_3,Check_Status,Remark, userEmail, id
         ];
         const updateResult = await dbconnect.query(sqlCommand, values);
 
@@ -217,7 +218,7 @@ const updateProductspec = async (req, res) => {
             "Num_Attach_2", "Name_Attach_Paper_3", "Attach_Paper_Erp_Id_3", "Num_Attach_3", 
             "Name_Attach_Paper_4", "Attach_Paper_Erp_Id_4", "Num_Attach_4", 
             "Name_Erp_Additional_Tool", "Additional_Tool_Erp_Id", "Num_Additional_Tool", 
-            "Column_36", "CreateBy" , "Status"
+            "Column_36", "CreateBy" , "Status", "Check_Status", "Remark", "Check_By"
         ];
 
         // const action = updated;

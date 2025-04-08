@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { CreateDatasheetapi } from '../../Ultility/Datasheet';
-import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+// import { fetchStatus } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatus, fetchcheckstatus  } from '../../Ultility/ApiSetup/staticData';
 
 
 const CreateDatasheet = () => {
@@ -14,18 +15,44 @@ const CreateDatasheet = () => {
     const navigate = useNavigate();
 
     // Column Name Labels Mapping
-    const columnNameLabels = {
-        Data_Sheet_No: "Data Sheet No.",
-        Compact_No: "Compact No.",
-        Grade_Chem: "เกรดเคมี.",
-        Weight_F1: "น้ำหนักเคมี F1",
-        Weight_F2: "น้ำหนักเคมี F2",
-        Underlayer_Grade_Chem: "เกรดเคมี Underlayer",
-        Weight_U1: "น้ำหนักเคมี U1",
-        Weight_U2: "น้ำหนักเคมี U2",
-        Formular: "สูตร",
-        Status: "Status",
-    };
+    // const columnNameLabels = {
+    //     Data_Sheet_No: "Data Sheet No.",
+    //     Compact_No: "Compact No.",
+    //     Grade_Chem: "เกรดเคมี.",
+    //     Weight_F1: "น้ำหนักเคมี F1",
+    //     Weight_F2: "น้ำหนักเคมี F2",
+    //     Underlayer_Grade_Chem: "เกรดเคมี Underlayer",
+    //     Weight_U1: "น้ำหนักเคมี U1",
+    //     Weight_U2: "น้ำหนักเคมี U2",
+    //     Formular: "สูตร",
+    //     Status: "Status",
+    // };
+    const fields = [
+        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No'},
+        { headerName: 'Compact No.', field: 'Compact_No' },
+        { headerName: 'เกรดเคมี.', field: 'Grade_Chem' },
+        { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
+        { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
+        { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
+        { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
+        { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
+        { headerName: 'สูตร', field: 'Formular' },
+
+        { headerName: 'แม่พิมพ์เย็น', field: 'Mold_Cold' },
+        { headerName: 'เครื่องจักรพิมพ์เย็น', field: 'Machine_Cold' },
+        { headerName: 'แรงดันพิมพ์เย็น', field: 'Presure_Cold' },
+        { headerName: 'ชิ้นต่อพิมพ์ (พิมพ์เย็น)', field: 'Piece_Per_Mold_Cold' },
+        { headerName: 'แม่พิมพ์ร้อน', field: 'Mold_Hot' },
+        { headerName: 'อุณหภูมิบน', field: 'Temperature_Upper' },
+        { headerName: 'อุณหภูมิล้าง', field: 'Temperature_Lower' },
+        { headerName: 'เครื่องจักรพิมพ์ร้อน', field: 'Machine_Hot' },
+        { headerName: 'แรงดันพิมพ์ร้อน', field: 'Presure_Hot' },
+        { headerName: 'ชิ้นต่อพิมพ์ (พิมพ์ร้อน)', field: 'Piece_Per_Mold_Hot' },
+
+        { headerName: 'Status', field: 'Status' },
+        { headerName: 'Check Status', field: 'Check_Status' },
+        { headerName: 'Remark', field: 'Remark' }
+    ]
 
     const handleSubmit = async (values) => {
         setIsPending(true);
@@ -35,8 +62,8 @@ const CreateDatasheet = () => {
         try {
             const result = await CreateDatasheetapi(datasheetData);
             showNotification(result.msg, 'success');
-            console.log('Datasheet:', datasheetData);
-            console.log('API Result:', result);
+            // console.log('Datasheet:', datasheetData);
+            // console.log('API Result:', result);
 
             form.resetFields(); // Clear the form fields upon success
             // Optionally navigate to another route
@@ -71,10 +98,38 @@ const CreateDatasheet = () => {
                     Weight_U2: '',
                     Formular: '',
                     Status: '',
+                    Check_Status: "Wait",
+                    Remark: "-",
                 }}
             >
                 <div className="row">
-                    <div className="col-xl-6 col-lg-6 col-md-12">
+                    {fields.map((field) => (
+                        <div className="col-xl-3 col-lg-6 col-md-12" key={field.field}>
+                            <Form.Item
+                                label={field.headerName}
+                                name={field.field}
+                                rules={[{ required: true, message: `กรุณากรอก ${field.headerName}` }]}
+                            >
+                                {field.field === 'Status' ? (
+                                    <Select>
+                                        <Select.Option options={fetchStatus}></Select.Option>
+                                    </Select>
+                                ) 
+                                : 
+                                field.field === 'Check_Status' ? (
+                                    <Select disabled>
+                                        <Select.Option options={fetchcheckstatus}></Select.Option>
+                                    </Select>
+                                ) 
+                                :  
+                                (
+                                    <Input />
+                                )}
+                            </Form.Item>
+                        </div>
+                    ))}
+
+                    {/* <div className="col-xl-6 col-lg-6 col-md-12">
                         <Form.Item
                             label={columnNameLabels.Data_Sheet_No}
                             name="Data_Sheet_No"
@@ -165,7 +220,7 @@ const CreateDatasheet = () => {
                                 <Select.Option options={fetchStatus}></Select.Option>
                             </Select>
                         </Form.Item>
-                    </div>
+                    </div> */}
 
                     <div className="col-12">
                         <Form.Item>

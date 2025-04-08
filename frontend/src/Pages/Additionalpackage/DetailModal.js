@@ -19,6 +19,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Additional_Tool_Erp_Id_2: "รหัส ERP โฟมและอุปกรณ์เสริม 2",
         Name_Additional_Tool_2: "ชื่อ ERP โฟมและอุปกรณ์เสริม 2",
         Quantity_Additional_Tool_2: "จำนวนโฟมและอุปกรณ์เสริม 2",
+        Weight: "น้ำหนัก",
     };
 
     return (
@@ -39,6 +40,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "รหัส ERP โฟมและอุปกรณ์เสริม 2:", value: data.Additional_Tool_Erp_Id_2 },
                         { label: "ชื่อ ERP โฟมและอุปกรณ์เสริม 2:", value: data.Name_Additional_Tool_2 },
                         { label: "จำนวนโฟมและอุปกรณ์เสริม 2:", value: data.Quantity_Additional_Tool_2 },
+                        { label: "น้ำหนัก:", value: data.Weight },
                         { label: "กรอกโดย:", value: data.CreateBy },
                         { label: "กรอกเมื่อ:", value: convertToUTCPlus7(data.CreateAt) },
                     ].map((field, index) => (

@@ -24,10 +24,10 @@ const Bom = () =>{
     const [statusFilter, setStatusFilter] = useState([]);
     const [customerNameFilter, setCustomerNameFilter] = useState([]);
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' },
+        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' , pinned: 'left' },
         { headerName: 'เบอร์', field: 'Num' },
-        { headerName: 'Part No.', field: 'Part_No' },
+        { headerName: 'Part No.', field: 'Part_No'},
         { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
         { headerName: 'รหัสลูกค้า', field: 'Customer_Code' },
 
@@ -50,6 +50,11 @@ const Bom = () =>{
         { headerName: 'Ref Code_Fg', field: 'Ref_Code' },
         { headerName: 'Emark Id', field: 'Emark_Id' },
         { headerName: 'น้ำหนัก', field: 'Weight' },
+        { headerName: 'Kit_Id', field: 'Kit_Id' },
+        { headerName: 'Check Status', field: 'Check_Status' },
+        { headerName: 'Remark', field: 'Remark' },
+        // { headerName: 'Check_By', field: 'Check_By' },
+        // { headerName: 'Check_At', field: 'Check_At' },
 
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
@@ -57,15 +62,23 @@ const Bom = () =>{
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right',
             cellRenderer: (params) => (
                 <div>
                     <button
-                        className="btn btn-primary btn-sm"
+                        className={`btn btn-sm ${
+                            params.data.Check_Status === 'Review' ? 'btn-warning' :
+                            params.data.Check_Status === 'Reject' ? 'btn-danger' :
+                            params.data.Check_Status === 'Wait' ? 'btn-success' :
+                            'btn-primary'
+                        }`}
                         onClick={() => handleShowDetails(params.data)}
                         style={{ marginRight: '5px' }}
                     >
                         Detail
                     </button>
+
+
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => handleShowEdit(params.data)}
@@ -131,7 +144,13 @@ const Bom = () =>{
 
                 Ref_Code:i.Ref_Code,
                 Emark_Id:i.Emark_Id,
-                Weight:i.Weight
+                Weight:i.Weight,
+                Kit_Id:i.Kit_Id,
+                
+                Check_Status:i.Check_Status,
+                Check_By:i.Check_By,
+                Check_At:i.Check_At,
+                Remark:i.Remark
 
             }));
             // console.log('Mapped Data', mappedData)

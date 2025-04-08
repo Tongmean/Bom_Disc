@@ -24,13 +24,14 @@ const Qcdisplay = () => {
 
 
   const columnDefs = [
-    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true , pinned: 'left'},
     { headerName: 'Part No.', field: 'Part_No' },
     { headerName: 'เบอร์', field: 'Num' },
     { headerName: 'รหัส Product Spec', field: 'Product_Spec_No' },
-    { headerName: 'Drawing No.', field: 'Drawing_No' },
+    { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
     { headerName: 'น้ำหนักรวม', field: 'Weight' },
     { headerName: 'Emark Id', field: 'Emark_Id' },
+
     {
         headerName: 'Actions',
         field: 'actions',

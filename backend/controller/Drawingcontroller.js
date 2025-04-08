@@ -125,13 +125,13 @@ const postDrawing = async (req, res) =>{
 const updateDrawing = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1,Thickness_Pad1 , Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy, Status} = req.body;
+    const {Compact_No_Modify_Drawing, Part_No, Erp_Id_BP1, Name_BP1, Id_BP1, Quantity_BP1,Thickness_Pad1 , Erp_Id_BP2, Name_BP2, Id_BP2, Quantity_BP2, Thickness_Pad2, Erp_Id_BP3, Name_BP3, Id_BP3, Quantity_BP3, Thickness_Pad3, Erp_Id_BP4, Name_BP4, Id_BP4, Quantity_BP4, Thickness_Pad4, Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1, Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2, Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3, CreateBy, Status, Check_Status,Remark} = req.body;
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Drawing" WHERE id = $1`;
         const currentValueResult = await dbconnect.query(currentValueSql, [id]);
         const currentValue = currentValueResult.rows[0];
-
+        const currentValueCreateBy = currentValueResult.rows[0].CreateBy;
         if (!currentValue) {
             return res.status(404).json({
                 success: false,
@@ -177,8 +177,11 @@ const updateDrawing = async (req, res) =>{
                 "Id_WD3" = $33,
                 "Quantity_WD3" = $34,
                 "CreateBy" = $35,
-                "Status" = $36
-            WHERE "id" = $37
+                "Status" = $36,
+                "Check_Status" = $37,
+                "Remark" = $38,
+                "Check_By" = $39
+            WHERE "id" = $40
             RETURNING *;
         `;
 
@@ -191,7 +194,7 @@ const updateDrawing = async (req, res) =>{
             Erp_Id_WD1, Name_WD1, Id_WD1, Quantity_WD1,
             Erp_Id_WD2, Name_WD2, Id_WD2, Quantity_WD2,
             Erp_Id_WD3, Name_WD3, Id_WD3, Quantity_WD3,
-            CreateBy, Status, id
+            currentValueCreateBy, Status,Check_Status,Remark, userEmail, id
         ];
 
         const updateResult = await dbconnect.query(updateSql, values);
@@ -199,7 +202,8 @@ const updateDrawing = async (req, res) =>{
 
         // Log changes
         const columns = [
-            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1", "Thickness_Pad2", "Thickness_Pad3", "Thickness_Pad4", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy" ,"Status"
+            "Compact_No_Modify_Drawing", "Part_No", "Erp_Id_BP1", "Name_BP1", "Id_BP1", "Quantity_BP1", "Thickness_Pad1", "Thickness_Pad2", "Thickness_Pad3", "Thickness_Pad4", "Erp_Id_BP2", "Name_BP2", "Id_BP2", "Quantity_BP2", "Erp_Id_BP3", "Name_BP3", "Id_BP3", "Quantity_BP3", "Erp_Id_BP4", "Name_BP4", "Id_BP4", "Quantity_BP4","Erp_Id_WD1", "Name_WD1", "Id_WD1", "Quantity_WD1","Erp_Id_WD2", "Name_WD2", "Id_WD2", "Quantity_WD2","Erp_Id_WD3", "Name_WD3", "Id_WD3", "Quantity_WD3","CreateBy" ,"Status", "Check_Status",
+            "Remark", "Check_By"
         ];
 
         // const action = updated;
@@ -219,7 +223,7 @@ const updateDrawing = async (req, res) =>{
         });        
 
     } catch (error) {
-        console.error("Error updating BOM:", error);
+        console.error("Error updating drawing:", error);
         res.status(500).json({
             success: false,
             msg: `เกิดข้อผิดพลาดขณะอัปเดตข้อมูล: ${Compact_No_Modify_Drawing} กรุณาลองอีกครั้ง.`,

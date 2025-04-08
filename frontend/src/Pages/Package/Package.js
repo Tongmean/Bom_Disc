@@ -5,7 +5,7 @@ import { baseURLpackage} from '../../Ultility/ApiSetup/api';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Package/DetailModal'
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 const Package = () =>{
@@ -123,7 +123,7 @@ const Package = () =>{
 
     const onSelectionChanged = () => {
         const selectedRows = gridApi.getSelectedRows();
-        console.log('Selected rows:', selectedRows);
+        // console.log('Selected rows:', selectedRows);
     };
 
     const handleOnClick = () => {
@@ -260,7 +260,9 @@ const Package = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

@@ -15,6 +15,7 @@ const dbconnect = new Pool({
   password: '15tongmean',    // Your PostgreSQL password
   port: 5432,                   // Default PostgreSQL port
 
+  //   host: '192.168.4.200',            (Loptop Ip)
 
 });
 dbconnect.connect((err, client, release) => {

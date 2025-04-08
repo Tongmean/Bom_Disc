@@ -4,7 +4,7 @@ import {fetchDrawings, fetchHistoryLog} from '../../Ultility/Drawingapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Drawing/DetailModal'
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 const Drawing = () =>{
@@ -22,8 +22,8 @@ const Drawing = () =>{
     const navigate = useNavigate();
 
     const columnDefs = [
-        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Compact No (ปรับ)', field: 'Compact_No_Modify_Drawing' },
+        { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'Compact No (ปรับ)', field: 'Compact_No_Modify_Drawing' , pinned: 'left' },
         { headerName: 'Part No.', field: 'Part_No' },
         { headerName: 'รหัส ERP BP1', field: 'Erp_Id_BP1' },
         { headerName: 'ชื่อ ERP BP1', field: 'Name_BP1' },
@@ -65,15 +65,22 @@ const Drawing = () =>{
         { headerName: 'จำนวน WD3', field: 'Quantity_WD3' },
         { headerName: 'Status', field: 'Status' },
 
-        // { headerName: 'กรอกโดย', field: 'CreateBy' },
+        { headerName: 'Check Status', field: 'Check_Status' },
+        { headerName: 'Remark', field: 'Remark' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right' ,
             cellRenderer: (params) => (
                 <div>
                     <button
-                        className="btn btn-primary btn-sm"
+                        className={`btn btn-sm ${
+                            params.data.Check_Status === 'Review' ? 'btn-warning' :
+                            params.data.Check_Status === 'Reject' ? 'btn-danger' :
+                            params.data.Check_Status === 'Wait' ? 'btn-success' :
+                            'btn-primary'
+                        }`}
                         onClick={() => handleShowDetails(params.data)}
                         style={{ marginRight: '5px' }}
                     >
@@ -159,7 +166,11 @@ const Drawing = () =>{
                 Id_WD3: i.Id_WD3,
                 Quantity_WD3: i.Quantity_WD3,
                 Status: i.Status,
-             
+
+                Check_Status:i.Check_Status,
+                Check_By:i.Check_By,
+                Check_At:i.Check_At,
+                Remark:i.Remark,
      
 
                 CreateBy: i.CreateBy,
@@ -271,7 +282,9 @@ const Drawing = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

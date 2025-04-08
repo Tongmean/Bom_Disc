@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import Tablecomponent from '../../Components/Tablecomponent';
 import { fetchDisplaySale } from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import { baseURLdrawing, baseURLproductspec } from '../../Ultility/ApiSetup/api';
+import DetailModal from './DetailModalSale';
+
 const { Option } = Select;
 
 const Saledisplay = () => {
@@ -13,7 +15,8 @@ const Saledisplay = () => {
   const [rowData, setRowData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
   // Individual filters
   const [codeFgFilter, setCodeFgFilter] = useState([]);
   const [partNoFilter, setPartNoFilter] = useState([]);
@@ -21,7 +24,7 @@ const Saledisplay = () => {
 
 
   const columnDefs = [
-    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true , pinned: 'left'},
     { headerName: 'Part No.', field: 'Part_No' },
     { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
     // { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
@@ -39,6 +42,7 @@ const Saledisplay = () => {
     {
         headerName: 'Actions',
         field: 'actions',
+        pinned: 'right',
         cellRenderer: (params) => (
             <div>
                 <>
@@ -71,7 +75,14 @@ const Saledisplay = () => {
                             </button>
                         </a>
                     )}
-                </>
+                    <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleShowDetails(params.data)}
+                        style={{ marginRight: '5px' }}
+                    >
+                        Detail
+                    </button>
+                  </>
             </div>
         ),
     },
@@ -96,6 +107,20 @@ const Saledisplay = () => {
   const onGridReady = (params) => {
     setGridApi(params.api);
   };
+  const onSelectionChanged = () => {
+    const selectedRows = gridApi.getSelectedRows();
+    console.log('Selected rows:', selectedRows);
+  };
+  const handleShowDetails = async (data) => {
+      setSelectedData(data);
+      setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+      setShowModal(false);
+      setSelectedData(null);
+  };
+  
 
   const handleFilterChange = () => {
     const filtered = rowData.filter((item) =>
@@ -184,7 +209,10 @@ const Saledisplay = () => {
         </Button>
       </div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+          <Spin size="large" />
+        </div>
+        // <div>Loading...</div>
       ) : error ? (
         <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
       ) : (
@@ -195,6 +223,15 @@ const Saledisplay = () => {
                 columnDefs={columnDefs}
                 rowData={filteredData}
                 onGridReady={onGridReady}
+                onSelectionChanged={onSelectionChanged}
+
+            />
+            <DetailModal
+                show={showModal}
+                onHide={handleCloseModal}
+                data={selectedData}
+                columnDefs = {columnDefs}
+                Tablename = 'Sale-Display'
             />
         </div>
       )}

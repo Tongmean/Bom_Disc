@@ -4,8 +4,10 @@ import {fetchMaterials, fetchHistoryLog} from '../../Ultility/Materialapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from './DetailModal';
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+import { baseURLMaterial } from '../../Ultility/ApiSetup/api';
+
 const { Option } = Select;
 const Material = () =>{
     const [loading, setLoading] = useState(true); 
@@ -23,8 +25,8 @@ const Material = () =>{
     const [numberFilter, setNumberFilter] = useState([]);
     const [filterwithoutid, setFilterwithoutid] = useState([]);
     const columnDefs = [
-        { headerName: 'ที่', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Compact_No (ปรับ)', field: 'Compact_No_Modify' },
+        { headerName: 'ที่', field: 'id', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'Compact_No (ปรับ)', field: 'Compact_No_Modify' , pinned: 'left' },
         { headerName: 'Compact_No (Catalog)', field: 'Compact_No_Catalog' },
         { headerName: 'Drawing Number', field: 'Drawing_no' },
         { headerName: 'Type Drawing', field: 'Type_Drawing' },
@@ -56,8 +58,23 @@ const Material = () =>{
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right' ,
             cellRenderer: (params) => (
                 <div>
+                    {params.data.uniquename && (
+                        <a
+                            href={`${baseURLMaterial}/${encodeURIComponent(params.data.uniquename)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <button
+                                className="btn btn-info btn-sm"
+                                style={{ marginRight: '5px' }}
+                            >
+                                PDF
+                            </button>
+                        </a>
+                    )}
                     <button
                         className="btn btn-primary btn-sm"
                         onClick={() => handleShowDetails(params.data)}
@@ -93,8 +110,6 @@ const Material = () =>{
         setSelectedData(null);
         setHistoryLog([]);
     };
-
-
 
     useEffect(() => {
         const load = async () => {
@@ -140,7 +155,7 @@ const Material = () =>{
         );
         setFilteredData(filtered);
         setFilterwithoutid(filteredwithoutiddata)
-        console.log('filteredwithoutiddata', filteredwithoutiddata)
+        // console.log('filteredwithoutiddata', filteredwithoutiddata)
     };
  
     
@@ -225,7 +240,9 @@ const Material = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

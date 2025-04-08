@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import Tablecomponent from '../../Components/Tablecomponent';
 import { fetchDisplayhome } from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
+import DetailModal from './DetailModalHome';
 
 const { Option } = Select;
 
@@ -13,7 +14,8 @@ const Homepage = () => {
   const [rowData, setRowData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
   // Individual filters
   const [codeFgFilter, setCodeFgFilter] = useState([]);
   const [saleCodeBomFilter, setSaleCodeBomFilter] = useState([]);
@@ -24,14 +26,15 @@ const Homepage = () => {
 
 
   const columnDefs = [
-    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg', checkboxSelection: true, headerCheckboxSelection: true ,pinned: 'left'},
     { headerName: 'ชื่อลูกค้า', field: 'Customer_Name' },
+
     { headerName: 'Code การขาย', field: 'Sale_Code_Bom' },
     { headerName: 'Part No.', field: 'Part_No' },
     { headerName: 'เบอร์', field: 'Num' },
     { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
     { headerName: 'Status', field: 'Status' },
-    { headerName: 'สูตรเคมี.', field: 'Formular' },
+    { headerName: 'สูตรเคมี.', field: 'Grade_Chem' },
     { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
     { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
     { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
@@ -158,7 +161,24 @@ const Homepage = () => {
     { headerName: 'รหัส Product spec', field: 'Product_Spec_Id' },
     { headerName: 'น้ำหนักรวม', field: 'Weight' },
     { headerName: 'Emark Id', field: 'Emark_Id' },
-
+    {
+      headerName: 'Actions',
+      field: 'actions',
+      pinned: 'right',
+      cellRenderer: (params) => (
+          <div>
+              <>
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => handleShowDetails(params.data)}
+                    style={{ marginRight: '5px' }}
+                >
+                    Detail
+                </button>
+              </>
+          </div>
+      ),
+  },
 
   ];
 
@@ -184,6 +204,7 @@ const Homepage = () => {
     // console.log('params.api', params.api)
     setGridApi(params.api);
   };
+  
 
   const handleFilterChange = () => {
     const filtered = rowData.filter((item) =>
@@ -207,7 +228,20 @@ const Homepage = () => {
     setStatusFilter([]);
     setProductspecFilter([])
   };
+  const onSelectionChanged = () => {
+    const selectedRows = gridApi.getSelectedRows();
+    console.log('Selected rows:', selectedRows);
+  };
+  const handleShowDetails = async (data) => {
+      setSelectedData(data);
+      setShowModal(true);
+  };
 
+  const handleCloseModal = () => {
+      setShowModal(false);
+      setSelectedData(null);
+  };
+  
   return (
     <div>
       <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
@@ -328,7 +362,9 @@ const Homepage = () => {
         </Button>
       </div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+          <Spin size="large" />
+        </div>
       ) : error ? (
         <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
       ) : (
@@ -339,8 +375,18 @@ const Homepage = () => {
                 columnDefs={columnDefs}
                 rowData={filteredData}
                 onGridReady={onGridReady}
+                onSelectionChanged={onSelectionChanged}
+
+            />
+            <DetailModal
+                show={showModal}
+                onHide={handleCloseModal}
+                data={selectedData}
+                columnDefs = {columnDefs}
+                Tablename = 'Home'
             />
         </div>
+
       )}
     </div>
   );

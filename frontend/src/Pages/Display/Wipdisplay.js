@@ -3,8 +3,8 @@ import Tablecomponent from '../../Components/Tablecomponent';
 import {fetchDisplaywip} from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
-import { useNavigate } from 'react-router-dom';
-import { Select, Button } from 'antd'; // Import Ant Design components
+// import { useNavigate } from 'react-router-dom';
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 const { Option } = Select;
 
 const Wipdisplay = () =>{
@@ -12,7 +12,7 @@ const Wipdisplay = () =>{
     const [error, setError] = useState('');
     const [rowData, setRowData] = useState([]);
     const [gridApi, setGridApi] = useState(null)
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     // Individual filters
     const [filteredData, setFilteredData] = useState([]);
     const [codeFgFilter, setCodeFgFilter] = useState([]);
@@ -20,62 +20,74 @@ const Wipdisplay = () =>{
     const [numberFilter, setNumberFilter] = useState([]);
 
     const columnDefs = [
-        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' , checkboxSelection: true, headerCheckboxSelection: true },
+        { headerName: 'รหัส ERP (Code_Fg)', field: 'Code_Fg' , checkboxSelection: true, headerCheckboxSelection: true , pinned: 'left'},
         { headerName: 'เบอร์', field: 'Num' },
         { headerName: 'Part No', field: 'Part_No' },
-        { headerName: 'WIP1', field: 'WIP1' },
+        { headerName: 'WIP1', field: 'WipTREAT1' },
         { headerName: 'จำนวน WIP1', field: 'Quantity_BP1' },
-        { headerName: 'WIP2', field: 'WIP2' },
+        { headerName: 'WIP2', field: 'WipTREAT2' },
         { headerName: 'จำนวน WIP2', field: 'Quantity_BP2' },
-        { headerName: 'WIP3', field: 'WIP3' },
+        { headerName: 'WIP3', field: 'WipTREAT3' },
         { headerName: 'จำนวน WIP3', field: 'Quantity_BP3' },
-        { headerName: 'WIP4', field: 'WIP4' },
+        { headerName: 'WIP4', field: 'WipTREAT4' },
         { headerName: 'จำนวน WIP4', field: 'Quantity_BP4' },
     ];
     //Map to Wip
-    const mapToWIPs = (array) => {
-        return array.map(item => {
-            const pads = [
-                { Id_BP: item.Id_BP1, Thickness: item.Thickness_Pad1, Quantity: item.Quantity_BP1 },
-                { Id_BP: item.Id_BP2, Thickness: item.Thickness_Pad2, Quantity: item.Quantity_BP2 },
-                { Id_BP: item.Id_BP3, Thickness: item.Thickness_Pad3, Quantity: item.Quantity_BP3 },
-                { Id_BP: item.Id_BP4, Thickness: item.Thickness_Pad4, Quantity: item.Quantity_BP4 }
-            ];
+    // const mapToWIPs = (array) => {
+    //     return array.map(item => {
+    //         const pads = [
+    //             { Id_BP: item.Id_BP1, Thickness: item.Thickness_Pad1, Quantity: item.Quantity_BP1 },
+    //             { Id_BP: item.Id_BP2, Thickness: item.Thickness_Pad2, Quantity: item.Quantity_BP2 },
+    //             { Id_BP: item.Id_BP3, Thickness: item.Thickness_Pad3, Quantity: item.Quantity_BP3 },
+    //             { Id_BP: item.Id_BP4, Thickness: item.Thickness_Pad4, Quantity: item.Quantity_BP4 }
+    //         ];
     
-            const result = pads.reduce((acc, pad, index) => {
-                const padKey = `WIP${index + 1}`;
-                if (
-                    pad.Thickness === pads[0].Thickness &&
-                    pads.every(p => p.Thickness === pad.Thickness)
-                ) {
-                    acc[padKey] =
-                        pad.Thickness === "-" && pad.Id_BP?.includes("BP")
-                            ? `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
-                            : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
-                                ? "-"
-                                : `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
-                } else {
-                    acc[padKey] =
-                        pad.Thickness === "-" && pad.Id_BP?.includes("BP")
-                            ? `${pad.Id_BP}-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
-                            : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
-                                ? "-"
-                                : `${pad.Id_BP}(${pad.Thickness})-${item.Grade_Chem}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
-                }
-                // Add Quantity for each pad
-                acc[`Quantity_BP${index + 1}`] = pad.Quantity || "-";
-                return acc;
-            }, {});
+    //         // Check if any two thicknesses are the same (excluding "-")
+    //         const uniqueThicknesses = [...new Set(pads.filter(pad => pad.Thickness !== "-").map(pad => pad.Thickness))];
     
-            // Include Code_Fg in the result
-            return {
-                Code_Fg: item.Code_Fg,
-                Num: item.Num,
-                Part_No: item.Part_No,
-                ...result
-            };
-        });
-    };
+    //         const result = pads.reduce((acc, pad, index) => {
+    //             const padKey = `WIP${index + 1}`;
+    //             const includeThickness = uniqueThicknesses.length > 1; // If there are multiple unique thicknesses, include thickness
+    
+    //             if (
+    //                 pad.Thickness === pads[0].Thickness &&
+    //                 (pad.Thickness === pads[1].Thickness || pad.Thickness === "-") &&
+    //                 (pad.Thickness === pads[2].Thickness || pads[2].Thickness === "-") &&
+    //                 (pad.Thickness === pads[3].Thickness || pads[3].Thickness === "-")
+    //             ) {
+    //                 acc[padKey] =
+    //                     pad.Thickness === "-" && pad.Id_BP?.includes("BP")
+    //                         ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+    //                         : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
+    //                             ? "-"
+    //                             : includeThickness
+    //                                 ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+    //                                 : `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+    //             } else {
+    //                 acc[padKey] =
+    //                     pad.Thickness === "-" && pad.Id_BP?.includes("BP")
+    //                         ? `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+    //                         : (pad.Thickness === "-" || !pad.Id_BP?.includes("BP"))
+    //                             ? "-"
+    //                             : includeThickness
+    //                                 ? `${pad.Id_BP}(${pad.Thickness})-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`
+    //                                 : `${pad.Id_BP}-${item.Formular}-${item.Slot}${item.Chamfer}-${item.Color_Id}-${item.Scoarching_Coating_Id}`;
+    //             }
+    
+    //             // Add Quantity for each pad
+    //             acc[`Quantity_BP${index + 1}`] = pad.Quantity || "-";
+    //             return acc;
+    //         }, {});
+    
+    //         // Include Code_Fg in the result
+    //         return {
+    //             Code_Fg: item.Code_Fg,
+    //             Num: item.Num,
+    //             Part_No: item.Part_No,
+    //             ...result
+    //         };
+    //     });
+    // };
     
 
     useEffect(() => {
@@ -83,11 +95,11 @@ const Wipdisplay = () =>{
           try {
             const Data = (await fetchDisplaywip()).data;
             console.log('Data', Data)
-            const WipmappedReult = mapToWIPs(Data);
-            console.log('WipmappedReult', WipmappedReult)
+            // const WipmappedReult = mapToWIPs(Data);
+            // console.log('WipmappedReult', WipmappedReult)
 
-            setRowData(WipmappedReult); // Set the users from the API response
-            console.log("RowData", rowData)
+            setRowData(Data); // Set the users from the API response
+            // console.log("RowData", rowData)
           } catch (err) {
             setError(err.message); // Set the error message if something goes wrong
           } finally {
@@ -199,7 +211,10 @@ const Wipdisplay = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
+                // <div>Loading...</div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

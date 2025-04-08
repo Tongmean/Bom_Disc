@@ -92,10 +92,15 @@ const UpdatePackage = () => {
         });
     
         // Append the file
-        const file = values.file && values.file[0]; // Assuming only one file
+        // const file = values.file && values.file[0]; // Assuming only one file
         // if (file) {
         //     formData.append('file', file.originFileObj); // Attach the file object from Ant Design's Upload
         // }
+        const file = fileList.length > 0 ? fileList[0].originFileObj : null;
+        // if (file) {
+        //     formData.append('file', file); // ✅ Ensure the key matches Multer's expected field name
+        // }
+
         if (fileList.length > 0) {
             formData.append('file', fileList[0].originFileObj); // Attach the file
         }

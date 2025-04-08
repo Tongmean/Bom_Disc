@@ -4,14 +4,15 @@ const {
     getMaterials,
     getMaterial,
     postMaterial,
-    updateMaterial
+    updateMaterial,
+    uploadMaterialMiddleware
 } =  require("../controller/Materialcontroller");
 
 
 router.get('/', getMaterials);
 router.get('/:id', getMaterial);
-router.post('/create', postMaterial);
-router.put('/update/:id', updateMaterial);
+router.post('/create',uploadMaterialMiddleware, postMaterial);
+router.put('/update/:id',uploadMaterialMiddleware, updateMaterial);
 
 
 

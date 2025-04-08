@@ -35,6 +35,11 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Customer_Code: "รหัสลูกค้า",
         Ref_Code: "Ref Code_Fg",
         Emark_Id: "Emark Id",
+        Kit_Id: "Kit_Id",
+        Check_Status: "Check Status",
+        Remark: "Remark",
+        Check_By: "Check_At",
+        Check_At: "Check_At",
     };
 
     return (
@@ -70,8 +75,14 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: columnNameLabels.Customer_Code, value: data.Customer_Code },
                         { label: columnNameLabels.Emark_Id, value: data.Emark_Id },
                         { label: columnNameLabels.Additional_Package_Id, value: data.Additional_Package_Id },
+                        // { label: "Kit_Id", value: data.Kit_Id },
                         { label: "กรอกโดย", value: data.CreateBy },
                         { label: "กรอกเมื่อ", value: convertToUTCPlus7(data.CreateAt) },
+                        { label: "Check Status", value: data.Check_Status },
+                        { label: "Remark", value: data.Remark },
+                        { label: "ตรวจสอบโดย", value: data.Check_By },
+                        { label: "ตรวจสอบเมื่อ", value: convertToUTCPlus7(data.Check_At) },
+                       
                     ].map((field, index) => (
                         <div key={index} className="col-xl-3 col-lg-3 col-md-3 col-sm-6 mb-3">
                             <div className="p-2 border border-primary rounded bg-light">
@@ -81,7 +92,11 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         </div>
                     ))}
                 </div>
-
+                {/* // { headerName: 'Kit_Id', field: 'Kit_Id' },
+                // { headerName: 'Check Status', field: 'Check_Status' },
+                // { headerName: 'Remark', field: 'Weight' },
+                // { headerName: 'Check_By', field: 'Weight' },
+                // { headerName: 'Check_At', field: 'Check_At' }, */}
                 {/* History Log Section */}
                 {showHistoryLog && (
                     <div className="mt-3">

@@ -14,7 +14,7 @@ import {
     fetchEmarks,
     fetchAdditionalpackages
 } from '../../Ultility/Sellectedbom';
-import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct, fetchcheckstatus } from '../../Ultility/ApiSetup/staticData';
 
 const { Option } = Select;
 
@@ -62,6 +62,10 @@ const UpdateBom = () => {
         Emark_Id: "Emark Id",
         Ref_Code: "Ref Code_Fg",
         Weight: "น้ำหนัก",
+        // Kit_Id: "Kit_Id",
+        Check_Status: "Check Status",
+        Remark: "Remark"
+
 
     };
 
@@ -206,6 +210,26 @@ const UpdateBom = () => {
                                     <Select placeholder={`เลือก ${label}`}>
                                     <Option value="-">-</Option>
                                     {fetchtypecustomerproduct.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
+                                </Form.Item>
+                            )
+                            :
+                            key === "Check_Status" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                >
+                                    <Select placeholder={`เลือก ${label}`}>
+                                    <Option value="-">-</Option>
+                                    {fetchcheckstatus.map((status) => (
                                         <Option key={status.value} value={status.value}>
                                             {status.label}
                                         </Option>

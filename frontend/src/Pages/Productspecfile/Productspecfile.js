@@ -6,7 +6,7 @@ import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import { useNavigate } from 'react-router-dom';
 import DetailModal from '../Productspecfile/DetailModal'
-
+import { Spin } from 'antd';
 const Productspecfile = () =>{
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState('');
@@ -127,7 +127,9 @@ const Productspecfile = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

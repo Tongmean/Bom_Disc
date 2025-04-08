@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
@@ -35,12 +35,16 @@ const CreateOuter = () => {
             setLoading(true);
             try {
                 const Data = (await fetchrmpk()).data;
-                const outerdata = Data.filter(item => item.Group === "Outer_Box");
+                // const outerdata = Data.filter(item => item.Group === "Outer_Box");
+                const outerdata = Data.filter(
+                    item => item.Group === "Outer_Box" || item.Group === "ลังไม้" || item.Group === "Slip-Sheet"
+                );
+                  
                 setOuteroptions(outerdata);
                 const innerdata = Data.filter(item => item.Group === "Inner_Box");
                 setInneroptions(innerdata);
-                // console.log('Data', Data);
-                // console.log('outerdata',outerdata)
+                console.log('Data', Data);
+                console.log('outerdata',outerdata)
                 // console.log('innerdata',innerdata)
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
@@ -76,8 +80,8 @@ const CreateOuter = () => {
             const result = await createOuterapi(outerData);
             showNotification(result.msg, 'success');
             form.resetFields(); // Clear form fields after success
-            console.log('Outer Data:', outerData);
-            console.log('API Result:', result);
+            // console.log('Outer Data:', outerData);
+            // console.log('API Result:', result);
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {
@@ -89,7 +93,13 @@ const CreateOuter = () => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
     };
-
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
     return (
         <>
             <div className="container-fluid">
@@ -121,6 +131,7 @@ const CreateOuter = () => {
                                         rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
                                     >
                                         <Select
+                                            showSearch
                                             placeholder={`เลือก ${label}`}
                                             onChange={(value) => handleSelectChange(value, key)}
                                         >

@@ -1,10 +1,10 @@
 import axios from 'axios';
-export const baseURLclient = 'http://localhost:3001' || 'http://192.168.4.242:3001' || 'http://192.168.5.92:3001';
-export const baseURL = 'http://localhost:3031' || 'http://192.168.4.242:3031' || 'http://192.168.5.92:3031';
-//VM
+export const baseURLclient = 'http://localhost:3001';
+export const baseURL = 'http://localhost:3031';
+// //VM
 // export const baseURLclient = 'http://192.168.4.242:3001';
 // export const baseURL = 'http://192.168.4.242:3031';
-//Laptop
+// // //Laptop
 // export const baseURLclient = 'http://192.168.5.92:3001';
 // export const baseURL = 'http://192.168.5.92:3031';
 
@@ -12,6 +12,8 @@ export const baseURLdrawing = `${baseURL}/Assets/Drawing`;
 export const baseURLproductspec = `${baseURL}/Assets/Productspec`;
 export const baseURLshim = `${baseURL}/Assets/Shim`;
 export const baseURLpackage = `${baseURL}/Assets/Package`;
+export const baseURLDatasheet = `${baseURL}/Assets/Datasheet`;
+export const baseURLMaterial = `${baseURL}/Assets/Material`;
 // Create a base Axios instance with default configurations
 const apiClient = axios.create({
   baseURL: `${baseURL}/api`, // Replace with your API's base URL
@@ -21,8 +23,6 @@ const apiClient = axios.create({
   },
 });
 
-// Add interceptors if needed (optional)
-// Example: Adding a request interceptor for authorization tokens
 apiClient.interceptors.request.use(
     (config) => {
       const user = JSON.parse(localStorage.getItem('user')); // Parse user object from localStorage

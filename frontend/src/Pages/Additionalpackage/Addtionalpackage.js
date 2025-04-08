@@ -24,6 +24,7 @@ const Additionalpackage = () =>{
         { headerName: 'รหัส ERP โฟมและอุปกรณ์เสริม 2', field: 'Additional_Tool_Erp_Id_2' },
         { headerName: 'ชื่อ ERP โฟมและอุปกรณ์เสริม 2', field: 'Name_Additional_Tool_2' },
         { headerName: 'จำนวนโฟมและอุปกรณ์เสริม 2', field: 'Quantity_Additional_Tool_2' },
+        { headerName: 'น้ำหนัก', field: 'Weight' },
       
 
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
@@ -86,6 +87,7 @@ const Additionalpackage = () =>{
                 Additional_Tool_Erp_Id_2: i.Additional_Tool_Erp_Id_2,
                 Name_Additional_Tool_2: i.Name_Additional_Tool_2,
                 Quantity_Additional_Tool_2: i.Quantity_Additional_Tool_2,
+                Weight: i.Weight,
                 CreateBy: i.CreateBy,
                 CreateAt: i.CreateAt,
 

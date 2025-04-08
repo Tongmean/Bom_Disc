@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getMateriallog, getShimfilelog, getEmarklog, getProductspecfilelog, getBomlog, getPackagelog, getOuterlog, getAdditionalpackagelog, getDatasheetlog,getShimlog, getDrawinglog, getProductspeclog, getDrawingfilelog } =  require("../controller/Historylog");
+const {getDatasheetfilelog, getMateriallog, getShimfilelog, getEmarklog, getProductspecfilelog, getBomlog, getPackagelog, getOuterlog, getAdditionalpackagelog, getDatasheetlog,getShimlog, getDrawinglog, getProductspeclog, getDrawingfilelog } =  require("../controller/Historylog");
 
 router.get('/bom/:id',getBomlog);
 router.get('/package/:id',getPackagelog);
@@ -15,6 +15,7 @@ router.get('/productspecfile/:id', getProductspecfilelog);
 router.get('/emark/:id', getEmarklog);
 router.get('/shimfile/:id', getShimfilelog);
 router.get('/material/:id', getMateriallog);
+router.get('/datasheetfile/:id', getDatasheetfilelog);
 
 
 module.exports = router;

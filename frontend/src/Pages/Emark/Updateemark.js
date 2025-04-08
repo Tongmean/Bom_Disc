@@ -19,7 +19,7 @@ const UpdateEmark = () => {
         const fetchData = async () => {
             try {
                 const emarkData = (await fetchEmark(id)).data[0];
-                console.log(emarkData, emarkData);
+                // console.log(emarkData, emarkData);
                 form.setFieldsValue(emarkData);
                 
                 

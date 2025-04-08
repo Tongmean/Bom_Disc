@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
-import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct } from '../../Ultility/ApiSetup/staticData';
+import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct, fetchcheckstatus } from '../../Ultility/ApiSetup/staticData';
 import {fetchAdditionalpackages, fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
 import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
 
@@ -58,6 +58,9 @@ const CreateBom = () => {
         Emark_Id: "Emark Id",
         Ref_Code: "Ref Code_Fg",
         Weight: "น้ำหนัก",
+        Check_Status: "Check Status",
+        // Kit_Id: "Kit_Id",
+        
 
     };
 
@@ -196,7 +199,14 @@ const CreateBom = () => {
         form.resetFields(); // Clears all the form fields
         showNotification('Form values cleared', 'success');
     };
-    
+    // Loading spinner while fetching data
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        ); // Show a spinner until the data is loaded
+    }
     return (
         <>
             <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
@@ -316,6 +326,8 @@ const CreateBom = () => {
                     Ref_Code: '',
                     Emark_Id: '',
                     Weight: "",
+                    // Kit_Id: ""
+                    Check_Status: "Wait"
 
                 }}
             >
@@ -338,6 +350,28 @@ const CreateBom = () => {
                                     ))}
                         
                                     </Select>
+                                </Form.Item>
+                            )
+                            :
+                            
+                            key === "Check_Status" ? (
+                                <Form.Item
+                                    label={label}
+                                    name={key}
+                                    loading={loading}
+                                    allowClear
+                                    rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
+                                    
+                                >
+                                    <Select placeholder={`เลือก ${label}`} disabled>
+                                    <Option value="-">-</Option>
+                                    {fetchcheckstatus.map((status) => (
+                                        <Option key={status.value} value={status.value}>
+                                            {status.label}
+                                        </Option>
+                                    ))}
+                        
+                                </Select>
                                 </Form.Item>
                             )
                             :

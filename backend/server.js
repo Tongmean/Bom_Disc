@@ -7,6 +7,21 @@ const compression = require('compression');
 const cors = require('cors');
 //Body Parser
 const bodyParser = require('body-parser');
+
+const fs = require('fs');
+const { trafficLogger, responseTimeTracker, monitorSystem } = require('./middleware/monitorMiddleware');
+const memoryLimitMiddleware = require('./middleware/memoryMiddleware');
+
+// Use monitoring middleware
+// app.use(trafficLogger);
+app.use(responseTimeTracker);
+//Calculate left Memory
+app.use(memoryLimitMiddleware);
+
+// Start system monitoring
+monitorSystem();
+
+
 //Use middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,14 +29,38 @@ const path = require('path');
 // Serve static files from the 'Assets' folder
 app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
 app.use(compression());
+//Access Manually path
+const AssetsPath = path.join(__dirname, 'Assets');
+// Serve static files from the 'Assets' directory
+app.use('/Assets', express.static(AssetsPath));
+// Enable directory listing
+app.get('/Assets/*?', (req, res) => {
+    let requestedPath = req.params[0] || '';
+    let dirPath = path.join(AssetsPath, requestedPath);
 
-// const fs = require('fs'); // Import fs module
-// // Load SSL certificate files
-// const privateKey = fs.readFileSync('path/to/private.key', 'utf8');
-// const certificate = fs.readFileSync('path/to/certificate.crt', 'utf8');
-// const ca = fs.readFileSync('path/to/ca.crt', 'utf8');
+    // Prevent directory traversal attack
+    if (!dirPath.startsWith(AssetsPath)) {
+        return res.status(400).send('Invalid path');
+    }
 
-// const credentials = { key: privateKey, cert: certificate, ca: ca };
+    fs.readdir(dirPath, { withFileTypes: true }, (err, files) => {
+        if (err) {
+            return res.status(500).send('Unable to scan directory');
+        }
+        
+        let fileList = files.map(file => {
+            let href = `/Assets/${requestedPath ? requestedPath + '/' : ''}${file.name}`;
+            return `<a href="${href}">${file.name}${file.isDirectory() ? '/' : ''}</a>`;
+        }).join('<br>');
+
+        res.send(`<h2>Available Files:</h2>${fileList}`);
+    });
+});
+
+
+
+
+
 
 const requireAuth = require('./middleware/requireAuth');
 const UserRouter = require('./routes/userRoutes')
@@ -39,10 +78,13 @@ const drawingfileRouter = require('./routes/drawingfileRoutes');
 const productspecfileRouter = require('./routes/productspecfileRoutes');
 const emarkRouter = require('./routes/emarkRoutes');
 const shimfileRouter = require('./routes/shimfileRoutes');
+const datasheetfileRouter = require('./routes/datasheetfileRoutes');
 const materialRouter = require('./routes/materialRoutes');
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
 const sellectedbomRouter = require('./routes/sellectedbomRoutes')
+//Frame Api
+const frameRouter = require('./routes/frameRoute')
 
 app.use('/api/user', UserRouter);
 app.use('/api/bom',requireAuth, Bomsrouter);
@@ -60,8 +102,14 @@ app.use('/api/display', requireAuth, displayRouter);
 app.use('/api/file', requireAuth, drawingfileRouter);
 app.use('/api/file', requireAuth, productspecfileRouter);
 app.use('/api/file', requireAuth, shimfileRouter);
+app.use('/api/file', requireAuth, datasheetfileRouter);
 app.use('/api/emark', requireAuth, emarkRouter);
 app.use('/api/material', requireAuth, materialRouter);
+app.use('/api/frame', frameRouter);
+
+
+
+
 
 require('dotenv').config();
 const port = process.env.PORT || 8001;

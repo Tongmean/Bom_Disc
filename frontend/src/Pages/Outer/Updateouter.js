@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
@@ -35,15 +35,27 @@ const UpdateOuter = () => {
         const load = async () => {
             setLoading(true);
             try {
+                const fetchOuterbyid = (await fetchOuter(id)).data[0];
                 const Data = (await fetchrmpk()).data;
-                const outerdata = Data.filter(item => item.Group === "Outer_Box");
+                // const outerdata = Data.filter(item => item.Group === "Outer_Box");
+                const outerdata = Data.filter(
+                    item => item.Group === "Outer_Box" || item.Group === "ลังไม้" || item.Group === "Slip-Sheet"
+                );
+                  
                 setOuteroptions(outerdata);
                 const innerdata = Data.filter(item => item.Group === "Inner_Box");
                 setInneroptions(innerdata);
                 // console.log('Data', Data);
                 // console.log('outerdata',outerdata)
                 // console.log('innerdata',innerdata)
+                if (fetchOuterbyid) {
 
+                    form.setFieldsValue(fetchOuterbyid); // Populate form with data
+                    setLoading(false);
+                } else {
+                    setLoading(false);
+                    showNotification('No data found', 'error');
+                }
             } catch (error) {
                 showNotification('Failed to fetch data', 'warning');
             } finally {
@@ -78,8 +90,8 @@ const UpdateOuter = () => {
             const result = await updateOuter(id, outerData);
             showNotification(result.msg, 'success');
             form.resetFields(); // Clear form fields after success
-            console.log('Outer Data:', outerData);
-            console.log('API Result:', result);
+            // console.log('Outer Data:', outerData);
+            // console.log('API Result:', result);
             setTimeout(() => navigate('/outer'), 2000);
 
         } catch (error) {
@@ -93,7 +105,13 @@ const UpdateOuter = () => {
         setNotification({ message, type });
         setTimeout(() => setNotification(null), 3000);
     };
-
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
     return (
         <>
             <div className="container-fluid">
@@ -125,6 +143,7 @@ const UpdateOuter = () => {
                                         rules={[{ required: true, message: `กรุณาเลือก ${label}` }]}
                                     >
                                         <Select
+                                            showSearch
                                             placeholder={`เลือก ${label}`}
                                             onChange={(value) => handleSelectChange(value, key)}
                                         >

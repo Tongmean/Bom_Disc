@@ -76,7 +76,7 @@ const postBom = async (req, res) => {
         Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
         Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
         Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
-        Pcs_Per_Set, Additional_Package_Id, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
+        Pcs_Per_Set, Additional_Package_Id, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight, Kit_Id
     } = req.body;
 
     try {
@@ -99,17 +99,17 @@ const postBom = async (req, res) => {
                 "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", 
                 "Product_Spec_No", "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box",
                 "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy", 
-                "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight"
+                "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight", "Kit_Id"
             ) 
             VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26
             ) RETURNING *`;
 
         const values = [
             Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
             Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
             Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
-            Pcs_Per_Set, Additional_Package_Id, userEmail, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
+            Pcs_Per_Set, Additional_Package_Id, userEmail, Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight, Kit_Id
         ];
 
         const insertResult = await dbconnect.query(sqlCommand, values);
@@ -154,15 +154,16 @@ const updateBom = async (req, res) => {
         Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
         Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
         Pcs_Per_Set, Additional_Package_Id, CreateBy, 
-        Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight
+        Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight, Kit_Id, Check_Status, Remark
     } = req.body;
-
+    console.log('Check_Status', Check_Status)
+    console.log('Remark', Remark)
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "bom" WHERE id = $1`;
         const currentValueResult = await dbconnect.query(currentValueSql, [id]);
         const currentValue = currentValueResult.rows[0];
-
+        const currentValueCreateBy = currentValueResult.rows[0].CreateBy;
         if (!currentValue) {
             return res.status(404).json({
                 success: false,
@@ -178,14 +179,15 @@ const updateBom = async (req, res) => {
                 "Shim_Attach" = $10, "Shim_No" = $11, "Product_Spec_No" = $12, "Data_Sheet_No" = $13, 
                 "Display_Box_Id" = $14, "Quantity_Display_Box" = $15, "Outer_Package" = $16, "Outer_Id" = $17,
                 "Pcs_Per_Set" = $18, "Additional_Package_Id" = $19, "CreateBy" = $20,
-                "Customer_Code" = $21, "Ref_Code" = $22, "Emark_Id" = $23, "End_Sale_Date" = $24, "Weight" = $25
-            WHERE "id" = $26 RETURNING *`;
+                "Customer_Code" = $21, "Ref_Code" = $22, "Emark_Id" = $23, "End_Sale_Date" = $24, "Weight" = $25 , 
+                "Kit_Id" = $26, "Check_Status" = $27, "Remark" = $28, "Check_By" = $29 
+            WHERE "id" = $30 RETURNING *`;
 
         const values = [
             Code_Fg, Num, Part_No, Sale_Code_Bom, Type_Customer, Customer_Name,
             Start_Sale_Date, Status, Drawing_No, Shim_Attach, Shim_No, Product_Spec_No,
             Data_Sheet_No, Display_Box_Id, Quantity_Display_Box, Outer_Package, Outer_Id,
-            Pcs_Per_Set, Additional_Package_Id, CreateBy,Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight, id
+            Pcs_Per_Set, Additional_Package_Id, currentValueCreateBy,Customer_Code, Ref_Code, Emark_Id, End_Sale_Date, Weight,"-", Check_Status, Remark,userEmail, id
         ];
 
         const updateResult = await dbconnect.query(updateSql, values);
@@ -197,7 +199,7 @@ const updateBom = async (req, res) => {
             "Start_Sale_Date", "Status", "Drawing_No", "Shim_Attach", "Shim_No", 
             "Product_Spec_No", "Data_Sheet_No", "Display_Box_Id", "Quantity_Display_Box",
             "Outer_Package","Outer_Id", "Pcs_Per_Set", "Additional_Package_Id", "CreateBy", 
-            "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight"
+            "Customer_Code", "Ref_Code", "Emark_Id", "End_Sale_Date", "Weight", "Kit_Id", "Check_Status", "Remark" 
         ];
 
         // const action = updated;

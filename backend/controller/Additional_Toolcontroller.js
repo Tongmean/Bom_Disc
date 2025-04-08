@@ -64,7 +64,7 @@ const getaddtionaltool = async (req,res) =>{
 //post 
 const postAdditionaltools = async (req, res) =>{
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy} = req.body;
+    const {Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy, Weight} = req.body;
     try {
         // Check for duplicate Code_Fg
         const sqlCheck = `SELECT * FROM "Additional_Package" WHERE "Additional_Package_Id" = $1`;
@@ -79,10 +79,10 @@ const postAdditionaltools = async (req, res) =>{
         }
         //Insert Record
         const sqlCommand = `
-            INSERT INTO "Additional_Package" ("Additional_Package_Id", "Additional_Tool_Erp_Id_1", "Name_Additional_Tool_1", "Quantity_Additional_Tool_1", "Additional_Tool_Erp_Id_2", "Name_Additional_Tool_2", "Quantity_Additional_Tool_2", "CreateBy")
+            INSERT INTO "Additional_Package" ("Additional_Package_Id", "Additional_Tool_Erp_Id_1", "Name_Additional_Tool_1", "Quantity_Additional_Tool_1", "Additional_Tool_Erp_Id_2", "Name_Additional_Tool_2", "Quantity_Additional_Tool_2", "CreateBy", "Weight")
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *
         `
-        const values = [Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, userEmail];
+        const values = [Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, userEmail, Weight];
         const insertResult = await dbconnect.query(sqlCommand, values);
 
         return res.status(200).json({
@@ -104,7 +104,8 @@ const postAdditionaltools = async (req, res) =>{
 const updateAdditionaltool = async (req, res) =>{
     const id = req.params.id;
     const userEmail = req.user.email; // This email comes from requireAuth
-    const {Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy} = req.body;
+    const {Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy, Weight} = req.body;
+    // console.log('Weight', Weight)
     try {
         // Retrieve current record before update
         const currentValueSql = `SELECT * FROM "Additional_Package" WHERE id = $1`;
@@ -118,13 +119,13 @@ const updateAdditionaltool = async (req, res) =>{
             });
         }
         //update-record
-        const updateSql = `UPDATE "Additional_Package" SET "Additional_Package_Id" = $1, "Additional_Tool_Erp_Id_1" = $2, "Name_Additional_Tool_1" = $3, "Quantity_Additional_Tool_1" = $4, "Additional_Tool_Erp_Id_2" = $5, "Name_Additional_Tool_2" = $6, "Quantity_Additional_Tool_2" = $7, "CreateBy" = $8 WHERE id = $9 RETURNING *`;
-        const values = [Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy, id];
+        const updateSql = `UPDATE "Additional_Package" SET "Additional_Package_Id" = $1, "Additional_Tool_Erp_Id_1" = $2, "Name_Additional_Tool_1" = $3, "Quantity_Additional_Tool_1" = $4, "Additional_Tool_Erp_Id_2" = $5, "Name_Additional_Tool_2" = $6, "Quantity_Additional_Tool_2" = $7, "CreateBy" = $8, "Weight" = $9 WHERE id = $10 RETURNING *`;
+        const values = [Additional_Package_Id, Additional_Tool_Erp_Id_1, Name_Additional_Tool_1, Quantity_Additional_Tool_1, Additional_Tool_Erp_Id_2, Name_Additional_Tool_2, Quantity_Additional_Tool_2, CreateBy, Weight, id];
         const updateResult = await dbconnect.query(updateSql, values);
         const updatedRecord = updateResult.rows[0];
         //Log change
         const columns = [
-            "Additional_Package_Id", "Additional_Tool_Erp_Id_1", "Name_Additional_Tool_1", "Quantity_Additional_Tool_1", "Additional_Tool_Erp_Id_2", "Name_Additional_Tool_2", "Quantity_Additional_Tool_2", "CreateBy"
+            "Additional_Package_Id", "Additional_Tool_Erp_Id_1", "Name_Additional_Tool_1", "Quantity_Additional_Tool_1", "Additional_Tool_Erp_Id_2", "Name_Additional_Tool_2", "Quantity_Additional_Tool_2", "CreateBy", "Weight"
         ];
 
         // const action = updated;

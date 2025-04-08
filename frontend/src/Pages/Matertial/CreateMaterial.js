@@ -1,40 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Upload } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createMaterial } from '../../Ultility/Materialapi'; // Assuming `createMaterial` is your API function
 import { fetchMaterialcabinetid, fetchMaterialtypedrawing, fetchMaterialdocumentid, fetchMaterialremark, fetchMaterialtype1, fetchMaterialtype2, fetchMaterialtype3 } from '../../Ultility/ApiSetup/staticData';
 import { Select } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
+const { Option } = Select;
 const CreateMaterial = () => {
     const [form] = Form.useForm(); // Initialize Form instance
     const [isPending, setIsPending] = useState(false);
     const [notification, setNotification] = useState(null);
-    const [catalog, setcatalog] = useState('');
+    const [fileList, setFileList] = useState([]); // Declare fileList state
+
+    // const [catalog, setcatalog] = useState('');
     const navigate = useNavigate();
 
- 
-    // const handleFieldsChange = () => {
-    //     const values = form.getFieldsValue(["Compact_No_Modify"]);
-    
-    //     // Extract the first 9 digits of Compact_No_Modify
-    //     const compactNoModify = values.Compact_No_Modify || '';
-    //     const catalog = compactNoModify.slice(0, 9); // First 9 digits
-    
-    //     // Set the catalog value only if Compact_No_Modify changes and Compact_No_Catalog is still empty
-    //     if (!form.getFieldValue('Compact_No_Catalog')) {
-    //         form.setFieldsValue({ Compact_No_Catalog: catalog });
-    //     }
-    // };
-    
-    
-    
-    
 
-    // console.log('catalog', catalog)
-    // console.log('form', form)
-
-    const fields = [
+    const columnNameLabels = [
         { headerName: 'Compact_No (ปรับ)', field: 'Compact_No_Modify' },
         { headerName: 'Compact_No (Catalog)', field: 'Compact_No_Catalog' },
         { headerName: 'Drawing Number', field: 'Drawing_no' },
@@ -62,20 +47,36 @@ const CreateMaterial = () => {
         { headerName: 'Area', field: 'Area' },
         { headerName: 'เจาะรู', field: 'Drill' },
         { headerName: 'ลักษณะชิม', field: 'Type_Shim' },
+        { headerName: 'ไฟล์ PDF', field: 'file' },
     ];
 
     const handleSubmit = async (values) => {
         setIsPending(true);
 
         const materialData = { ...values, CreateBy: '-' }; // Merge form values with CreateBy
+        // Create FormData to send as multipart form data
+        const formData = new FormData();
+
+        // Append form fields to FormData
+        Object.keys(materialData).forEach((key) => {
+            formData.append(key, materialData[key]);
+        });
+    
+
+        const file = fileList.length > 0 ? fileList[0].originFileObj : null;
+
+        if (fileList.length > 0) {
+            formData.append('file', fileList[0].originFileObj); // Attach the file
+        }
 
         try {
-            const result = await createMaterial(materialData);
+            const result = await createMaterial(formData);
             showNotification(result.msg, 'success');
-            console.log('Material Data:', materialData);
-            console.log('API Result:', result);
+            // console.log('Material Data:', materialData);
+            // console.log('API Result:', result);
 
             form.resetFields(); // Clear the form fields upon success
+            setFileList([])
         } catch (error) {
             showNotification(error.message, 'warning');
         } finally {
@@ -124,64 +125,214 @@ const CreateMaterial = () => {
                     Area: '',
                     Drill: '',
                     Type_Shim: '',
+                    file: []
                 }}
             >
                 <div className="row">
-                    {fields.map((field) => (
-                        <div className="col-xl-3 col-lg-6 col-md-12" key={field.field}>
-                            <Form.Item
-                                label={field.headerName}
-                                name={field.field}
-                                rules={[{ required: true, message: `กรุณากรอก ${field.headerName}` }]}
-                            >
-                                {field.field === 'Cabinet_Id' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialcabinetid}></Select.Option>
-                                    </Select>
-                                ) 
-                                : field.field === 'Type_Drawing' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialtypedrawing}></Select.Option>
-                                    </Select>
-                                )
-                                : field.field === 'Remark' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialremark}></Select.Option>
-                                    </Select>
-                                )
-                                : field.field === 'Document_Id' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialdocumentid}></Select.Option>
-                                    </Select>
-                                )
-                                : field.field === 'Type1' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialtype1}></Select.Option>
-                                    </Select>
-                                )
-                                : field.field === 'Type2' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialtype2}></Select.Option>
-                                    </Select>
-                                )
-                                : field.field === 'Type3' ? (
-                                    <Select>
-                                        <Select.Option options={fetchMaterialtype3}></Select.Option>
-                                    </Select>
+                    <div className='row'>
+                        {columnNameLabels.map(({ headerName, field }, index) => (
+                            <div className={`col-xl-3 col-lg-3 col-md-4 col-sm-6`} key={index}>
+                                {field === 'Cabinet_Id' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialcabinetid.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
                                 )
                                 : 
-                                field.field === 'Data_Approve' ? (
-                                    <Input
-                                        placeholder='DD/MM/YYYY'
-                                    />
+                                field === 'Type_Drawing' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialtypedrawing.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
                                 )
                                 : 
-                                (
-                                    <Input />
+                                field === 'fetchMaterialtypedrawing' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialremark.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Remark' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialremark.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Remark' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialremark.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Document_Id' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialdocumentid.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Type1' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialtype1.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Type2' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialtype2.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Type3' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Select placeholder={`เลือก ${headerName}`}>
+                                            {fetchMaterialtype3.map((status) => (
+                                                <Option key={status.value} value={status.value}>
+                                                    {status.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'Data_Approve' ? (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        allowClear
+                                        rules={[{ required: true, message: `กรุณาเลือก ${headerName}` }]}
+                                    >
+                                        <Input placeholder="DD/MM/YYYY" />
+                                    </Form.Item>
+                                )
+                                : 
+                                field === 'file' ? (
+                                    <Form.Item label="PDF File" name="file" valuePropName="file">
+                                        <Upload
+                                            beforeUpload={(file) => {
+                                                setFileList([
+                                                    {
+                                                        uid: '-1',
+                                                        name: file.name,
+                                                        originFileObj: file,
+                                                        status: 'done',
+                                                    },
+                                                ]);
+                                                return false;
+                                            }}
+                                            fileList={fileList}
+                                            onChange={({ fileList }) =>
+                                                setFileList(fileList.length > 0 ? [fileList[fileList.length - 1]] : [])
+                                            }
+                                            accept=".pdf"
+                                            maxCount={1}
+                                            onRemove={() => form.setFieldsValue({ file: null })}
+                                        >
+                                            <Button icon={<UploadOutlined />}>Upload PDF</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                ) : (
+                                    <Form.Item
+                                        label={headerName}
+                                        name={field}
+                                        rules={[{ required: true, message: `กรุณากรอก ${headerName}` }]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
                                 )}
-                            </Form.Item>
-                        </div>
-                    ))}
+                            </div>
+                        ))}
+                    </div>
 
                     <div className="col-12">
                         <Form.Item>

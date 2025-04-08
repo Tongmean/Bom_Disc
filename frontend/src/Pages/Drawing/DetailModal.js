@@ -45,11 +45,16 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
             Name_WD3: "ชื่อ ERP WD3",
             Id_WD3: "ID WD3",
             Quantity_WD3: "จำนวน WD3",
+            Status: "Status",
             CreateBy: "กรอกโดย",
             CreateAt: "กรอกเมื่อ",
-
+            Check_Status: "Check Status",
+            Remark: "Remark",
+            Check_By: "ตรวจสอบโดย",
+            Check_At: "ตรวจสอบเมื่อ"
         };
-
+        // { headerName: 'Check Status', field: 'Check_Status' },
+        // { headerName: 'Remark', field: 'Remark' },
     return (
         <Modal show={show} onHide={onHide} centered size="xl">
             <Modal.Header closeButton>
@@ -63,7 +68,10 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         <div key={index} className="col-xl-3 col-lg-3 col-md-3 col-sm-6 mb-3">
                             <div className="p-2 border border-primary rounded bg-light">
                                 <h6 className="text-secondary mb-1">{label}</h6>
-                                <p className="m-0">{data[key] || "-"}</p>
+                                {/* <p className="m-0">{data[key]}</p> */}
+                                <p className="m-0">
+                                    {["Check_At", "CreateAt"].includes(key) ? convertToUTCPlus7(data[key]) : data[key]}
+                                </p>
                             </div>
                         </div>
                     ))}

@@ -23,6 +23,21 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
         Weight_U2: "น้ำหนักเคมี U2",
         Formular: "สูตร",
         Status: "Status",
+
+        Mold_Cold: "แม่พิมพ์เย็น",
+        Machine_Cold: "เครื่องจักรพิมพ์เย็น",
+        Presure_Cold: "แรงดันพิมพ์เย็น",
+        Piece_Per_Mold_Cold: "ชิ้นต่อพิมพ์ (พิมพ์เย็น)",
+        Mold_Hot: "แม่พิมพ์ร้อน",
+        Temperature_Upper: "อุณหภูมิบน",
+        Temperature_Lower: "อุณหภูมิล้าง",
+        Machine_Hot: "เครื่องจักรพิมพ์ร้อน",
+        Presure_Hot: "แรงดันพิมพ์ร้อน",
+        Piece_Per_Mold_Hot: "ชิ้นต่อพิมพ์ (พิมพ์ร้อน)",
+        Check_Status: "Check Status",
+        Remark: "Remark",
+        CheckBy: "ตรวจสอบโดย",
+        CheckAt: "ตรวจสอบเมื่อ"
     };
 
     return (
@@ -45,11 +60,25 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "น้ำหนักเคมี U1:", value: data.Weight_U1 },
                         { label: "น้ำหนักเคมี U2:", value: data.Weight_U2 },
                         { label: "สูตร:", value: data.Formular },
+                        { label: "แม่พิมพ์เย็น:", value: data.Mold_Cold },
+                        { label: "เครื่องจักรพิมพ์เย็น:", value: data.Machine_Cold },
+                        { label: "แรงดันพิมพ์เย็น:", value: data.Presure_Cold },
+                        { label: "ชิ้นต่อพิมพ์ (พิมพ์เย็น):", value: data.Piece_Per_Mold_Cold },
+                        { label: "แม่พิมพ์ร้อน:", value: data.Mold_Hot },
+                        { label: "อุณหภูมิบน:", value: data.Temperature_Upper },
+                        { label: "อุณหภูมิล้าง:", value: data.Temperature_Lower },
+                        { label: "เครื่องจักรพิมพ์ร้อน:", value: data.Machine_Hot },
+                        { label: "ชิ้นต่อพิมพ์ (พิมพ์ร้อน):", value: data.Piece_Per_Mold_Hot },
+                        // { label: "Check Status:", value: data.Check_Status },
                         { label: "Status:", value: data.Status },
                         { label: "กรอกโดย:", value: data.CreateBy },
                         { label: "กรอกเมื่อ:", value: convertToUTCPlus7(data.CreateAt) },
+                        { label: "Check Status:", value: data.Check_Status },
+                        { label: "ตรวจสอบโดย:", value: data.Check_By },
+                        { label: "ตรวจสอบเมื่อ:", value: convertToUTCPlus7(data.Check_At) },
+                        { label: "Remark:", value: data.Remark },
                     ].map((field, index) => (
-                        <div key={index} className="col-md-4 mb-3"> {/* Changed col-md-6 to col-md-4 for 3 boxes in a row */}
+                        <div key={index} className="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-3"> {/* Changed col-md-6 to col-md-4 for 3 boxes in a row */}
                             <div className="p-2 border border-primary rounded bg-light">
                                 <h6 className="text-secondary mb-1">{field.label}</h6>
                                 <p className="m-0">{field.value || "-"}</p>

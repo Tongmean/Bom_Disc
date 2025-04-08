@@ -4,8 +4,9 @@ import {fetchdDatasheets, fetchHistoryLog} from '../../Ultility/Datasheet';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Datasheet/DetailModal'
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
+import { baseURLMaterial } from '../../Ultility/ApiSetup/api';
 const { Option } = Select;
 const DataSheet = () =>{
     const [loading, setLoading] = useState(true); 
@@ -23,7 +24,7 @@ const DataSheet = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'No', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' },
+        { headerName: 'Data Sheet No.', field: 'Data_Sheet_No' , pinned: 'left'},
         { headerName: 'Compact No.', field: 'Compact_No' },
         { headerName: 'เกรดเคมี.', field: 'Grade_Chem' },
         { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
@@ -32,16 +33,56 @@ const DataSheet = () =>{
         { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
         { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
         { headerName: 'สูตร', field: 'Formular' },
+
+        { headerName: 'แม่พิมพ์เย็น', field: 'Mold_Cold' },
+        { headerName: 'เครื่องจักรพิมพ์เย็น', field: 'Machine_Cold' },
+        { headerName: 'แรงดันพิมพ์เย็น', field: 'Presure_Cold' },
+        { headerName: 'ชิ้นต่อพิมพ์ (พิมพ์เย็น)', field: 'Piece_Per_Mold_Cold' },
+        { headerName: 'แม่พิมพ์ร้อน', field: 'Mold_Hot' },
+        { headerName: 'อุณหภูมิบน', field: 'Temperature_Upper' },
+        { headerName: 'อุณหภูมิล้าง', field: 'Temperature_Lower' },
+        { headerName: 'เครื่องจักรพิมพ์ร้อน', field: 'Machine_Hot' },
+        { headerName: 'แรงดันพิมพ์ร้อน', field: 'Presure_Hot' },
+        { headerName: 'ชิ้นต่อพิมพ์ (พิมพ์ร้อน)', field: 'Piece_Per_Mold_Hot' },
+
+        { headerName: 'ID', field: 'ID' },
+        { headerName: 'Area', field: 'Area' },
+        { headerName: 'ความหนา SD', field: 'Thick' },
+        { headerName: 'ความหนา SD + 0.5', field: 'Thickplus' },
+
+
         { headerName: 'Status', field: 'Status' },
+        { headerName: 'Check Status', field: 'Check_Status' },
+        { headerName: 'Remark', field: 'Remark' },
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right',
             cellRenderer: (params) => (
                 <div>
+                    {params.data.materialfile && (
+                        <a
+                            href={`${baseURLMaterial}/${encodeURIComponent(params.data.materialfile)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <button
+                                className="btn btn-warning btn-sm"
+                                style={{ marginRight: '5px' }}
+                            >
+                                C
+                            </button>
+                        </a>
+                    )}
                     <button
-                        className="btn btn-primary btn-sm"
+                        className={`btn btn-sm ${
+                            params.data.Check_Status === 'Review' ? 'btn-warning' :
+                            params.data.Check_Status === 'Reject' ? 'btn-danger' :
+                            params.data.Check_Status === 'Wait' ? 'btn-success' :
+                            'btn-primary'
+                        }`}
                         onClick={() => handleShowDetails(params.data)}
                         style={{ marginRight: '5px' }}
                     >
@@ -82,7 +123,7 @@ const DataSheet = () =>{
         const loadDatasheet = async () => {
           try {
             const packageData = (await fetchdDatasheets()).data;
-            
+            // console.log('packageData',packageData)
             const mappedData = packageData.map(i => ({
                 No: i.id,
                 Data_Sheet_No: i.Data_Sheet_No,
@@ -97,6 +138,28 @@ const DataSheet = () =>{
                 Status: i.Status,
                 CreateBy: i.CreateBy,
                 CreateAt: i.CreateAt,
+
+                Mold_Cold: i.Mold_Cold,
+                Machine_Cold: i.Machine_Cold,
+                Presure_Cold: i.Presure_Cold,
+                Piece_Per_Mold_Cold: i.Piece_Per_Mold_Cold,
+                Mold_Hot: i.Mold_Hot,
+                Temperature_Upper: i.Temperature_Upper,
+                Temperature_Lower: i.Temperature_Lower,
+                Machine_Hot: i.Machine_Hot,
+                Presure_Hot: i.Presure_Hot,
+                Piece_Per_Mold_Hot: i.Piece_Per_Mold_Hot,
+                Check_Status: i.Check_Status,
+                Remark: i.Remark,
+                Check_By: i.Check_By,
+                Check_At: i.Check_At,
+
+                ID: i.ID,
+                Thick: i.Thick,
+                Area: i.Area,
+                materialfile: i.materialfile,
+                Thickplus: (parseFloat(i.Thick) + 0.5)
+
 
             }));
             // console.log('Mapped Data', mappedData)
@@ -193,7 +256,9 @@ const DataSheet = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

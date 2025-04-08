@@ -4,7 +4,7 @@ import { fetchEmarks, fetchHistoryLog } from '../../Ultility/Emarkapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Emark/DetailModal';
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 const Emark = () => {
@@ -25,7 +25,7 @@ const Emark = () => {
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'E-mark ID', field: 'Emark_Id'},
+        { headerName: 'E-mark ID', field: 'Emark_Id', pinned: 'left' },
         { headerName: 'Part No. ', field: 'Part_No' },
         { headerName: 'Brake Pad', field: 'Brake_Pad' },
         { headerName: 'Material', field: 'Material' },
@@ -111,7 +111,7 @@ const Emark = () => {
 
     const onSelectionChanged = () => {
         const selectedRows = gridApi.getSelectedRows();
-        console.log('Selected rows:', selectedRows);
+        // console.log('Selected rows:', selectedRows);
     };
 
     const handleOnClick = () => {
@@ -229,7 +229,9 @@ const Emark = () => {
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

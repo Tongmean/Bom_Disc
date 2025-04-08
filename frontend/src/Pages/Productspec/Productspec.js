@@ -4,7 +4,7 @@ import {fetchProductspecs, fetchHistoryLog} from '../../Ultility/Productspecapi'
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 import DetailModal from '../Productspec/DetailModal'
-import { Select, Button } from 'antd'; // Import Ant Design components
+import { Select, Button, Spin } from 'antd'; // Import Ant Design components
 import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 
@@ -25,8 +25,8 @@ const Productspec = () =>{
     const [customerNameFilter, setCustomerNameFilter] = useState([]);
 
     const columnDefs = [
-        { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
-        { headerName: 'รหัส Product Spec', field: 'Product_Spec_Id' },
+        { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'รหัส Product Spec', field: 'Product_Spec_Id' , pinned: 'left' },
         { headerName: 'Code การขาย', field: 'Sale_Code' },
         { headerName: 'Coating', field: 'Coating' },
         { headerName: 'Scoarching', field: 'Scoarching' },
@@ -76,15 +76,23 @@ const Productspec = () =>{
 
         { headerName: 'Status', field: 'Status' },
 
+        { headerName: 'Check Status', field: 'Check_Status' },
+        { headerName: 'Remark', field: 'Remark' },
         // { headerName: 'กรอกโดย', field: 'CreateBy' },
         // { headerName: 'กรอกเมื่อ', field: 'CreateAt' },
         {
             headerName: 'Actions',
             field: 'actions',
+            pinned: 'right' ,
             cellRenderer: (params) => (
                 <div>
                     <button
-                        className="btn btn-primary btn-sm"
+                        className={`btn btn-sm ${
+                            params.data.Check_Status === 'Review' ? 'btn-warning' :
+                            params.data.Check_Status === 'Reject' ? 'btn-danger' :
+                            params.data.Check_Status === 'Wait' ? 'btn-success' :
+                            'btn-primary'
+                        }`}
                         onClick={() => handleShowDetails(params.data)}
                         style={{ marginRight: '5px' }}
                     >
@@ -172,6 +180,16 @@ const Productspec = () =>{
                 Additional_Tool_Erp_Id_3: i.Additional_Tool_Erp_Id_3,
                 Num_Additional_Tool_3: i.Num_Additional_Tool_3,
                 Status: i.Status,
+                CreateBy: i.CreateBy,
+                CreateAt: i.CreateAt,
+                Check_Status: i.Check_Status,
+                Remark: i.Remark,
+                Check_At: i.Check_At,
+                Check_By: i.Check_By,
+
+                
+
+
 
             }));
             // console.log('Mapped Data', mappedData)
@@ -315,7 +333,9 @@ const Productspec = () =>{
                 <ClipboardButton gridApi={gridApi} columnDefs={columnDefs} />
             </div>
             {loading ? (
-                <div>Loading...</div>
+                <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <div style={{ color: 'red' }}>{`Error: ${error}`}</div>
             ) : (

@@ -33,8 +33,8 @@ const CreateEmark = () => {
         try {
             const result = await createEmark(emarkData);
             showNotification(result.msg, 'success');
-            console.log('Emark Data:', emarkData);
-            console.log('API Result:', result);
+            // console.log('Emark Data:', emarkData);
+            // console.log('API Result:', result);
 
             form.resetFields(); // Clear the form fields upon success
             setEmarkId(''); // Reset Emark_Id

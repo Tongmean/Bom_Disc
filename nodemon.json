@@ -1,0 +1,12 @@
+{
+  "restartable": "rs",
+  "ignore": ["node_modules/**"],
+  "watch": ["server.js"],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "events": {
+    "crash": "echo 'App crashed! Cleaning up...'"
+  },
+  "exec": "nodemon --exitcrash --legacy-watch --exec \"node server.js\""
+}

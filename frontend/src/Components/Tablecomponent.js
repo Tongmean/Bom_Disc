@@ -2,7 +2,7 @@ import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-
+// import 'ag-grid-enterprise'
 const Tablecomponent = ({
     columnDefs,
     rowData,
@@ -13,7 +13,8 @@ const Tablecomponent = ({
         filter: true,
         editable: true,
         flex: 1,
-        minWidth: 150,
+        minWidth: 100,
+        filter: "agSetColumnFilter", // Set filter dropdown
     },
     onGridReady,
     onSelectionChanged,

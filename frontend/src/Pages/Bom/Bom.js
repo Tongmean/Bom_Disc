@@ -128,6 +128,7 @@ const Bom = () =>{
                 Status: i.Status,
                 Drawing_No: i.Drawing_No,
                 Shim_Attach: i.Shim_Attach,
+                Shim_No: i.Shim_No,
                 Product_Spec_No: i.Product_Spec_No,
                 Data_Sheet_No: i.Data_Sheet_No,
                 Display_Box_Id: i.Display_Box_Id,

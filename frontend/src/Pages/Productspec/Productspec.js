@@ -26,7 +26,9 @@ const Productspec = () =>{
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true},
+        { headerName: 'Status', field: 'Status'},
         { headerName: 'รหัส Product Spec', field: 'Product_Spec_Id' , pinned: 'left' },
+        
         { headerName: 'Code การขาย', field: 'Sale_Code' },
         { headerName: 'Coating', field: 'Coating' },
         { headerName: 'Scoarching', field: 'Scoarching' },
@@ -74,7 +76,7 @@ const Productspec = () =>{
         { headerName: 'รหัส ERP อุปกรณ์เสริมอื่น 3', field: 'Additional_Tool_Erp_Id_3' },
         { headerName: 'จำนวน อุปกรณ์เสริมอื่น 3', field: 'Num_Additional_Tool_3' },
 
-        { headerName: 'Status', field: 'Status' },
+        // { headerName: 'Status', field: 'Status'  , pinned: 'left'},
 
         { headerName: 'Check Status', field: 'Check_Status' },
         { headerName: 'Remark', field: 'Remark' },

@@ -4,7 +4,7 @@ module.exports = {
       {
         name: "frontend-disc", // Name of the backend process
         script: "server.js", // Path to the main file of your Express.js backend
-        watch: true, // Restarts when files in the backend directory change
+        watch: true, // Restarts when files in the backend directory changewr
         autorestart: true, // Ensures the app restarts on crash
         max_memory_restart: "1000M", // Restarts the app if memory exceeds 1000MB
         env: {

@@ -55,6 +55,14 @@ const CreateDrawing = () => {
     }, []);
 
     const columnNameLabels = {
+        Id_D1: "D1",
+        Id_D2: "D2",
+        Id_D3: "D3",
+        Id_D4: "D4",
+        Quantity_D1: " จำนวน D1",
+        Quantity_D2: "จำนวน D2",
+        Quantity_D3: "จำนวน D3",
+        Quantity_D4: "จำนวน D3",
         Compact_No_Modify_Drawing: "Compact No (ปรับ)",
         Part_No: "Part No.",
         Erp_Id_BP1: "รหัส ERP BP1",
@@ -691,7 +699,43 @@ const CreateDrawing = () => {
                         </Form.Item>
                     </div>
                 </div> */}
-                
+            <div className="row">
+                {['Id_D1', 'Id_D2', 'Id_D3', 'Id_D4'].map((key) => (
+                    <div className="col-md-3" key={key}>
+                        <Form.Item
+                            label={columnNameLabels[key]}
+                            name={key}
+                            // rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels[key]}` }]}
+                        >
+                            {
+
+                            (
+                                <Input  disabled/>
+                            )}
+                        </Form.Item>
+                    </div>
+                ))}
+
+            </div>
+            <div className="row">
+                {['Quantity_D1', 'Quantity_D2', 'Quantity_D3', 'Quantity_D4'].map((key) => (
+                    <div className="col-md-3" key={key}>
+                        <Form.Item
+                            label={columnNameLabels[key]}
+                            name={key}
+                            // rules={[{ required: true, message: `กรุณากรอก ${columnNameLabels[key]}` }]}
+                        >
+                            {
+
+                            (
+                                <Input  disabled/>
+                            )}
+                        </Form.Item>
+                    </div>
+                ))}
+
+            </div>
+
             <div className="row">
                 {['Compact_No_Modify_Drawing', 'Part_No', 'Status', 'Check_Status'].map((key) => (
                     <div className="col-md-3" key={key}>
@@ -718,7 +762,7 @@ const CreateDrawing = () => {
             </div>
 
             {/* BP1 to BP4 Rows */}
-            {[1, 2, 3, 4].map((num) => (
+            {/* {[1, 2, 3, 4].map((num) => (
                 <div className="row" key={num}>
                     {['Erp_Id_BP', 'Name_BP', 'Id_BP', 'Quantity_BP', 'Thickness_Pad'].map((prefix) => {
                         const key = `${prefix}${num}`;
@@ -729,7 +773,7 @@ const CreateDrawing = () => {
                                     name={key}
                                     rules={[{ required: true, message: `กรุณาเลือก ${columnNameLabels[key]}` }]}
                                 >
-                                    {key.includes('Name_BP') || key.includes('Thickness_Pad') || key.includes('Quantity_BP') ? (
+                                    {key.includes('Name_BP') || key.includes('Thickness_Pad') || key.includes('Quantity_BP') || key.includes('Id_BP') ? (
                                         <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
                                     ) : (
                                         <Select
@@ -740,19 +784,60 @@ const CreateDrawing = () => {
                                             onChange={(value) => handleSelectChange(value, key)}
                                         >
                                             <Select.Option value="-">-</Select.Option>
-                                            {(key.includes('Erp_Id_BP') ? bperpoptions : bpoptions).map((i) => (
-                                                <Select.Option key={i.ID || i.Erp_Id} value={i.ID || i.Erp_Id}>
-                                                    {i.ID || i.Erp_Id}
+                                            {bperpoptions.map((i) => (
+                                                <Select.Option key={i.Erp_Id} value={i.Erp_Id}>
+                                                    {i.Erp_Id}
                                                 </Select.Option>
                                             ))}
                                         </Select>
                                     )}
+
                                 </Form.Item>
                             </div>
                         );
                     })}
                 </div>
+            ))} */}
+            {[1, 2, 3, 4].map((num) => (
+                <div className="row" key={num}>
+                    {['Erp_Id_BP', 'Name_BP', 'Id_BP', 'Quantity_BP', 'Thickness_Pad'].map((prefix) => {
+                    const key = `${prefix}${num}`;
+                    const isSelect = key.includes('Erp_Id_BP');
+                    const isInput = key.includes('Name_BP') || key.includes('Thickness_Pad') || key.includes('Quantity_BP') || key.includes('Id_BP');
+                    const colClass = key.includes('Erp_Id_BP') || key.includes('Name_BP') ? "col-md-3" : "col-md-2";
+
+                    return (
+                        <div className={colClass} key={key}>
+                        <Form.Item
+                            label={columnNameLabels[key]}
+                            name={key}
+                            rules={[{ required: true, message: `กรุณาเลือก ${columnNameLabels[key]}` }]}
+                        >
+                            {isSelect ? (
+                            <Select
+                                placeholder={`เลือก ${columnNameLabels[key]}`}
+                                loading={loading}
+                                allowClear
+                                showSearch
+                                onChange={(value) => handleSelectChange(value, key)}
+                            >
+                                <Select.Option value="-">-</Select.Option>
+                                {bperpoptions.map((i) => (
+                                <Select.Option key={i.Erp_Id} value={i.Erp_Id}>
+                                    {i.Erp_Id}
+                                </Select.Option>
+                                ))}
+                            </Select>
+                            ) : isInput ? (
+                            <Input placeholder={`กรอก ${columnNameLabels[key]}`} />
+                            ) : null}
+                        </Form.Item>
+                        </div>
+                    );
+                    })}
+                </div>
             ))}
+
 
   
 

@@ -14,6 +14,8 @@ import Qcdisplay from './Pages/Display/Qcdisplay';
 import Saledisplay from './Pages/Display/Saledisplay';
 import Componentdisplay from './Pages/Display/Componentdisplay';
 import Wipprocessdisplay from './Pages/Display/Wipprocessdisplay';
+import Datasheetdisplay from './Pages/Display/Datasheetdisplay';
+import HomeDescription from './HomeDescription/HomeDescription';
 //Protect Route
 import ProtectedRoute from './Components/ProtectedRoute';
 //package
@@ -79,8 +81,34 @@ import Kit from './Pages/Kit/Kit';
 import Datasheetfile from './Pages/Datasheetfile/Datasheetfile';
 import CreateDatasheetFile from './Pages/Datasheetfile/Createdtasheetfile';
 import UpdateDatasheetFile from './Pages/Datasheetfile/Updatedatasheet';
+//Data-sheet-Revise
+import Machine from './Pages/D_Machine/Machine';
+import CreateMachine from './Pages/D_Machine/CreateMachine';
+import UpdateMachine from './Pages/D_Machine/UpdateMachine';
 
+import Mold from './Pages/D_Mold/Mold';
+import CreateMold from './Pages/D_Mold/CreateMold';
+import UpdateMold from './Pages/D_Mold/UpdateMold';
+import Chemgrade from './Pages/D_Chemgrade/Chemgrade';
+import CreateChemgrade from './Pages/D_Chemgrade/CreateChemgrade';
+import UpdateChemgrade from './Pages/D_Chemgrade/UpdateChemgrade';
 
+import D_Weight from './Pages/D_Weight/D_Weight';
+import CreateD_Weight from './Pages/D_Weight/CreateD_Weight';
+import UpdateD_Weight from './Pages/D_Weight/UpdateD_Weight';
+
+import D_Pressure from './Pages/D_Pressure/D_Pressure';
+import CreateD_Pressure from './Pages/D_Pressure/CreateD_Pressure';
+import UpdateD_Pressure from './Pages/D_Pressure/UpdateD_Pressure';
+
+import Moldmachine from './Pages/D_Moldmachine/Moldmachine';
+import CreateMoldmachine from './Pages/D_Moldmachine/CreateMoldmachine';
+import CreateMultipleMoldmachine from './Pages/D_Moldmachine/CreateMultipleMoldmachine';
+import UpdateMoldmachine from './Pages/D_Moldmachine/UpdateMoldmachine';
+
+import Wipprocess from './Pages/Wipprocess/Wipprocess';
+import CreateWip from './Pages/Wipprocess/CreateWip';
+import UpdateWip from './Pages/Wipprocess/UpdateWip';
 const { Content } = Layout;
 
 const App = () => {
@@ -114,12 +142,14 @@ const App = () => {
               <Route path='' element={<HomepageTwin/>} />
 
               <Route path='/login' element={isAuthenticated ? <Navigate to='/Home' /> : <Loginpage />} />
-              <Route path='/Home' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
+              <Route path='/bomdisplay' element={isAuthenticated ? <Homepage /> : <Navigate to='/login' />} />
+              <Route path='/Home' element={isAuthenticated ? <HomeDescription /> : <Navigate to='/login' />} />
               <Route path='/wipdisplay' element={isAuthenticated ? <Wipdisplay /> : <Navigate to='/login' />} />
               <Route path='/wipprocessdisplay' element={isAuthenticated ? <Wipprocessdisplay /> : <Navigate to='/login' />} />
               <Route path='/Qcdisplay' element={isAuthenticated ? <Qcdisplay /> : <Navigate to='/login' />} />
               <Route path='/saledisplay' element={isAuthenticated ? <Saledisplay /> : <Navigate to='/login' />} />
               <Route path='/componentdisplay' element={isAuthenticated ? <Componentdisplay /> : <Navigate to='/login' />} />
+              <Route path='/datasheetdisplay' element={isAuthenticated ? <Datasheetdisplay /> : <Navigate to='/login' />} />
 
               <Route path="/Package" element={isAuthenticated ? <Package /> : <Navigate to='/login' />} />
 
@@ -139,6 +169,47 @@ const App = () => {
                 <Route path="/createdatasheet" element={<CreateDatasheet />} />
                 <Route path="/datasheet/:id" element={<UpdateDatasheet />} />
               </Route>
+
+              <Route path="/machine" element={isAuthenticated ? <Machine /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createmachine" element={<CreateMachine />} />
+                <Route path="/machine/:id" element={<UpdateMachine />} />
+              </Route>
+
+              <Route path="/mold" element={isAuthenticated ? <Mold /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createmold" element={<CreateMold />} />
+                <Route path="/mold/:id" element={<UpdateMold />} />
+              </Route>
+
+              <Route path="/chemgrade" element={isAuthenticated ? <Chemgrade /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createchemgrade" element={<CreateChemgrade />} />
+                <Route path="/chemgrade/:id" element={<UpdateChemgrade />} />
+              </Route>
+
+              <Route path="/dweight" element={isAuthenticated ? <D_Weight /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createdweight" element={<CreateD_Weight />} />
+                <Route path="/dweight/:id" element={<UpdateD_Weight />} />
+              </Route>
+              <Route path="/dpressure" element={isAuthenticated ? <D_Pressure /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createdpressure" element={<CreateD_Pressure />} />
+                <Route path="/dpressure/:id" element={<UpdateD_Pressure />} />
+              </Route>
+              <Route path="/dmoldmachine" element={isAuthenticated ? <Moldmachine /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createdmoldmachine" element={<CreateMoldmachine />} />
+                <Route path="/createmultipledmoldmachine" element={<CreateMultipleMoldmachine />} />
+                <Route path="/dmoldmachine/:id" element={<UpdateMoldmachine />} />
+              </Route>
+              <Route path="/wip" element={isAuthenticated ? <Wipprocess /> : <Navigate to='/login' />} />
+              <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>
+                <Route path="/createwip" element={<CreateWip />} />
+                <Route path="/wip/:id" element={<UpdateWip />} />
+              </Route>
+
 
               <Route path="/dataSheetfile" element={isAuthenticated ? <Datasheetfile /> : <Navigate to='/login' />} />
               <Route element={<ProtectedRoute allowedRoles={['admin']} allowedPermissions={['datasheet']}/>}>

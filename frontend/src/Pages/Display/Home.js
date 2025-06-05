@@ -34,12 +34,18 @@ const Homepage = () => {
     { headerName: 'เบอร์', field: 'Num' },
     { headerName: 'จำนวนชิ้น/ชุด', field: 'Pcs_Per_Set' },
     { headerName: 'Status', field: 'Status' },
-    { headerName: 'สูตรเคมี.', field: 'Grade_Chem' },
-    { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
-    { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
-    { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
-    { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
-    { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
+    { headerName: 'สูตรเคมี.', field: 'Chem_Grade' },
+    { headerName: 'น้ำหนักเคมี F', field: 'Weight_F' },
+    { headerName: 'เกรดเคมี Underlayer', field: 'Chem_Grade_U' },
+    { headerName: 'น้ำหนักเคมี U', field: 'Weight_U' },
+    // { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
+
+    // { headerName: 'สูตรเคมี.', field: 'Grade_Chem' },
+    // { headerName: 'น้ำหนักเคมี F1', field: 'Weight_F1' },
+    // { headerName: 'น้ำหนักเคมี F2', field: 'Weight_F2' },
+    // { headerName: 'เกรดเคมี Underlayer', field: 'Underlayer_Grade_Chem' },
+    // { headerName: 'น้ำหนักเคมี U1', field: 'Weight_U1' },
+    // { headerName: 'น้ำหนักเคมี U2', field: 'Weight_U2' },
     { headerName: 'รหัส ERP BP1', field: 'Erp_Id_BP1' },
     { headerName: 'ชื่อ ERP BP1', field: 'Name_BP1' },
     { headerName: 'ID BP1', field: 'Id_BP1' },
@@ -282,7 +288,16 @@ const Homepage = () => {
               value={saleCodeBomFilter}
               onChange={(value) => setSaleCodeBomFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Sale_Code_Bom))].map((code) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                // (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Sale_Code_Bom))].map((code) => (
                 <Option key={code} value={code}>
                   {code}
                 </Option>
@@ -299,7 +314,16 @@ const Homepage = () => {
               value={partNoFilter}
               onChange={(value) => setPartNoFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                // (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Part_No))].map((partNo) => (
                 <Option key={partNo} value={partNo}>
                   {partNo}
                 </Option>
@@ -316,7 +340,16 @@ const Homepage = () => {
               value={customerNameFilter}
               onChange={(value) => setCustomerNameFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Customer_Name))].map((customerName) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                // (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Customer_Name))].map((customerName) => (
                 <Option key={customerName} value={customerName}>
                   {customerName}
                 </Option>
@@ -333,7 +366,16 @@ const Homepage = () => {
               value={statusFilter}
               onChange={(value) => setStatusFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Status))].map((status) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                // (!statusFilter.length || statusFilter.includes(item.Status)) &&
+                (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Status))].map((status) => (
                 <Option key={status} value={status}>
                   {status}
                 </Option>
@@ -349,7 +391,16 @@ const Homepage = () => {
               value={productspecFilter}
               onChange={(value) => setProductspecFilter(value)}
             >
-              {[...new Set(filteredData.map((item) => item.Product_Spec_Id))].map((productspec) => (
+              {[...new Set(
+                rowData.filter((item) =>
+                (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                (!saleCodeBomFilter.length || saleCodeBomFilter.includes(item.Sale_Code_Bom)) &&
+                (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                (!customerNameFilter.length || customerNameFilter.includes(item.Customer_Name)) &&
+                (!statusFilter.length || statusFilter.includes(item.Status))
+                // (!productspecFilter.length || productspecFilter.includes(item.Product_Spec_Id))
+              )
+                .map((item) => item.Product_Spec_Id))].map((productspec) => (
                 <Option key={productspec} value={productspec}>
                   {productspec}
                 </Option>

@@ -5,10 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Notification from '../../Components/Notification';
 import { createBom } from '../../Ultility/Bomapi';
 import { fetchStatusproduct, fetchOuterproduct, fetchtypecustomerproduct, fetchcheckstatus } from '../../Ultility/ApiSetup/staticData';
-import {fetchAdditionalpackages, fetchPackages , fetchOuters, fetchDatasheets, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
+import {fetchAdditionalpackages, fetchPackages , fetchOuters, fetchDatasheetweights, fetchProductspecs, fetchShims, fetchDrawings, fetchEmarks} from '../../Ultility/Sellectedbom';
 import { fetchBomfilter, fetchBomfilterbycodefg } from '../../Ultility/Bomfilterapi';
 
 const { Option } = Select;
+
 const CreateBom = () => {
     const [form] = Form.useForm();
     const [isPending, setIsPending] = useState(false);
@@ -75,7 +76,7 @@ const CreateBom = () => {
                 const outerData = await fetchOuters(); 
                 setOuteroptions(outerData.data); 
 
-                const datasheetData = await fetchDatasheets(); 
+                const datasheetData = await fetchDatasheetweights(); 
                 setDatasheetoptions(datasheetData.data); 
 
                 const productspecData = await fetchProductspecs(); 
@@ -102,7 +103,14 @@ const CreateBom = () => {
             }
         };
         load();
+        // const interval = setInterval(() => {
+        //     load(); // periodic refresh
+        // }, 10000); // every 10 seconds
+    
+        // return () => clearInterval(interval); // cleanup on unmount
     }, []);
+
+    
 
 
     const handleSubmit = async (values) => {
@@ -308,8 +316,8 @@ const CreateBom = () => {
                     Sale_Code_Bom: '',
                     Type_Customer: '',
                     Customer_Name: '',
-                    Start_Sale_Date: '',
-                    End_Sale_Date: '',
+                    Start_Sale_Date: '-',
+                    End_Sale_Date: '-',
                     Status: '',
                     Drawing_No: '',
                     Shim_Attach: '',
@@ -317,15 +325,15 @@ const CreateBom = () => {
                     Product_Spec_No: '',
                     Data_Sheet_No: '',
                     Display_Box_Id: '',
-                    Quantity_Display_Box: '',
+                    Quantity_Display_Box: '1',
                     Outer_Package: '',
                     Outer_Id: '',
-                    Pcs_Per_Set: '',
+                    Pcs_Per_Set: '4',
                     Additional_Package_Id: '',
                     Customer_Code: '',
-                    Ref_Code: '',
+                    Ref_Code: '-',
                     Emark_Id: '',
-                    Weight: "",
+                    Weight: "-",
                     // Kit_Id: ""
                     Check_Status: "Wait"
 

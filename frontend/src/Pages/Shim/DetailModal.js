@@ -45,7 +45,7 @@ const DetailModal = ({ show, onHide, data, historyLog, Tablename }) => {
                         { label: "ชื่อ SP1:", value: data.Name_SP1 },
                         { label: "รหัส SP1:", value: data.Erp_Id_SP1 },
                         { label: "ID SP1:", value: data.Id_SP1 },
-                        { label: "จำนวน SP1:", value: data.Quantity_SP2 },  // Make sure this matches the actual data field
+                        { label: "จำนวน SP1:", value: data.Quantity_SP1 },  // Make sure this matches the actual data field
                         { label: "ชื่อ SP2:", value: data.Name_SP2 },
                         { label: "รหัส SP2:", value: data.Erp_Id_SP2 },
                         { label: "ID SP2:", value: data.Id_SP2 },

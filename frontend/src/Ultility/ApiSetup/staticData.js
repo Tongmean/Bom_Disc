@@ -204,3 +204,21 @@ export const fetchcheckstatus = [
     { label: 'Reject', value: 'Reject' },
     { label: 'Wait', value: 'Wait' }
 ]
+
+export const fetchstatusD_Machine = [
+    { label: 'Active', value: 'Active' },
+    { label: 'Inactive', value: 'Inactive' },
+    { label: 'Wait', value: 'Wait' }
+]
+export const fetchtypeD_Machine = [
+    { label: 'เครื่องอัดขึ้นรูปพิมพ์เย็น', value: 'เครื่องอัดขึ้นรูปพิมพ์เย็น' },
+    { label: 'เครื่องอัดขึ้นรูปพิมพ์ร้อน', value: 'เครื่องอัดขึ้นรูปพิมพ์ร้อน' },
+    
+]
+export const fetchtypeD_Mold = [
+    { label: 'แม่พิมพ์เย็นดิสเบรก', value: 'แม่พิมพ์เย็นดิสเบรก' },
+    { label: 'แม่พิมพ์เย็นผ้าเบรก', value: 'แม่พิมพ์เย็นผ้าเบรก' },
+    { label: 'แม่พิมพ์ร้อนดิสเบรก', value: 'แม่พิมพ์ร้อนดิสเบรก' },
+    { label: 'แม่พิมพ์ร้อนผ้าเบรก', value: 'แม่พิมพ์ร้อนผ้าเบรก' },
+    
+]

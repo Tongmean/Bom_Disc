@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Tablecomponent from '../../Components/Tablecomponent';
-import {fetchDisplaywip} from '../../Ultility/Displayapi';
+import {fetchDisplaywiptostore} from '../../Ultility/Displayapi';
 import ExcelExportButton from '../../Components/ExcelExportButton';
 import ClipboardButton from '../../Components/ClipboardButton';
 // import { useNavigate } from 'react-router-dom';
@@ -93,7 +93,7 @@ const Wipdisplay = () =>{
     useEffect(() => {
         const loadpackages = async () => {
           try {
-            const Data = (await fetchDisplaywip()).data;
+            const Data = (await fetchDisplaywiptostore()).data;
             console.log('Data', Data)
             // const WipmappedReult = mapToWIPs(Data);
             // console.log('WipmappedReult', WipmappedReult)

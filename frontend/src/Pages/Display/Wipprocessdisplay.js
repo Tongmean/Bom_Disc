@@ -27,21 +27,32 @@ const Wipprocessdisplay = () =>{
         { headerName: 'WipGRD1', field: 'WipGRD1' },
         { headerName: 'WipPow1', field: 'WipPow1' },
         { headerName: 'WipTREAT1', field: 'WipTREAT1' },
+        { headerName: 'WipShim1', field: 'WipShim1' },
+        { headerName: 'WipWD1', field: 'WipWD1' },
         { headerName: 'จำนวน WIP1', field: 'Quantity_BP1' },
+
         { headerName: 'WipHP2', field: 'WipHP2' },
         { headerName: 'WipGRD2', field: 'WipGRD2' },
         { headerName: 'WipPow2', field: 'WipPow2' },
         { headerName: 'WipTREAT2', field: 'WipTREAT2' },
+        { headerName: 'WipShim2', field: 'WipShim2' },
+        { headerName: 'WipWD2', field: 'WipWD2' },
         { headerName: 'จำนวน WIP2', field: 'Quantity_BP2' },
+
         { headerName: 'WipHP3', field: 'WipHP3' },
         { headerName: 'WipGRD3', field: 'WipGRD3' },
         { headerName: 'WipPow3', field: 'WipPow3' },
         { headerName: 'WipTREAT3', field: 'WipTREAT3' },
+        { headerName: 'WipShim3', field: 'WipShim3' },
+        { headerName: 'WipWD3', field: 'WipWD3' },
         { headerName: 'จำนวน WIP3', field: 'Quantity_BP3' },
+
         { headerName: 'WipHP4', field: 'WipHP4' },
         { headerName: 'WipGRD4', field: 'WipGRD4' },
         { headerName: 'WipPow4', field: 'WipPow4' },
         { headerName: 'WipTREAT4', field: 'WipTREAT4' },
+        { headerName: 'WipShim4', field: 'WipShim4' },
+        { headerName: 'WipWD4', field: 'WipWD4' },
         { headerName: 'จำนวน WIP4', field: 'Quantity_BP4' },
     ];
     //Map to Wip
@@ -274,7 +285,13 @@ const Wipprocessdisplay = () =>{
                     value={partNoFilter}
                     onChange={(value) => setPartNoFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Part_No))].map((partNo) => (
+                    {[...new Set(
+                         rowData.filter((item) =>
+                         (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                        //  (!partNoFilter.length || partNoFilter.includes(item.Part_No)) &&
+                         (!numberFilter.length || numberFilter.includes(item.Num))
+                       )
+                        .map((item) => item.Part_No))].map((partNo) => (
                         <Option key={partNo} value={partNo}>
                         {partNo}
                         </Option>
@@ -292,7 +309,13 @@ const Wipprocessdisplay = () =>{
                     value={numberFilter}
                     onChange={(value) => setNumberFilter(value)}
                     >
-                    {[...new Set(filteredData.map((item) => item.Num))].map((Num) => (
+                    {[...new Set(
+                         rowData.filter((item) =>
+                         (!codeFgFilter.length || codeFgFilter.includes(item.Code_Fg)) &&
+                         (!partNoFilter.length || partNoFilter.includes(item.Part_No)) 
+                        //  (!numberFilter.length || numberFilter.includes(item.Num))
+                       )
+                        .map((item) => item.Num))].map((Num) => (
                         <Option key={Num} value={Num}>
                         {Num}
                         </Option>

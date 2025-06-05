@@ -26,11 +26,13 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     { key: '1', icon: <HomeOutlined />, label: <Link to="/home">Home</Link> },
 
     { key: 'Display', icon: <ExceptionOutlined />, label: 'Display', children: [
+      { key: '17', label: <Link to="/bomdisplay">Bill of Material</Link> },
       { key: '11', label: <Link to="/wipdisplay">WIP Code</Link> },
       { key: '15', label: <Link to="/wipprocessdisplay">WIP Process</Link> },
       { key: '12', label: <Link to="/Qcdisplay">Quality Control</Link> },
       { key: '13', label: <Link to="/saledisplay">Sale</Link> },
       { key: '14', label: <Link to="/componentdisplay">Component</Link> },
+      { key: '16', label: <Link to="/datasheetdisplay">Data Sheet</Link> },
     ]},
     { key: 'Bom', icon: <FileExcelOutlined />, label: <Link to="/productregister">Product Register</Link>},
     { key: 'Product-Spec', icon: <FileExcelOutlined />, label: 'Product Spec', children: [
@@ -43,8 +45,14 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       // { key: '81', label: <Link to="/drawingfile">Drawing File</Link> },
     ]},
     { key: 'Data-Sheet', icon: <FileExcelOutlined />, label: 'Data Sheet', children: [
-      { key: '90', label: <Link to="/dataSheet">Data sheet</Link> },
-      { key: '91', label: <Link to="/datasheetfile">Data sheet File</Link> },
+      // { key: '90', label: <Link to="/dataSheet">Data sheet</Link> },
+      { key: '92', label: <Link to="/machine">Machine</Link> },
+      { key: '93', label: <Link to="/mold">Mold</Link> },
+      { key: '96', label: <Link to="/dmoldmachine">Mold-Machine</Link> },
+      { key: '94', label: <Link to="/chemgrade">เกรดเคมี</Link> },
+      { key: '95', label: <Link to="/dweight">D_Weight</Link> },
+      { key: '97', label: <Link to="/dpressure">D_Pressure</Link> },
+      // { key: '91', label: <Link to="/datasheetfile">Data sheet File</Link> },
     ]},
 
     // { key: 'Shim', icon: <FileExcelOutlined />, label: <Link to="/shim">Shim</Link>},
@@ -69,6 +77,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       { key: '1120', label: <Link to="/shimfile">Shim File</Link> },
 
     ]},
+    { key: 'Wip', icon: <FileExcelOutlined />, label: <Link to="/Wip">WIP</Link>},
 
 
     

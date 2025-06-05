@@ -60,38 +60,6 @@ const getFilterbomsbycodefg = async (req, res) => {
 
 //Drawing
 const getFiltermaterialfordrawing = async (req, res) => {
-    // const sqlCommand = `
-    // SELECT 
-    //     "Compact_No_Modify" AS "Compact_No_Modify_Drawing",
-    //     "Num",
-    //     -- BP Types (BP1-BP4)
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-1' THEN "ID" END) AS "Id_BP1",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-1' THEN "Quantity_Shim" END) AS "Quantity_BP1",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-2' THEN "ID" END) AS "Id_BP2",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-2' THEN "Quantity_Shim" END) AS "Quantity_BP2",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-3' THEN "ID" END) AS "Id_BP3",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-3' THEN "Quantity_Shim" END) AS "Quantity_BP3",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-4' THEN "ID" END) AS "Id_BP4",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-4' THEN "Quantity_Shim" END) AS "Quantity_BP4",
-
-    //     -- WD Types (WD1-WD2)
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND ("Type3" = 'WD-1' OR "Type3" = 'WD' OR "Type3" = 'FC') THEN "ID" END) AS "Id_WD1",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND ("Type3" = 'WD-1' OR "Type3" = 'WD' OR "Type3" = 'FC') THEN "Quantity_Shim" END) AS "Quantity_WD1",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-2' THEN "ID" END) AS "Id_WD2",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-2' THEN "Quantity_Shim" END) AS "Quantity_WD2",
-        
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-3' THEN "ID" END) AS "Id_WD3",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-3' THEN "Quantity_Shim" END) AS "Quantity_WD3",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-4' THEN "ID" END) AS "Id_WD4",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-4' THEN "Quantity_Shim" END) AS "Quantity_WD4"
-
-    // FROM "Material"
-    // WHERE (("Type2" = 'WD' OR "Type2" = 'FP') OR "Type2" ='BP') 
-    // GROUP BY "Compact_No_Modify", "Num"
-
-    // `
-
-
     const sqlCommand = `
         SELECT 
             "Compact_No_Modify" AS "Compact_No_Modify_Drawing",
@@ -151,42 +119,20 @@ const getFiltermaterialfordrawing = async (req, res) => {
 
 const getFiltermaterialbycompactnodrawing = async (req, res) => {
     const {Compact_No_Modify_Drawing} = req.body;
-    // const sqlCommand = `
-    // SELECT 
-    //     "Compact_No_Modify" AS "Compact_No_Modify_Drawing",
-    //     "Num"  AS "Part_No",
-    //     -- BP Types (BP1-BP4)
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-1' THEN "ID" END) AS "Id_BP1",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-1' THEN "Quantity_Shim" END) AS "Quantity_BP1",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-2' THEN "ID" END) AS "Id_BP2",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-2' THEN "Quantity_Shim" END) AS "Quantity_BP2",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-3' THEN "ID" END) AS "Id_BP3",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-3' THEN "Quantity_Shim" END) AS "Quantity_BP3",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-4' THEN "ID" END) AS "Id_BP4",
-    //     MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-4' THEN "Quantity_Shim" END) AS "Quantity_BP4",
-
-    //     -- WD Types (WD1-WD2)
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND ("Type3" = 'WD-1' OR "Type3" = 'WD' OR "Type3" = 'FC') THEN "ID" END) AS "Id_WD1",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND ("Type3" = 'WD-1' OR "Type3" = 'WD' OR "Type3" = 'FC') THEN "Quantity_Shim" END) AS "Quantity_WD1",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-2' THEN "ID" END) AS "Id_WD2",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-2' THEN "Quantity_Shim" END) AS "Quantity_WD2",
-        
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-3' THEN "ID" END) AS "Id_WD3",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-3' THEN "Quantity_Shim" END) AS "Quantity_WD3",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-4' THEN "ID" END) AS "Id_WD4",
-    //     MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-4' THEN "Quantity_Shim" END) AS "Quantity_WD4"
-
-    // FROM "Material"
-    // WHERE (("Type2" = 'WD' OR "Type2" = 'FP') OR "Type2" ='BP') AND "Compact_No_Modify" = $1
-    // GROUP BY "Compact_No_Modify", "Num"
-
-
-
-    // `
+    
     const sqlCommand = `
         SELECT 
             "Compact_No_Modify" AS "Compact_No_Modify_Drawing",
             "Num"  AS "Part_No",
+            -- D Types (D1-D4)
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-1' THEN "ID" END), '-') AS "Id_D1",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-1' THEN "Quantity_Shim" END), '-') AS "Quantity_D1",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-2' THEN "ID" END), '-') AS "Id_D2",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-2' THEN "Quantity_Shim" END), '-') AS "Quantity_D2",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-3' THEN "ID" END), '-') AS "Id_D3",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-3' THEN "Quantity_Shim" END), '-') AS "Quantity_D3",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-4' THEN "ID" END), '-') AS "Id_D4",
+            COALESCE(MAX(CASE WHEN "Type2" = 'D' AND "Type3" = 'D-4' THEN "Quantity_Shim" END), '-') AS "Quantity_D4",
 
             -- BP Types (BP1-BP4)
             COALESCE(MAX(CASE WHEN "Type2" = 'BP' AND "Type3" = 'BP-1' THEN "ID" END), '-') AS "Id_BP1",
@@ -209,7 +155,7 @@ const getFiltermaterialbycompactnodrawing = async (req, res) => {
             COALESCE(MAX(CASE WHEN ("Type2" = 'WD' OR "Type2" = 'FP') AND "Type3" = 'WD-4' THEN "Quantity_Shim" END), '-') AS "Quantity_WD4"
 
         FROM "Material"
-        WHERE (("Type2" = 'WD' OR "Type2" = 'FP') OR "Type2" = 'BP') 
+        WHERE (("Type2" = 'WD' OR "Type2" = 'FP' OR "Type2" = 'D') OR "Type2" = 'BP') 
             AND "Compact_No_Modify" = $1
         GROUP BY "Compact_No_Modify", "Num";
 

@@ -7,7 +7,7 @@ import Notification from '../../Components/Notification';
 import {
     fetchPackages,
     fetchOuters,
-    fetchDatasheets,
+    fetchDatasheetweights,
     fetchProductspecs,
     fetchShims,
     fetchDrawings,
@@ -77,7 +77,7 @@ const UpdateBom = () => {
                 const [packages, outers, datasheets, productspecs, shims, drawings, emarks, additionalpackageData] = await Promise.all([
                     fetchPackages(),
                     fetchOuters(),
-                    fetchDatasheets(),
+                    fetchDatasheetweights(),
                     fetchProductspecs(),
                     fetchShims(),
                     fetchDrawings(),

@@ -15,6 +15,12 @@ const Outer = () =>{
     const [historyLog, setHistoryLog] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+     // Individual filters
+    const [filteredData, setFilteredData] = useState([]);
+    const [num_OuterFilter, setNum_OuterFilter] = useState([]);
+    const [outer_IdFilter, setOuter_IdFilter] = useState([]);
+    const [erp_Name_InnerFilter, setErp_Name_InnerFilter] = useState([]);
+
 
     const columnDefs = [
         { headerName: 'No', field: 'id', checkboxSelection: true, headerCheckboxSelection: true },
@@ -121,8 +127,93 @@ const Outer = () =>{
     const handleShowEdit = (data) => {
         navigate(`/outer/${data.id}`);
     };
+
+    // const handleFilterChange = () => {
+    //     const filtered = rowData.filter((item) =>
+    //       (!num_OuterFilter.length || num_OuterFilter.includes(item.Num_Outer)) &&
+    //       (!outer_IdFilter.length || outer_IdFilter.includes(item.Outer_Id)) &&
+    //       (!erp_Name_InnerFilter.length || erp_Name_InnerFilter.includes(item.Name_Erp_Inner))
+    //     );
+        
+    //     setFilteredData(filtered);
+    // };
+ 
+    
+    
+    
+    // useEffect(handleFilterChange, [num_OuterFilter, outer_IdFilter, erp_Name_InnerFilter, rowData]);
+
+    // const clearFilters = () => {
+    //     setNum_OuterFilter([]);
+    //     setOuter_IdFilter([]);
+    //     setErp_Name_InnerFilter([])
+    // };
     return (
         <>
+            {/* <div style={{ marginBottom: '20px', background: '#f7f7f7', padding: '15px', borderRadius: '8px' }}>
+                <h3 style={{ marginBottom: '10px' }}>Filters</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by เบอร์.:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select เบอร์."
+                    style={{ width: '100%' }}
+                    value={numberFilter}
+                    onChange={(value) => setNumberFilter(value)}
+                    >
+                    {[...new Set(rowData.map((item) => item.Num))].map((Num) => (
+                        <Option key={Num} value={Num}>
+                            {Num}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by Type 2:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select Type 2"
+                    style={{ width: '100%' }}
+                    value={type2Filter}
+                    onChange={(value) => setType2Filter(value)}
+                    >
+                    {[...new Set(rowData.map((item) => item.Type2))].map((Type2) => (
+                        <Option key={Type2} value={Type2}>
+                            {Type2}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                <div style={{ flex: '1 1 30%' }}>
+                    <label>Filter by ID:</label>
+                    <Select
+                    mode='multiple'
+                    showSearch
+                    placeholder="Select ID"
+                    style={{ width: '100%' }}
+                    value={idFilter}
+                    onChange={(value) => setIdFilter(value)}
+                    >
+                    {[...new Set(
+                        filterwithoutid.map((item) => item.ID))].map((Id) => (
+                        <Option key={Id} value={Id}>
+                            {Id}
+                        </Option>
+                    ))}
+                    </Select>
+                </div>
+                
+                </div>
+                <Button type="default" style={{ marginTop: '10px' }} onClick={clearFilters}>
+                Clear Filters
+                </Button>
+            </div> */}
+
             <div>
                 <button className='btn btn-success btn-sm' style={{ marginBottom: '10px' }} onClick={handleOnClick}>เพิ่มรายการ</button>
                 <ExcelExportButton gridApi={gridApi} columnDefs={columnDefs} Tablename = "การบรรจุ-Outer"/>

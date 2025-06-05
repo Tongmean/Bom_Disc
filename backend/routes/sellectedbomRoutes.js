@@ -6,12 +6,14 @@ const { SelectedPackages, SelectedOuters, SelectedDatasheets,
     Selectedmaterialbp,
     Selectedmaterialsp,
     Selectedemark,
-    Selectedrmpk
+    Selectedrmpk,
+    SelectedDatasheetsweight
 } =  require("../controller/SelecttedbomController");
 
 router.get('/package', SelectedPackages);
 router.get('/outer', SelectedOuters);
 router.get('/datasheet', SelectedDatasheets);
+router.get('/datasheetweight', SelectedDatasheetsweight);
 router.get('/productspec', SelectedProductspecs);
 router.get('/additionalpackage', Selectedadditionalpackages);
 router.get('/shim', Selectedshims);

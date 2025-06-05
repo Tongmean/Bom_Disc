@@ -60,8 +60,6 @@ app.get('/Assets/*?', (req, res) => {
 
 
 
-
-
 const requireAuth = require('./middleware/requireAuth');
 const UserRouter = require('./routes/userRoutes')
 const Bomsrouter = require('./routes/BomRoutes');
@@ -80,11 +78,21 @@ const emarkRouter = require('./routes/emarkRoutes');
 const shimfileRouter = require('./routes/shimfileRoutes');
 const datasheetfileRouter = require('./routes/datasheetfileRoutes');
 const materialRouter = require('./routes/materialRoutes');
+const wipRouter = require('./routes/WipprocessRoutes')
+//Data-sheet-revise
+const machineRouter = require('./routes/D_MachineRouter')
+const moldRouter = require('./routes/D_MoldRouter')
+const chemgradeRouter = require('./routes/D_ChemgradeRouter')
+const weightRouter = require('./routes/D_WeightRoute')
+const pressureRouter = require("./routes/D_PressureRoute")
+const MoldmachineRouter = require('./routes/D_Mold_MachineRouter')
+const dsellectedRouter = require('./routes/D_Sellected')
 //Utily-History-Log
 const historylogRouter = require('./routes/historyRoutes');
 const sellectedbomRouter = require('./routes/sellectedbomRoutes')
 //Frame Api
 const frameRouter = require('./routes/frameRoute')
+const toeyRouter = require('./routes/ToeyRoute')
 
 app.use('/api/user', UserRouter);
 app.use('/api/bom',requireAuth, Bomsrouter);
@@ -105,7 +113,17 @@ app.use('/api/file', requireAuth, shimfileRouter);
 app.use('/api/file', requireAuth, datasheetfileRouter);
 app.use('/api/emark', requireAuth, emarkRouter);
 app.use('/api/material', requireAuth, materialRouter);
+app.use('/api/wip', requireAuth, wipRouter);
 app.use('/api/frame', frameRouter);
+app.use('/api/toey', toeyRouter);
+
+app.use('/api/data-sheet/machine', requireAuth, machineRouter);
+app.use('/api/data-sheet/mold', requireAuth, moldRouter);
+app.use('/api/data-sheet/chemgrade', requireAuth, chemgradeRouter);
+app.use('/api/data-sheet/weight', requireAuth, weightRouter);
+app.use('/api/data-sheet/pressure', requireAuth, pressureRouter);
+app.use('/api/data-sheet/moldmachine', requireAuth, MoldmachineRouter);
+app.use('/api/data-sheet/sellect', requireAuth, dsellectedRouter);
 
 
 
@@ -117,6 +135,10 @@ const host = "0.0.0.0";
 //Listen require
 app.listen(port, host,  (req, res)=>{
 
+    // setTimeout(() => {
+    //     throw new Error("Simulated crash");
+    // }, 2000);
+
     console.log(`Backend running at http://${host}:${port}`);
     console.log("Server run on port:", port);
-})
+});
